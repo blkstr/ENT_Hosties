@@ -21,6 +21,7 @@
 #include <cstrike>
 #include <sdktools>
 #include <hosties>
+#include <sourcebanspp>
 
 new Handle:gH_Cvar_Strip_On_Slay = INVALID_HANDLE;
 new Handle:gH_Cvar_Strip_On_Kick = INVALID_HANDLE;
@@ -415,7 +416,7 @@ PrepareBan(client, target, time, const String:reason[])
 	{
 		if (g_bSBAvailable)
 		{
-			SBBanPlayer(client, target, time, "Banned");
+			SBPP_BanPlayer(client, target, time, "Banned");
 		}
 		else
 		{
@@ -429,7 +430,7 @@ PrepareBan(client, target, time, const String:reason[])
 			// avoid const-string tag mismatch
 			new String:banreason[255];
 			strcopy(banreason, sizeof(banreason), reason);
-			SBBanPlayer(client, target, time, banreason);
+			SBPP_BanPlayer(client, target, time, banreason);
 		}
 		else
 		{

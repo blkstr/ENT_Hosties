@@ -1614,8 +1614,12 @@ public LastRequest_PlayerJump(Handle:event, const String:name[], bool:dontBroadc
 							// record position
 							decl Float:Prisoner_Position[3];
 							GetClientAbsOrigin(LR_Player_Prisoner, Prisoner_Position);
-							new Handle:JumpPackPosition = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_DataPackHandle);						
-							SetPackPosition(JumpPackPosition, 0);
+							Handle JumpPackPosition = GetArrayCell(gH_DArray_LR_Partners, idx, view_as<int>(Block_DataPackHandle));						
+							#if SOURCEMOD_V_MAJOR >= 1 && SOURCEMOD_V_MINOR >= 8
+								SetPackPosition(JumpPackPosition, view_as<DataPackPos>(0));
+							#else
+								SetPackPosition(JumpPackPosition, 0);
+							#endif
 							WritePackFloat(JumpPackPosition, Prisoner_Position[0]);
 							WritePackFloat(JumpPackPosition, Prisoner_Position[1]);
 							WritePackFloat(JumpPackPosition, Prisoner_Position[2]);
@@ -1625,8 +1629,12 @@ public LastRequest_PlayerJump(Handle:event, const String:name[], bool:dontBroadc
 							// record position
 							decl Float:Guard_Position[3];
 							GetClientAbsOrigin(LR_Player_Guard, Guard_Position);
-							new Handle:JumpPackPosition = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_DataPackHandle);							
-							SetPackPosition(JumpPackPosition, 24);
+							Handle JumpPackPosition = GetArrayCell(gH_DArray_LR_Partners, idx, view_as<int>(Block_DataPackHandle));							
+							#if SOURCEMOD_V_MAJOR >= 1 && SOURCEMOD_V_MINOR >= 8
+								SetPackPosition(JumpPackPosition, view_as<DataPackPos>(24));
+							#else
+								SetPackPosition(JumpPackPosition, 24);
+							#endif
 							WritePackFloat(JumpPackPosition, Guard_Position[0]);
 							WritePackFloat(JumpPackPosition, Guard_Position[1]);
 							WritePackFloat(JumpPackPosition, Guard_Position[2]);
@@ -1647,8 +1655,12 @@ public LastRequest_PlayerJump(Handle:event, const String:name[], bool:dontBroadc
 					// record position
 					decl Float:Prisoner_Position[3];
 					GetClientAbsOrigin(LR_Player_Prisoner, Prisoner_Position);
-					new Handle:JumpPackPosition = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_DataPackHandle);
-					SetPackPosition(JumpPackPosition, 96);
+					Handle JumpPackPosition = GetArrayCell(gH_DArray_LR_Partners, idx, view_as<int>(Block_DataPackHandle));
+					#if SOURCEMOD_V_MAJOR >= 1 && SOURCEMOD_V_MINOR >= 8
+						SetPackPosition(JumpPackPosition, view_as<DataPackPos>(96));
+					#else
+						SetPackPosition(JumpPackPosition, 96);
+					#endif
 					WritePackFloat(JumpPackPosition, Prisoner_Position[0]);
 					WritePackFloat(JumpPackPosition, Prisoner_Position[1]);
 					WritePackFloat(JumpPackPosition, Prisoner_Position[2]);
@@ -1658,8 +1670,12 @@ public LastRequest_PlayerJump(Handle:event, const String:name[], bool:dontBroadc
 					// record position
 					decl Float:Guard_Position[3];
 					GetClientAbsOrigin(LR_Player_Guard, Guard_Position);
-					new Handle:JumpPackPosition = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_DataPackHandle);
-					SetPackPosition(JumpPackPosition, 120);
+					Handle JumpPackPosition = GetArrayCell(gH_DArray_LR_Partners, idx, view_as<int>(Block_DataPackHandle));
+					#if SOURCEMOD_V_MAJOR >= 1 && SOURCEMOD_V_MINOR >= 8
+						SetPackPosition(JumpPackPosition, view_as<DataPackPos>(120));
+					#else
+						SetPackPosition(JumpPackPosition, 120);
+					#endif
 					WritePackFloat(JumpPackPosition, Guard_Position[0]);
 					WritePackFloat(JumpPackPosition, Guard_Position[1]);
 					WritePackFloat(JumpPackPosition, Guard_Position[2]);
@@ -2213,7 +2229,11 @@ public Action:OnWeaponDrop(client, weapon)
 
 								decl Float:GTp1droppos[3];
 								GetClientAbsOrigin(LR_Player_Prisoner, GTp1droppos);
-								SetPackPosition(PositionDataPack, 48);
+								#if SOURCEMOD_V_MAJOR >= 1 && SOURCEMOD_V_MINOR >= 8
+									SetPackPosition(PositionDataPack, view_as<DataPackPos>(48));
+								#else
+									SetPackPosition(PositionDataPack, 48);
+								#endif
 								WritePackFloat(PositionDataPack, GTp1droppos[0]);
 								WritePackFloat(PositionDataPack, GTp1droppos[1]);
 								WritePackFloat(PositionDataPack, GTp1droppos[2]);
@@ -2231,7 +2251,11 @@ public Action:OnWeaponDrop(client, weapon)
 							{
 								decl Float:GTp2droppos[3];
 								GetClientAbsOrigin(LR_Player_Guard, GTp2droppos);
-								SetPackPosition(PositionDataPack, 72);
+								#if SOURCEMOD_V_MAJOR >= 1 && SOURCEMOD_V_MINOR >= 8
+									SetPackPosition(PositionDataPack, view_as<DataPackPos>(72));
+								#else
+									SetPackPosition(PositionDataPack, 722);
+								#endif
 								WritePackFloat(PositionDataPack, GTp2droppos[0]);
 								WritePackFloat(PositionDataPack, GTp2droppos[1]);
 								WritePackFloat(PositionDataPack, GTp2droppos[2]);
@@ -3991,6 +4015,9 @@ InitializeGame(iPartnersIndex)
 				SetEntityRenderColor(GTdeagle2, 0, 0, 255);
 			}
 
+			SetEntData(LR_Player_Prisoner, g_Offset_Health, 100);
+			SetEntData(LR_Player_Guard, g_Offset_Health, 100);
+			
 			// announce LR
 			PrintToChatAll(CHAT_BANNER, "LR GT Start", LR_Player_Prisoner, LR_Player_Guard);
 		}
@@ -5179,11 +5206,12 @@ public Action:Timer_RemoveFlashbang(Handle:timer, any:entity)
 		
 		if ((client != -1) && IsClientInGame(client) && IsPlayerAlive(client) && Local_IsClientInLR(client))
 		{
-			new String:sWeaponName[64];
+			new String:weapon[32];
 			new flash = CreateEntityByName("weapon_flashbang");
+			GetClientWeapon(client, weapon, sizeof(weapon));
 			
 			//If client throw his flash it gives new one
-			if (GetClientWeapon(client, sWeaponName, sizeof(sWeaponName)) != flash)
+			if (!StrEqual("weapon_flashbang", weapon))
 			{
 				DispatchSpawn(flash);
 				EquipPlayerWeapon(client, flash);	
@@ -5827,7 +5855,11 @@ public Action:Timer_GunToss(Handle:timer)
 							GTdeagle1lastpos[0] = GTdeagle1pos[0];
 							GTdeagle1lastpos[1] = GTdeagle1pos[1];
 							GTdeagle1lastpos[2] = GTdeagle1pos[2];
-							SetPackPosition(PositionDataPack, 0);
+							#if SOURCEMOD_V_MAJOR >= 1 && SOURCEMOD_V_MINOR >= 8
+								SetPackPosition(PositionDataPack, view_as<DataPackPos>(0));
+							#else
+								SetPackPosition(PositionDataPack, 0);
+							#endif
 							WritePackFloat(PositionDataPack, GTdeagle1lastpos[0]);
 							WritePackFloat(PositionDataPack, GTdeagle1lastpos[1]);
 							WritePackFloat(PositionDataPack, GTdeagle1lastpos[2]);
@@ -5872,7 +5904,11 @@ public Action:Timer_GunToss(Handle:timer)
 							GTdeagle2lastpos[1] = GTdeagle2pos[1];
 							GTdeagle2lastpos[2] = GTdeagle2pos[2];
 	
-							SetPackPosition(PositionDataPack, 24);
+							#if SOURCEMOD_V_MAJOR >= 1 && SOURCEMOD_V_MINOR >= 8
+								SetPackPosition(PositionDataPack, view_as<DataPackPos>(24));
+							#else
+								SetPackPosition(PositionDataPack, 24);
+							#endif
 							WritePackFloat(PositionDataPack, GTdeagle2lastpos[0]);
 							WritePackFloat(PositionDataPack, GTdeagle2lastpos[1]);
 							WritePackFloat(PositionDataPack, GTdeagle2lastpos[2]);

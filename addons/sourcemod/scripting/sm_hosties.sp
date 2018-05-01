@@ -24,11 +24,11 @@
 #include <sdkhooks>
 #include <hosties>
 #include <emitsoundany>
+#include <sourcebanspp>
 
 #undef REQUIRE_PLUGIN
 #undef REQUIRE_EXTENSIONS
 #tryinclude <SteamWorks>
-#tryinclude <sourcebans>
 #define REQUIRE_EXTENSIONS
 #define REQUIRE_PLUGIN
 
