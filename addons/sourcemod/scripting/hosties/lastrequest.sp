@@ -1816,7 +1816,6 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 						SetEntData(LR_Player_Guard, g_Offset_Ammo+(iAmmoType*4), 0, _, true);
 						SetEntData(LR_Player_Prisoner, g_Offset_Ammo+(iAmmoType*4), 0, _, true);
 					}
-					
 					ChangeEdictState(Prisoner_Weapon, g_Offset_Clip1);
 					ChangeEdictState(Guard_Weapon, g_Offset_Clip1);
 				}
@@ -1832,10 +1831,10 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 					new S4Slastshot = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_Global1);
 					
 					decl String:FiredWeapon[32];
-					GetEventString(event, "weapon", FiredWeapon, sizeof(FiredWeapon));
+					GetEventString(event, "weapon", FiredWeapon, sizeof(FiredWeapon));					
 					
 					// get the entity index of the pistol
-					new iClientWeapon = GetPlayerWeaponSlot(client, CS_SLOT_SECONDARY);
+					new iClientWeapon = GetPlayerWeaponSlot(client, CS_SLOT_SECONDARY);					
 					
 					// check if we have the same weapon
 					new String:LR_WeaponName[32];
@@ -1843,12 +1842,11 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 					{
 						GetEdictClassname(iClientWeapon, LR_WeaponName, sizeof(LR_WeaponName));
 					}
-					
-					if (StrEqual(FiredWeapon, LR_WeaponName))
+									
+					if (StrEqual(FiredWeapon, LR_WeaponName) && !StrEqual("weapon_hkp2000", FiredWeapon))
 					{
 						// update who took the last shot
 						SetArrayCell(gH_DArray_LR_Partners, idx, client, _:Block_Global1);
-						
 						// they picked up an identical gun and are using it instead
 						if (iClientWeapon != Prisoner_S4S_Pistol && iClientWeapon != Guard_S4S_Pistol)		    	
 						{
@@ -1860,7 +1858,7 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 							// check for double shot situation (if they picked up another deagle with more ammo between shots)
 							if (gShadow_LR_S4S_DoubleShot && (S4Slastshot == client))
 							{
-								// this should no longer be possible to do without extra manipulation								
+								// this should no longer be possible to do without extra manipulation							
 								DecideRebelsFate(client, idx, -1);	
 							}
 							else // if we didn't repeat
@@ -1891,7 +1889,7 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 								}
 								
 								if(g_Game == Game_CSGO)
-								{
+								{								
 									SetEntProp(Guard_S4S_Pistol, Prop_Send, "m_iPrimaryReserveAmmoCount", 0);
 									SetEntProp(Prisoner_S4S_Pistol, Prop_Send, "m_iPrimaryReserveAmmoCount", 0);
 								}
@@ -1911,6 +1909,20 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 					else if (StrEqual(FiredWeapon, "knife"))
 					{
 						DecideRebelsFate(client, idx, -1);
+					}
+					else if (StrEqual(LR_WeaponName, "weapon_hkp2000") && StrEqual(FiredWeapon, "weapon_usp_silencer") || StrEqual(FiredWeapon, "weapon_hkp2000"))
+					{
+						//IF the game find another gun in lr like hkp2000 - usp bug then it runs this
+						if (client == LR_Player_Prisoner)
+						{
+							// modify deagle 2s ammo
+							SetEntData(Guard_S4S_Pistol, g_Offset_Clip1, 1);
+						}
+						else if (client == LR_Player_Guard)
+						{
+							// modify deagle 1s ammo
+							SetEntData(Prisoner_S4S_Pistol, g_Offset_Clip1, 1);
+						}
 					}
 				}	
 			}			

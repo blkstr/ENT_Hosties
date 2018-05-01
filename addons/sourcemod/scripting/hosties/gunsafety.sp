@@ -21,7 +21,6 @@
 #include <cstrike>
 #include <sdktools>
 #include <hosties>
-#include <sourcebanspp>
 
 new Handle:gH_Cvar_Strip_On_Slay = INVALID_HANDLE;
 new Handle:gH_Cvar_Strip_On_Kick = INVALID_HANDLE;
