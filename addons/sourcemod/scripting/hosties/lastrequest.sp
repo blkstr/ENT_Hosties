@@ -1146,7 +1146,10 @@ public LastRequest_PlayerHurt(Handle:event, const String:name[], bool:dontBroadc
 			if ((target == LR_Player_Prisoner || target == LR_Player_Guard) && \
 			(attacker == LR_Player_Prisoner || attacker == LR_Player_Guard))
 			{
-				DecideRebelsFate(attacker, idx, target);
+				if (type == LR_HotPotato)
+				{
+					DecideRebelsFate(attacker, idx, target);
+				}
 			}
 		}
 	}
