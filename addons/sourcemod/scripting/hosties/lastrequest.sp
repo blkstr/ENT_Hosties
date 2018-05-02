@@ -1142,6 +1142,12 @@ public LastRequest_PlayerHurt(Handle:event, const String:name[], bool:dontBroadc
 					}
 				}		
 			}
+			
+			if ((target == LR_Player_Prisoner || target == LR_Player_Guard) && \
+			(attacker == LR_Player_Prisoner || attacker == LR_Player_Guard))
+			{
+				DecideRebelsFate(attacker, idx, target);
+			}
 		}
 	}
 	// if a T attacks a CT and there's no last requests active
@@ -1306,11 +1312,11 @@ CleanupLastRequest(loser, arrayIndex)
 				{
 					if (IsClientInGame(LR_Player_Prisoner))
 					{
-						SetFirstPerson(LR_Player_Prisoner);
+						ClientCommand(LR_Player_Prisoner, "firstperson");
 					}
 					if (IsClientInGame(LR_Player_Guard))
 					{
-						SetFirstPerson(LR_Player_Guard);
+						ClientCommand(LR_Player_Guard, "firstperson");
 					}
 					SetEntData(winner, g_Offset_Health, 100);
 				}
@@ -1912,6 +1918,19 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 					}
 					else if (StrEqual(LR_WeaponName, "weapon_hkp2000") && StrEqual(FiredWeapon, "weapon_usp_silencer") || StrEqual(FiredWeapon, "weapon_hkp2000"))
 					{
+						if (gShadow_Announce_Shot4Shot)
+						{
+							if (gShadow_SendGlobalMsgs)
+							{
+								PrintToChatAll(CHAT_BANNER, "S4S Shot Taken", client);
+							}
+							else
+							{
+								PrintToChat(LR_Player_Guard, CHAT_BANNER, "S4S Shot Taken", client);
+								PrintToChat(LR_Player_Prisoner, CHAT_BANNER, "S4S Shot Taken", client);
+							}
+						}
+						
 						//IF the game find another gun in lr like hkp2000 - usp bug then it runs this
 						if (client == LR_Player_Prisoner)
 						{
@@ -1924,6 +1943,10 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 							SetEntData(Prisoner_S4S_Pistol, g_Offset_Clip1, 1);
 						}
 					}
+					else
+					{
+						DecideRebelsFate(client, idx, -1);
+					}
 				}	
 			}			
 			else if (type == LR_NoScope)
@@ -1933,6 +1956,7 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 				if (client == LR_Player_Prisoner || client == LR_Player_Guard)
 				{
 					// grab weapon choice
+					decl String:NoScopeW[32];
 					new NoScopeWeapon:NS_Selection;
 					NS_Selection = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_Global2);					
 					switch (NS_Selection)
@@ -1940,17 +1964,73 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 						case NSW_AWP:
 						{
 							CreateTimer(1.8, Timer_ResetZoom, GetClientUserId(client), TIMER_FLAG_NO_MAPCHANGE);
+							
+							NoScopeW = "weapon_awp";
+							if (g_Game == Game_CSGO)
+							{
+								NoScopeW = "weapon_awp";
+							}
 						}
 						case NSW_Scout:
-						{
+						{					
 							CreateTimer(1.3, Timer_ResetZoom, GetClientUserId(client), TIMER_FLAG_NO_MAPCHANGE);
+							
+							if (g_Game == Game_CSS)
+							{
+								NoScopeW = "weapon_scout";
+							}
+							else if (g_Game == Game_CSGO)
+							{
+								NoScopeW = "weapon_ssg08";
+							}
+						}
+						case NSW_SG550:
+						{
+							CreateTimer(0.5, Timer_ResetZoom, GetClientUserId(client), TIMER_FLAG_NO_MAPCHANGE);
+							
+							if (g_Game == Game_CSS)
+							{
+								NoScopeW = "weapon_sg550";
+							}
+							else if (g_Game == Game_CSGO)
+							{
+								NoScopeW = "weapon_scar20";
+							}
+						}
+						case NSW_G3SG1:
+						{
+							CreateTimer(0.5, Timer_ResetZoom, GetClientUserId(client), TIMER_FLAG_NO_MAPCHANGE);
+							
+							NoScopeW = "weapon_g3sg1";
+							if (g_Game == Game_CSGO)
+							{
+								NoScopeW = "weapon_g3sg1";
+							}
 						}
 						default:
 						{
 							CreateTimer(0.5, Timer_ResetZoom, GetClientUserId(client), TIMER_FLAG_NO_MAPCHANGE);
 						}
 					}
+					
+					decl String:FiredWeapon[32];
+					GetEventString(event, "weapon", FiredWeapon, sizeof(FiredWeapon));
+					
+					if (!StrEqual(FiredWeapon, NoScopeW))
+					{
+						DecideRebelsFate(client, idx, -1);
+					}
 				}
+			}
+			else if (type == LR_Dodgeball)
+			{									
+					decl String:FiredWeapon[32];
+					GetEventString(event, "weapon", FiredWeapon, sizeof(FiredWeapon));
+					
+					if (!StrEqual(FiredWeapon, "weapon_flashbang"))
+					{
+						DecideRebelsFate(client, idx, -1);
+					}
 			}
 		}
 	}
@@ -3778,8 +3858,8 @@ InitializeGame(iPartnersIndex)
 				}
 				case Knife_ThirdPerson:
 				{
-					SetThirdPerson(LR_Player_Prisoner);
-					SetThirdPerson(LR_Player_Guard);
+					ClientCommand(LR_Player_Guard, "thirdperson");
+					ClientCommand(LR_Player_Prisoner, "thirdperson");
 				}
 				case Knife_Drugs:
 				{
@@ -5685,6 +5765,7 @@ public Action:Timer_DodgeballCheckCheaters(Handle:timer)
 				if (IsValidEntity(LR_Player_Prisoner) && (GetClientHealth(LR_Player_Prisoner) > 1))
 				{
 					SetEntityHealth(LR_Player_Prisoner, 1);
+					
 				}
 				if (IsValidEntity(LR_Player_Guard) && (GetClientHealth(LR_Player_Guard) > 1))
 				{
