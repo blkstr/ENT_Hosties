@@ -18,12 +18,15 @@
  */
 
 #define     FlashbangOffset         12    // (12 * 4)
+#define MAX_BUTTONS 25
+#define IN_ATTACK2    (1 << 11)
  
 // Include files
 #include <sourcemod>
 #include <sdktools>
 #include <cstrike>
 #include <sdkhooks>
+#include <sdktools>
 #include <hosties>
 #include <lastrequest>
 #include <smlib>
@@ -32,6 +35,9 @@
 #pragma semicolon 1
 
 // Global variables
+new g_LastButtons[MAXPLAYERS+1];
+new bool:g_TriedToStab[MAXPLAYERS+1] = false;
+
 new bool:g_bIsLRAvailable = true;
 new bool:g_bRoundInProgress = true;
 new bool:g_bListenersAdded = false;
@@ -1125,7 +1131,7 @@ public LastRequest_PlayerHurt(Handle:event, const String:name[], bool:dontBroadc
 					case LR_KnifeFight, LR_ChickenFight:
 					{
 						if (!bIsItAKnife)
-						{							
+						{			
 							DecideRebelsFate(attacker, idx, target);
 						}
 					}
@@ -1146,6 +1152,7 @@ public LastRequest_PlayerHurt(Handle:event, const String:name[], bool:dontBroadc
 			if ((target == LR_Player_Prisoner || target == LR_Player_Guard) && \
 			(attacker == LR_Player_Prisoner || attacker == LR_Player_Guard))
 			{
+				RightKnifeAntiCheat(attacker, idx);
 				if (type == LR_HotPotato)
 				{
 					DecideRebelsFate(attacker, idx, target);
@@ -1543,16 +1550,18 @@ public Action:OnPlayerRunCmd(client, &buttons, &impulse, Float:vel[3], Float:ang
 {
 	for (new idx = 0; idx < GetArraySize(gH_DArray_LR_Partners); idx++)
 	{	
-		new LastRequest:type = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_LRType);
+		new LastRequest:type = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_LRType);		
 		if (type == LR_NoScope)
 		{
 			new LR_Player_Prisoner = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_Prisoner);
 			new LR_Player_Guard = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_Guard);
 			if (client == LR_Player_Prisoner || client == LR_Player_Guard)
 			{
-				buttons &= ~IN_ATTACK2;
+				buttons &= ~IN_ATTACK2;				
 			}
 		}
+		
+		GetLastButton(client, buttons, idx);
 	}
 	return Plugin_Continue;
 }
@@ -1777,7 +1786,7 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 								}
 							}
 						}
-					}			
+					}
 				}			
 			}
 			else if (type == LR_RussianRoulette)
@@ -1830,7 +1839,7 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 				}
 			}
 			else if (type == LR_Shot4Shot)
-			{
+			{			
 				new LR_Player_Prisoner = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_Prisoner);
 				new LR_Player_Guard = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_Guard);
 				if ((client == LR_Player_Prisoner) || (client == LR_Player_Guard))
@@ -1851,7 +1860,7 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 					{
 						GetEdictClassname(iClientWeapon, LR_WeaponName, sizeof(LR_WeaponName));
 					}
-									
+
 					if (StrEqual(FiredWeapon, LR_WeaponName) && !StrEqual("weapon_hkp2000", FiredWeapon))
 					{
 						// update who took the last shot
@@ -1868,7 +1877,7 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 							if (gShadow_LR_S4S_DoubleShot && (S4Slastshot == client))
 							{
 								// this should no longer be possible to do without extra manipulation							
-								DecideRebelsFate(client, idx, -1);	
+								DecideRebelsFate(client, idx, -1);
 							}
 							else // if we didn't repeat
 							{		
@@ -1915,10 +1924,6 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 							}
 						}		    							
 					}
-					else if (StrEqual(FiredWeapon, "knife"))
-					{
-						DecideRebelsFate(client, idx, -1);
-					}
 					else if (StrEqual(LR_WeaponName, "weapon_hkp2000") && StrEqual(FiredWeapon, "weapon_usp_silencer") || StrEqual(FiredWeapon, "weapon_hkp2000"))
 					{
 						if (gShadow_Announce_Shot4Shot)
@@ -1946,7 +1951,7 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 							SetEntData(Prisoner_S4S_Pistol, g_Offset_Clip1, 1);
 						}
 					}
-					else
+					else if (!StrEqual(FiredWeapon, "knife"))
 					{
 						DecideRebelsFate(client, idx, -1);
 					}
@@ -2019,7 +2024,7 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 					decl String:FiredWeapon[32];
 					GetEventString(event, "weapon", FiredWeapon, sizeof(FiredWeapon));
 					
-					if (!StrEqual(FiredWeapon, NoScopeW))
+					if (!StrEqual(FiredWeapon, NoScopeW) && !StrEqual(FiredWeapon, "knife"))
 					{
 						DecideRebelsFate(client, idx, -1);
 					}
@@ -2034,6 +2039,11 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 					{
 						DecideRebelsFate(client, idx, -1);
 					}
+			}
+			else if (type == LR_RockPaperScissors || type == LR_Race || type == LR_JumpContest)
+			{
+				RightKnifeAntiCheat(client, idx);
+				DecideRebelsFate(client, idx, -1);
 			}
 		}
 	}
@@ -6287,11 +6297,70 @@ stock SetReserveAmmo(client, weapon, ammo)
   SetEntProp(client, Prop_Send, "m_iAmmo", ammo, _, ammotype);
 }
 
-
 stock SetClipAmmo(client, weapon, ammo)
 {
   SetEntProp(weapon, Prop_Send, "m_iClip1", ammo);
   SetEntProp(weapon, Prop_Send, "m_iClip2", ammo);
+}
+
+GetLastButton(client, buttons, idx)
+{
+	new LR_Player_Prisoner = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_Prisoner);
+	new LR_Player_Guard = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_Guard);
+	if (IsClientInGame(client) && IsPlayerAlive(client))
+	{
+		if (client == LR_Player_Prisoner || client == LR_Player_Guard)
+		{
+			for (new i = 0; i < MAX_BUTTONS; i++)
+			{
+				new button = (1 << i);
+				if ((buttons & button))
+				{
+					if (!(g_LastButtons[client] & button))
+					{
+						if (button == IN_ATTACK2 || button == IN_ATTACK)
+						{
+							new String:classname[32];
+							Client_GetActiveWeaponName(client, classname, 32);
+							if (StrContains(classname, "knife", false) != -1)
+							{
+								g_TriedToStab[client] = true;
+							}
+							else
+							{
+								g_TriedToStab[client] = false;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	g_LastButtons[client] = buttons;
+}
+
+RightKnifeAntiCheat(client, idx)
+{
+	new LastRequest:type = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_LRType);
+	new LR_Player_Prisoner = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_Prisoner);
+	new LR_Player_Guard = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_Guard);
+	
+	if (client == LR_Player_Prisoner || client == LR_Player_Guard)
+	{		
+		if (!(type == LR_KnifeFight) && !(type == LR_Rebel))
+		{
+			if (IsClientInGame(client) && IsPlayerAlive(client))
+			{
+				if (g_TriedToStab[client] == true)
+				{
+					DecideRebelsFate(client, idx);
+					
+					g_TriedToStab[client] = false;
+				}
+			}
+		}		
+	}
 }
 
 UpdatePlayerCounts(&Prisoners, &Guards, &iNumGuardsAvailable)
