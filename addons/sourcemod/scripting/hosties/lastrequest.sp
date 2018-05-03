@@ -37,6 +37,7 @@
 // Global variables
 new g_LastButtons[MAXPLAYERS+1];
 new bool:g_TriedToStab[MAXPLAYERS+1] = false;
+new bool:g_bThirdperson[MAXPLAYERS+1] = false;
 
 new bool:g_bIsLRAvailable = true;
 new bool:g_bRoundInProgress = true;
@@ -1321,12 +1322,20 @@ CleanupLastRequest(loser, arrayIndex)
 				case Knife_ThirdPerson:
 				{
 					if (IsClientInGame(LR_Player_Prisoner))
-					{
-						ClientCommand(LR_Player_Prisoner, "firstperson");
+					{						
+						if (g_bThirdperson[LR_Player_Prisoner] == true)
+						{
+							ClientCommand(LR_Player_Prisoner, "firstperson");
+							g_bThirdperson[LR_Player_Prisoner] = false;
+						}
 					}
 					if (IsClientInGame(LR_Player_Guard))
 					{
-						ClientCommand(LR_Player_Guard, "firstperson");
+						if (g_bThirdperson[LR_Player_Guard] == true)
+						{
+							ClientCommand(LR_Player_Guard, "firstperson");
+							g_bThirdperson[LR_Player_Guard] = false;
+						}
 					}
 					SetEntData(winner, g_Offset_Health, 100);
 				}
@@ -3871,8 +3880,22 @@ InitializeGame(iPartnersIndex)
 				}
 				case Knife_ThirdPerson:
 				{
-					ClientCommand(LR_Player_Guard, "thirdperson");
-					ClientCommand(LR_Player_Prisoner, "thirdperson");
+					static Handle:m_hAllowTP;
+					if (!m_hAllowTP)
+					{
+						m_hAllowTP = FindConVar("sv_allow_thirdperson");
+					}
+					SetConVarInt(m_hAllowTP, 1, false, false);
+					if (g_bThirdperson[LR_Player_Guard] == false)
+					{
+						ClientCommand(LR_Player_Guard, "thirdperson");
+						g_bThirdperson[LR_Player_Guard] = true;
+					}
+					if (g_bThirdperson[LR_Player_Prisoner] == false)
+					{
+						ClientCommand(LR_Player_Prisoner, "thirdperson");
+						g_bThirdperson[LR_Player_Prisoner] = true;
+					}
 				}
 				case Knife_Drugs:
 				{
