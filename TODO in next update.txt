@@ -1,15 +1,15 @@
 TODO list for the next update:
-	-Add Bayonet to RightKnifeAntiCheat 						(Fixed) 		[Many Thanks for Bara]
-	-Add Debug cvar 											(Done) 			[sm_hosties_debug_enabled - 1 = enabled , 0 = disabled]
-	-Add Debug texts 											(Started)		[Kills printed]
-	-Add Support to CSS thirdperson knife 						(Done)
-	-Add reset to thirdperson used cvar							(Done)
-	-Fix the Outside LR slay
-	-Fix the Race AirKnife Slay 								(Fixed)
-	-Translate it to Hungarian
-	-Make Texts fancy
-	-Create custom prefix for servernames
+-Add Bayonet to RightKnifeAntiCheat ✓
+-Add Debug cvar ✓
+-Add Debug texts ✓
+-Add Support to CSS thirdperson knife ✓
+-Add reset to thirdperson used cvar	✓
+-Fix the Outside LR slay
+-Fix the Race AirKnife Slay ✓
+-Fix MyJailBreak
+-Translate it to Hungarian
+-Make Texts fancy
+-Create custom prefix for servernames
 	
-	
-	
-	+Colored the Debug texts
++Colored the Debug texts
+https://github.com/Sples1/sm-hosties-fixed/tree/beta
