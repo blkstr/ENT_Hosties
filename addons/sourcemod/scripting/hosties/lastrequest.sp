@@ -38,6 +38,7 @@
 new g_LastButtons[MAXPLAYERS+1];
 new bool:g_TriedToStab[MAXPLAYERS+1] = false;
 new bool:g_bThirdperson[MAXPLAYERS+1] = false;
+new Handle:m_hAllowTP;
 
 new bool:g_bIsLRAvailable = true;
 new bool:g_bRoundInProgress = true;
@@ -139,6 +140,7 @@ new Handle:gH_Cvar_LR_GunToss_MarkerMode = INVALID_HANDLE;
 new Handle:gH_Cvar_LR_GunToss_StartMode = INVALID_HANDLE;
 new Handle:gH_Cvar_LR_GunToss_ShowMeter = INVALID_HANDLE;
 new Handle:gH_Cvar_LR_Race_AirPoints = INVALID_HANDLE;
+new Handle:gH_Cvar_LR_Debug_Enabled = INVALID_HANDLE;
 new Handle:gH_Cvar_LR_Race_NotifyCTs = INVALID_HANDLE;
 new Handle:gH_Cvar_Announce_CT_FreeHit = INVALID_HANDLE;
 new Handle:gH_Cvar_Announce_LR = INVALID_HANDLE;
@@ -211,6 +213,7 @@ new bool:gShadow_LR_NonContKiller_Action;
 new gShadow_LR_GunToss_MarkerMode = -1;
 new gShadow_LR_GunToss_StartMode = -1;
 new gShadow_LR_GunToss_ShowMeter = -1;
+new bool:gShadow_LR_Debug_Enabled = false;
 new bool:gShadow_LR_Race_AirPoints = false;
 new bool:gShadow_LR_Race_NotifyCTs = false;
 new gShadow_Announce_CT_FreeHit = 0;
@@ -365,6 +368,15 @@ LastRequest_OnPluginStart()
 	if (g_Offset_SecAttack == -1)
 	{
 		SetFailState("Unable to find offset for next secondary attack.");
+	}
+	
+	//Set convar to thirdperson
+	if (!m_hAllowTP)
+	{
+		if (g_Game == Game_CSGO)
+		{
+			m_hAllowTP = FindConVar("sv_allow_thirdperson");
+		}
 	}
 	
 	// Console commands
@@ -525,6 +537,8 @@ LastRequest_OnPluginStart()
 	gShadow_LR_KnifeFight_Rebel = 1;
 	gH_Cvar_LR_Race_AirPoints = CreateConVar("sm_hosties_lr_race_airpoints", "0", "Allow prisoners to set race points in the air.", 0, true, 0.0, true, 1.0);
 	gShadow_LR_Race_AirPoints = false;
+	gH_Cvar_LR_Debug_Enabled = CreateConVar("sm_hosties_debug_enabled", "0", "Allow prisoners to set race points in the air.", 0, true, 0.0, true, 1.0);
+	gShadow_LR_Debug_Enabled = false;
 	gH_Cvar_LR_Race_NotifyCTs = CreateConVar("sm_hosties_lr_race_tell_cts", "1", "Tells all CTs when a T has selected the race option from the LR menu", 0, true, 0.0, true, 1.0);
 	gShadow_LR_Race_NotifyCTs = false;
 	gH_Cvar_LR_Rebel_MaxTs = CreateConVar("sm_hosties_lr_rebel_ts", "1", "If the Rebel LR option is enabled, specifies the maximum number of alive terrorists needed for the option to appear in the LR menu.", 0, true, 1.0);
@@ -620,6 +634,7 @@ LastRequest_OnPluginStart()
 	HookConVarChange(gH_Cvar_LR_ChickenFight_Rebel, ConVarChanged_Setting); 
 	HookConVarChange(gH_Cvar_LR_HotPotato_Rebel, ConVarChanged_Setting);
 	HookConVarChange(gH_Cvar_LR_Race_AirPoints, ConVarChanged_Setting);
+	HookConVarChange(gH_Cvar_LR_Debug_Enabled, ConVarChanged_Setting);
 	HookConVarChange(gH_Cvar_LR_Race_NotifyCTs, ConVarChanged_Setting);
 	HookConVarChange(gH_Cvar_LR_Rebel_MinCTs, ConVarChanged_Setting);
 	HookConVarChange(gH_Cvar_LR_Rebel_MaxTs, ConVarChanged_Setting);
@@ -1116,6 +1131,12 @@ public LastRequest_PlayerHurt(Handle:event, const String:name[], bool:dontBroadc
 			else if (target != LR_Player_Prisoner && target != LR_Player_Guard && \
 				(attacker == LR_Player_Prisoner || attacker == LR_Player_Guard))
 			{
+				if (gShadow_LR_Debug_Enabled == true)
+				{
+					new String:playername[32];
+					GetClientName(attacker, playername, sizeof(playername));
+					PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for attacking someone else", playername);
+				}
 				DecideRebelsFate(attacker, idx, target);
 			}
 			
@@ -1132,7 +1153,13 @@ public LastRequest_PlayerHurt(Handle:event, const String:name[], bool:dontBroadc
 					case LR_KnifeFight, LR_ChickenFight:
 					{
 						if (!bIsItAKnife)
-						{			
+						{	
+							if (gShadow_LR_Debug_Enabled == true)
+							{
+								new String:playername[32];
+								GetClientName(attacker, playername, sizeof(playername));
+								PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for using other weapon", playername);
+							}
 							DecideRebelsFate(attacker, idx, target);
 						}
 					}
@@ -1140,11 +1167,23 @@ public LastRequest_PlayerHurt(Handle:event, const String:name[], bool:dontBroadc
 					{
 						if (bIsItAKnife)
 						{
+							if (gShadow_LR_Debug_Enabled == true)
+							{
+								new String:playername[32];
+								GetClientName(attacker, playername, sizeof(playername));
+								PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for using other weapon", playername);
+							}
 							DecideRebelsFate(attacker, idx, target);
 						}
 					}
 					case LR_HotPotato:
 					{
+						if (gShadow_LR_Debug_Enabled == true)
+						{
+							new String:playername[32];
+							GetClientName(attacker, playername, sizeof(playername));
+							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for using other weapon", playername);
+						}
 						DecideRebelsFate(attacker, idx, target);
 					}
 				}		
@@ -1325,7 +1364,17 @@ CleanupLastRequest(loser, arrayIndex)
 					{						
 						if (g_bThirdperson[LR_Player_Prisoner] == true)
 						{
-							ClientCommand(LR_Player_Prisoner, "firstperson");
+							if (g_Game == Game_CSGO)
+							{
+								ClientCommand(LR_Player_Prisoner, "firstperson");
+							}
+							else if (g_Game == Game_CSS)
+							{
+								SetEntPropEnt(LR_Player_Prisoner, Prop_Send, "m_hObserverTarget", LR_Player_Prisoner);
+								SetEntProp(LR_Player_Prisoner, Prop_Send, "m_iObserverMode", 0);
+								SetEntProp(LR_Player_Prisoner, Prop_Send, "m_bDrawViewmodel", 1);
+								SetEntProp(LR_Player_Prisoner, Prop_Send, "m_iFOV", 90);
+							}
 							g_bThirdperson[LR_Player_Prisoner] = false;
 						}
 					}
@@ -1333,10 +1382,19 @@ CleanupLastRequest(loser, arrayIndex)
 					{
 						if (g_bThirdperson[LR_Player_Guard] == true)
 						{
+						if (g_Game == Game_CSGO)
 							ClientCommand(LR_Player_Guard, "firstperson");
-							g_bThirdperson[LR_Player_Guard] = false;
 						}
+						else if (g_Game == Game_CSS)
+						{
+							SetEntPropEnt(LR_Player_Guard, Prop_Send, "m_hObserverTarget", LR_Player_Guard);
+							SetEntProp(LR_Player_Guard, Prop_Send, "m_iObserverMode", 0);
+							SetEntProp(LR_Player_Guard, Prop_Send, "m_bDrawViewmodel", 1);
+							SetEntProp(LR_Player_Guard, Prop_Send, "m_iFOV", 90);
+						}
+						g_bThirdperson[LR_Player_Guard] = false;
 					}
+					SetConVarInt(m_hAllowTP, 0, false, false);
 					SetEntData(winner, g_Offset_Health, 100);
 				}
 			}
@@ -1742,6 +1800,12 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 					
 					if (iClientWeapon != M4M_Prisoner_Weapon && iClientWeapon != M4M_Guard_Weapon && !StrEqual(FiredWeapon, "knife"))
 					{
+						if (gShadow_LR_Debug_Enabled == true)
+						{
+							new String:playername[32];
+							GetClientName(client, playername, sizeof(playername));
+							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for firing other weapon", playername);
+						}
 						DecideRebelsFate(client, idx, -1);
 					}
 					else if (!StrEqual(FiredWeapon, "knife"))
@@ -1877,6 +1941,12 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 						// they picked up an identical gun and are using it instead
 						if (iClientWeapon != Prisoner_S4S_Pistol && iClientWeapon != Guard_S4S_Pistol)		    	
 						{
+							if (gShadow_LR_Debug_Enabled == true)
+							{
+								new String:playername[32];
+								GetClientName(client, playername, sizeof(playername));
+								PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for using other weapon in S4S", playername);
+							}
 							DecideRebelsFate(client, idx, -1);
 						}
 						// firing weapon IS correct
@@ -1885,7 +1955,13 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 							// check for double shot situation (if they picked up another deagle with more ammo between shots)
 							if (gShadow_LR_S4S_DoubleShot && (S4Slastshot == client))
 							{
-								// this should no longer be possible to do without extra manipulation							
+								// this should no longer be possible to do without extra manipulation	
+								if (gShadow_LR_Debug_Enabled == true)
+								{
+									new String:playername[32];
+									GetClientName(client, playername, sizeof(playername));
+									PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for DoubleShot in S4S", playername);
+								}								
 								DecideRebelsFate(client, idx, -1);
 							}
 							else // if we didn't repeat
@@ -1962,6 +2038,12 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 					}
 					else if (!StrEqual(FiredWeapon, "knife"))
 					{
+						if (gShadow_LR_Debug_Enabled == true)
+						{
+							new String:playername[32];
+							GetClientName(client, playername, sizeof(playername));
+							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for using other weapon in S4S out", playername);
+						}
 						DecideRebelsFate(client, idx, -1);
 					}
 				}	
@@ -2035,6 +2117,12 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 					
 					if (!StrEqual(FiredWeapon, NoScopeW) && !StrEqual(FiredWeapon, "knife"))
 					{
+						if (gShadow_LR_Debug_Enabled == true)
+						{
+							new String:playername[32];
+							GetClientName(client, playername, sizeof(playername));
+							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for using other weapon in NoScope", playername);
+						}
 						DecideRebelsFate(client, idx, -1);
 					}
 				}
@@ -2046,13 +2134,14 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 					
 					if (!StrEqual(FiredWeapon, "weapon_flashbang"))
 					{
+						if (gShadow_LR_Debug_Enabled == true)
+						{
+							new String:playername[32];
+							GetClientName(client, playername, sizeof(playername));
+							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for using other weapon in DodgeBall", playername);
+						}
 						DecideRebelsFate(client, idx, -1);
 					}
-			}
-			else if (type == LR_RockPaperScissors || type == LR_Race || type == LR_JumpContest)
-			{
-				RightKnifeAntiCheat(client, idx);
-				DecideRebelsFate(client, idx, -1);
 			}
 		}
 	}
@@ -2091,6 +2180,12 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:damage, &damage
 					
 					if ((weapon != -1) && (weapon != Pistol_Prisoner) && (weapon != Pistol_Guard))
 					{
+						if (gShadow_LR_Debug_Enabled == true)
+						{
+							new String:playername[32];
+							GetClientName(attacker, playername, sizeof(playername));
+							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for using other weapon Roulette", playername);
+						}
 						DecideRebelsFate(attacker, idx, victim);
 					}
 					
@@ -2130,6 +2225,17 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:damage, &damage
 				else if (Type == LR_Rebel)
 				{
 					return Plugin_Continue;
+				}
+				else if (Type == LR_RockPaperScissors || Type == LR_Race || Type == LR_JumpContest)
+				{
+					RightKnifeAntiCheat(attacker, idx);
+					if (gShadow_LR_Debug_Enabled == true)
+					{
+						new String:playername[32];
+						GetClientName(attacker, playername, sizeof(playername));
+						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for using other weapon in RPS/R/JC", playername);
+					}
+					DecideRebelsFate(attacker, idx, -1);
 				}				
 				// Allow LR contestants to attack each other
 				else if ((victim == LR_Player_Prisoner && attacker == LR_Player_Guard) || (victim == LR_Player_Guard && attacker == LR_Player_Prisoner))
@@ -2567,6 +2673,7 @@ LastRequest_OnConfigsExecuted()
 		g_bListenersAdded = false;
 	}
 	gShadow_LR_Race_AirPoints = bool:GetConVarInt(gH_Cvar_LR_Race_AirPoints);
+	gShadow_LR_Debug_Enabled = bool:GetConVarInt(gH_Cvar_LR_Debug_Enabled);
 	gShadow_LR_Race_NotifyCTs = bool:GetConVarInt(gH_Cvar_LR_Race_NotifyCTs);
 	gShadow_LR_Beacons = bool:GetConVarInt(gH_Cvar_LR_Beacons);
 	gShadow_LR_HelpBeams = bool:GetConVarInt(gH_Cvar_LR_HelpBeams);
@@ -2672,6 +2779,10 @@ public ConVarChanged_Setting(Handle:cvar, const String:oldValue[], const String:
 	else if (cvar == gH_Cvar_LR_Race_AirPoints)
 	{
 		gShadow_LR_Race_AirPoints = bool:StringToInt(newValue);
+	}
+	else if (cvar == gH_Cvar_LR_Debug_Enabled)
+	{
+		gShadow_LR_Debug_Enabled = bool:StringToInt(newValue);
 	}
 	else if (cvar == gH_Cvar_LR_Race_NotifyCTs)
 	{
@@ -3880,20 +3991,35 @@ InitializeGame(iPartnersIndex)
 				}
 				case Knife_ThirdPerson:
 				{
-					static Handle:m_hAllowTP;
-					if (!m_hAllowTP)
-					{
-						m_hAllowTP = FindConVar("sv_allow_thirdperson");
-					}
 					SetConVarInt(m_hAllowTP, 1, false, false);
 					if (g_bThirdperson[LR_Player_Guard] == false)
 					{
-						ClientCommand(LR_Player_Guard, "thirdperson");
+						if (g_Game == Game_CSGO)
+						{
+							ClientCommand(LR_Player_Guard, "thirdperson");
+						}
+						else if (g_Game == Game_CSS)
+						{
+							SetEntPropEnt(LR_Player_Guard, Prop_Send, "m_hObserverTarget", 0);
+							SetEntProp(LR_Player_Guard, Prop_Send, "m_iObserverMode", 1);
+							SetEntProp(LR_Player_Guard, Prop_Send, "m_bDrawViewmodel", 0);
+							SetEntProp(LR_Player_Guard, Prop_Send, "m_iFOV", 120);
+						}
 						g_bThirdperson[LR_Player_Guard] = true;
 					}
 					if (g_bThirdperson[LR_Player_Prisoner] == false)
 					{
-						ClientCommand(LR_Player_Prisoner, "thirdperson");
+						if (g_Game == Game_CSGO)
+						{
+							ClientCommand(LR_Player_Prisoner, "thirdperson");
+						}
+						else if (g_Game == Game_CSS)
+						{
+							SetEntPropEnt(LR_Player_Prisoner, Prop_Send, "m_hObserverTarget", 0);
+							SetEntProp(LR_Player_Prisoner, Prop_Send, "m_iObserverMode", 1);
+							SetEntProp(LR_Player_Prisoner, Prop_Send, "m_bDrawViewmodel", 0);
+							SetEntProp(LR_Player_Prisoner, Prop_Send, "m_iFOV", 120);
+						}
 						g_bThirdperson[LR_Player_Prisoner] = true;
 					}
 				}
@@ -6345,7 +6471,7 @@ GetLastButton(client, buttons, idx)
 						{
 							new String:classname[32];
 							Client_GetActiveWeaponName(client, classname, 32);
-							if (StrContains(classname, "knife", false) != -1)
+							if ((StrContains(classname, "knife", false) != -1) || StrContains(classname, "bayonet", false) != -1)
 							{
 								g_TriedToStab[client] = true;
 							}
@@ -6376,9 +6502,14 @@ RightKnifeAntiCheat(client, idx)
 			if (IsClientInGame(client) && IsPlayerAlive(client))
 			{
 				if (g_TriedToStab[client] == true)
-				{
+				{					
+					if (gShadow_LR_Debug_Enabled == true)
+					{
+						new String:playername[32];
+						GetClientName(client, playername, sizeof(playername));
+						PrintToChatAll("[Entity-Debug] %s has been killed by RightKnifeAntiCheat", playername);
+					}
 					DecideRebelsFate(client, idx);
-					
 					g_TriedToStab[client] = false;
 				}
 			}

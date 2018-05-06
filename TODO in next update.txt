@@ -1,0 +1,15 @@
+TODO list for the next update:
+	-Add Bayonet to RightKnifeAntiCheat 						(Fixed) 		[Many Thanks for Bara]
+	-Add Debug cvar 											(Done) 			[sm_hosties_debug_enabled - 1 = enabled , 0 = disabled]
+	-Add Debug texts 											(Started)		[Kills printed]
+	-Add Support to CSS thirdperson knife 						(Done)
+	-Add reset to thirdperson used cvar							(Done)
+	-Fix the Outside LR slay
+	-Fix the Race AirKnife Slay 								(Fixed)
+	-Translate it to Hungarian
+	-Make Texts fancy
+	-Create custom prefix for servernames
+	
+	
+	
+	+Colored the Debug texts
