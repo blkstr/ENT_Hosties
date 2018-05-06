@@ -60,7 +60,7 @@
 // Add muting system
 #define	MODULE_MUTE							1
 // Add freekill detection and prevention
-#define	MODULE_FREEKILL						0
+#define	MODULE_FREEKILL						1
 // Add gun safety
 #define	MODULE_GUNSAFETY					1
 // Add intelli-respawn
@@ -78,6 +78,25 @@ new GameType:g_Game = Game_Unknown;
 
 new Handle:gH_TopMenu = INVALID_HANDLE;
 new TopMenuObject:gM_Hosties = INVALID_TOPMENUOBJECT;
+
+new Handle:gH_Cvar_LR_Debug_Enabled = INVALID_HANDLE;
+new bool:gShadow_LR_Debug_Enabled = false;
+
+#if (MODULE_FREEKILL == 1)
+new Handle:gH_Cvar_Freekill_Sound = INVALID_HANDLE;
+new Handle:gH_Cvar_Freekill_Threshold = INVALID_HANDLE;
+new Handle:gH_Cvar_Freekill_Notify = INVALID_HANDLE;
+new Handle:gH_Cvar_Freekill_BanLength = INVALID_HANDLE;
+new Handle:gH_Cvar_Freekill_Punishment = INVALID_HANDLE;
+new Handle:gH_Cvar_Freekill_Reset = INVALID_HANDLE;
+new String:gShadow_Freekill_Sound[PLATFORM_MAX_PATH];
+new gShadow_Freekill_Threshold;
+new gShadow_Freekill_BanLength;
+new gShadow_Freekill_Reset;
+new FreekillPunishment:gShadow_Freekill_Punishment;
+new bool:gShadow_Freekill_Notify;
+new gA_FreekillsOfCT[MAXPLAYERS+1];
+#endif
 
 #if (MODULE_NOBLOCK == 1)
 #include "hosties/noblock.sp"
@@ -310,7 +329,7 @@ public OnConfigsExecuted()
 public OnClientPutInServer(client)
 {
 	LastRequest_ClientPutInServer(client);
-	//Freekillers_ClientPutInServer(client);
+	Freekillers_ClientPutInServer(client);
 }
 
 public Event_RoundStart(Handle:event, const String:name[], bool:dontBroadcast)

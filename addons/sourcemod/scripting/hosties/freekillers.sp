@@ -44,8 +44,6 @@ Freekillers_OnPluginStart()
 	gShadow_Freekill_Punishment = FP_Slay;
 	gH_Cvar_Freekill_Reset = CreateConVar("sm_hosties_freekill_reset", "0", "When to reset the 'freekill counter' for all CTs: 0 - on round start, 1 - on map end", 0, true, 0.0, true, 1.0);
 	gShadow_Freekill_Reset = 0;
-	gH_Cvar_Freekill_Sound_Mode = CreateConVar("sm_hosties_freekill_sound_mode", "1", "When to play the 'freekill sound': 0 - on freeATTACK, 1 - on freeKILL", 0, true, 0.0, true, 1.0);
-	gShadow_Freekill_Sound_Mode = 1;
 	
 	gH_Cvar_Advanced_FK_Prevention = CreateConVar("sm_hosties_freekill_adv_prot", "1", "Turns on or off the advanced freekill protection system.", 0, true, 0.0, true, 1.0);
 	gShadow_Advanced_FK_Prevention = true;
@@ -59,7 +57,6 @@ Freekillers_OnPluginStart()
 	HookConVarChange(gH_Cvar_Freekill_BanLength, Freekillers_CvarChanged);
 	HookConVarChange(gH_Cvar_Freekill_Punishment, Freekillers_CvarChanged);
 	HookConVarChange(gH_Cvar_Freekill_Reset, Freekillers_CvarChanged);
-	HookConVarChange(gH_Cvar_Freekill_Sound_Mode, Freekillers_CvarChanged);
 	HookConVarChange(gH_Cvar_Advanced_FK_Prevention, Freekillers_CvarChanged);
 	
 	ResetNumFreekills();
@@ -131,7 +128,6 @@ Freekillers_OnConfigsExecuted()
 	gShadow_Freekill_BanLength = GetConVarInt(gH_Cvar_Freekill_BanLength);
 	gShadow_Freekill_Punishment = FreekillPunishment:GetConVarInt(gH_Cvar_Freekill_Punishment);
 	gShadow_Freekill_Reset = GetConVarInt(gH_Cvar_Freekill_Reset);
-	gShadow_Freekill_Sound_Mode = GetConVarInt(gH_Cvar_Freekill_Sound_Mode);
 	gShadow_Advanced_FK_Prevention = GetConVarBool(gH_Cvar_Advanced_FK_Prevention);
 }
 
@@ -160,10 +156,6 @@ public Freekillers_CvarChanged(Handle:cvar, const String:oldValue[], const Strin
 	else if (cvar == gH_Cvar_Freekill_Reset)
 	{
 		gShadow_Freekill_Reset = StringToInt(newValue);
-	}
-	else if (cvar == gH_Cvar_Freekill_Sound_Mode)
-	{
-		gShadow_Freekill_Sound_Mode = StringToInt(newValue);
 	}
 	else if (cvar == gH_Cvar_Advanced_FK_Prevention)
 	{
@@ -264,7 +256,7 @@ TakeActionOnFreekiller(attacker)
 				{
 					if (g_bSBAvailable)
 					{
-						SBBanPlayer(0, attacker, gShadow_Freekill_BanLength, "SM_Hosties: Freekilling");
+						SBPP_BanPlayer(0, attacker, gShadow_Freekill_BanLength, "SM_Hosties: Freekilling");
 					}
 					else
 					{

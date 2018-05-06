@@ -140,7 +140,6 @@ new Handle:gH_Cvar_LR_GunToss_MarkerMode = INVALID_HANDLE;
 new Handle:gH_Cvar_LR_GunToss_StartMode = INVALID_HANDLE;
 new Handle:gH_Cvar_LR_GunToss_ShowMeter = INVALID_HANDLE;
 new Handle:gH_Cvar_LR_Race_AirPoints = INVALID_HANDLE;
-new Handle:gH_Cvar_LR_Debug_Enabled = INVALID_HANDLE;
 new Handle:gH_Cvar_LR_Race_NotifyCTs = INVALID_HANDLE;
 new Handle:gH_Cvar_Announce_CT_FreeHit = INVALID_HANDLE;
 new Handle:gH_Cvar_Announce_LR = INVALID_HANDLE;
@@ -213,7 +212,6 @@ new bool:gShadow_LR_NonContKiller_Action;
 new gShadow_LR_GunToss_MarkerMode = -1;
 new gShadow_LR_GunToss_StartMode = -1;
 new gShadow_LR_GunToss_ShowMeter = -1;
-new bool:gShadow_LR_Debug_Enabled = false;
 new bool:gShadow_LR_Race_AirPoints = false;
 new bool:gShadow_LR_Race_NotifyCTs = false;
 new gShadow_Announce_CT_FreeHit = 0;
@@ -1022,7 +1020,12 @@ public LastRequest_PlayerDeath(Handle:event, const String:name[], bool:dontBroad
 					}
 					else
 					{
-						// follow rebel action
+						if (gShadow_LR_Debug_Enabled == true)
+						{
+							new String:playername[32];
+							GetClientName(attacker, playername, sizeof(playername));
+							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06PlayerDeath Rebel Decided", playername);
+						}
 						DecideRebelsFate(attacker, idx);
 						return;
 					}
@@ -1195,6 +1198,12 @@ public LastRequest_PlayerHurt(Handle:event, const String:name[], bool:dontBroadc
 				RightKnifeAntiCheat(attacker, idx);
 				if (type == LR_HotPotato)
 				{
+					if (gShadow_LR_Debug_Enabled == true)
+					{
+						new String:playername[32];
+						GetClientName(attacker, playername, sizeof(playername));
+						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for using other weapon in HP", playername);
+					}
 					DecideRebelsFate(attacker, idx, target);
 				}
 			}
@@ -1292,6 +1301,12 @@ public LastRequest_PlayerDisconnect(Handle:event, const String:name[], bool:dont
 				CleanupLastRequest(client, idx);
 				RemoveFromArray(gH_DArray_LR_Partners, idx);
 				PrintToChatAll(CHAT_BANNER, "LR Player Disconnect", client);
+				if (gShadow_LR_Debug_Enabled == true)
+				{
+					new String:playername[32];
+					GetClientName(client, playername, sizeof(playername));
+					PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06disconnected, CleanUP done", playername);
+				}
 			}
 		}
 	}
@@ -1332,7 +1347,11 @@ CleanupLastRequest(loser, arrayIndex)
 						SetEntData(LR_Player_Guard, g_Offset_DefFOV, NORMAL_VISION, 4, true);
 						ShowOverlayToClient(LR_Player_Guard, "");
 					}
-					SetEntData(winner, g_Offset_Health, 100);					
+					SetEntData(winner, g_Offset_Health, 100);
+					if (gShadow_LR_Debug_Enabled == true)
+					{
+						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after Drunk/Drugges KnifeFight");
+					}
 				}
 				case Knife_LowGrav:
 				{
@@ -1345,6 +1364,10 @@ CleanupLastRequest(loser, arrayIndex)
 						SetEntityGravity(LR_Player_Guard, 1.0);
 					}
 					SetEntData(winner, g_Offset_Health, 100);
+					if (gShadow_LR_Debug_Enabled == true)
+					{
+						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after LowGrav KnifeFight");
+					}
 				}
 				case Knife_HiSpeed:
 				{
@@ -1357,6 +1380,10 @@ CleanupLastRequest(loser, arrayIndex)
 						SetEntPropFloat(winner, Prop_Data, "m_flLaggedMovementValue", 1.0);
 					}
 					SetEntData(winner, g_Offset_Health, 100);
+					if (gShadow_LR_Debug_Enabled == true)
+					{
+						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after HiSpeed KnifeFight");
+					}
 				}
 				case Knife_ThirdPerson:
 				{
@@ -1396,17 +1423,23 @@ CleanupLastRequest(loser, arrayIndex)
 					}
 					SetConVarInt(m_hAllowTP, 0, false, false);
 					SetEntData(winner, g_Offset_Health, 100);
+					if (gShadow_LR_Debug_Enabled == true)
+					{
+						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after ThirdPerson KnifeFight");
+					}
 				}
 			}
-		}
-		
+		}		
 		case LR_NoScope:
 		{
 			SetEntData(winner, g_Offset_Health, 100);
 			StripAllWeapons(winner);
 			GivePlayerItem(winner, "weapon_knife");
-		}
-		
+			if (gShadow_LR_Debug_Enabled == true)
+			{
+				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after NoScope");
+			}
+		}		
 		case LR_GunToss:
 		{
 			new GTdeagle1 = EntRefToEntIndex(GetArrayCell(gH_DArray_LR_Partners, arrayIndex, _:Block_PrisonerData));
@@ -1424,6 +1457,10 @@ CleanupLastRequest(loser, arrayIndex)
 			SetEntData(winner, g_Offset_Health, 100);
 			StripAllWeapons(winner);
 			GivePlayerItem(winner, "weapon_knife");
+			if (gShadow_LR_Debug_Enabled == true)
+			{
+				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after GunToss");
+			}
 		}
 		case LR_ChickenFight:
 		{
@@ -1436,8 +1473,11 @@ CleanupLastRequest(loser, arrayIndex)
 					StripAllWeapons(winner);
 					GivePlayerItem(winner, "weapon_knife");
 				}	
-			}	
-			
+			}
+			if (gShadow_LR_Debug_Enabled == true)
+			{
+				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after ChickenFight");
+			}
 		}
 		case LR_HotPotato:
 		{
@@ -1457,15 +1497,24 @@ CleanupLastRequest(loser, arrayIndex)
 				SetEntityRenderColor(HPdeagle, 255, 255, 255);
 				SetEntityRenderMode(HPdeagle, RENDER_NORMAL);
 			}
+			if (gShadow_LR_Debug_Enabled == true)
+			{
+				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after HotPotato");
+			}
 		}
 		case LR_RussianRoulette:
 		{
 			if (IsClientInGame(winner) && IsPlayerAlive(winner))
 			{
 				SetEntityMoveType(winner, MOVETYPE_WALK);
+				SetEntityMoveType(loser, MOVETYPE_WALK);
 				SetEntData(winner, g_Offset_Health, 100);
 				StripAllWeapons(winner);
 				GivePlayerItem(winner, "weapon_knife");
+			}
+			if (gShadow_LR_Debug_Enabled == true)
+			{
+				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after RussianRoulette");
 			}
 		}
 		case LR_Dodgeball:
@@ -1497,6 +1546,10 @@ CleanupLastRequest(loser, arrayIndex)
 				StripAllWeapons(winner);
 				GivePlayerItem(winner, "weapon_knife");
 			}
+			if (gShadow_LR_Debug_Enabled == true)
+			{
+				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after Dodgeball");
+			}
 		}
 		case LR_Race:
 		{
@@ -1512,6 +1565,10 @@ CleanupLastRequest(loser, arrayIndex)
 				{				
 					BlockEntity(winner, g_Offset_CollisionGroup);
 				}			
+			}
+			if (gShadow_LR_Debug_Enabled == true)
+			{
+				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after Race");
 			}
 		}
 		case LR_JumpContest:
@@ -1544,6 +1601,10 @@ CleanupLastRequest(loser, arrayIndex)
 					}               
 				}
 			}
+			if (gShadow_LR_Debug_Enabled == true)
+			{
+				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after JumpContest");
+			}
 		}
 		case LR_Mag4Mag:
 		{
@@ -1553,6 +1614,10 @@ CleanupLastRequest(loser, arrayIndex)
 				StripAllWeapons(winner);
 				GivePlayerItem(winner, "weapon_knife");
 			}
+			if (gShadow_LR_Debug_Enabled == true)
+			{
+				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after Mag4Mag");
+			}
 		}
 		case LR_Shot4Shot:
 		{
@@ -1561,6 +1626,10 @@ CleanupLastRequest(loser, arrayIndex)
 				SetEntData(winner, g_Offset_Health, 100);
 				StripAllWeapons(winner);
 				GivePlayerItem(winner, "weapon_knife");
+			}
+			if (gShadow_LR_Debug_Enabled == true)
+			{
+				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after Shot4Shot");
 			}
 		}
 		default:
@@ -1582,6 +1651,10 @@ CleanupLastRequest(loser, arrayIndex)
 				SetEntData(winner, g_Offset_Health, 100);
 				StripAllWeapons(winner);
 				GivePlayerItem(winner, "weapon_knife");
+			}
+			if (gShadow_LR_Debug_Enabled == true)
+			{
+				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP by default");
 			}
 		}
 	}	
@@ -1797,18 +1870,8 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 					
 					// set the time to enable burst value to a high value
 					SetEntDataFloat(iClientWeapon, g_Offset_SecAttack, 5000.0);
-					
-					if (iClientWeapon != M4M_Prisoner_Weapon && iClientWeapon != M4M_Guard_Weapon && !StrEqual(FiredWeapon, "knife"))
-					{
-						if (gShadow_LR_Debug_Enabled == true)
-						{
-							new String:playername[32];
-							GetClientName(client, playername, sizeof(playername));
-							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for firing other weapon", playername);
-						}
-						DecideRebelsFate(client, idx, -1);
-					}
-					else if (!StrEqual(FiredWeapon, "knife"))
+				
+					if (!StrEqual(FiredWeapon, "knife"))
 					{
 						new currentAmmo = GetEntData(iClientWeapon, g_Offset_Clip1);
 						// check if a shot was actually fired
@@ -2036,16 +2099,6 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 							SetEntData(Prisoner_S4S_Pistol, g_Offset_Clip1, 1);
 						}
 					}
-					else if (!StrEqual(FiredWeapon, "knife"))
-					{
-						if (gShadow_LR_Debug_Enabled == true)
-						{
-							new String:playername[32];
-							GetClientName(client, playername, sizeof(playername));
-							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for using other weapon in S4S out", playername);
-						}
-						DecideRebelsFate(client, idx, -1);
-					}
 				}	
 			}			
 			else if (type == LR_NoScope)
@@ -2056,7 +2109,9 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 				{
 					// grab weapon choice
 					decl String:NoScopeW[32];
+					decl String:FiredWeapon[32];
 					new NoScopeWeapon:NS_Selection;
+					GetEventString(event, "weapon", FiredWeapon, sizeof(FiredWeapon));
 					NS_Selection = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_Global2);					
 					switch (NS_Selection)
 					{
@@ -2111,12 +2166,11 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 							CreateTimer(0.5, Timer_ResetZoom, GetClientUserId(client), TIMER_FLAG_NO_MAPCHANGE);
 						}
 					}
-					
-					decl String:FiredWeapon[32];
-					GetEventString(event, "weapon", FiredWeapon, sizeof(FiredWeapon));
+	
 					
 					if (!StrEqual(FiredWeapon, NoScopeW) && !StrEqual(FiredWeapon, "knife"))
 					{
+						RightKnifeAntiCheat(client, idx);
 						if (gShadow_LR_Debug_Enabled == true)
 						{
 							new String:playername[32];
@@ -2126,22 +2180,6 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 						DecideRebelsFate(client, idx, -1);
 					}
 				}
-			}
-			else if (type == LR_Dodgeball)
-			{									
-					decl String:FiredWeapon[32];
-					GetEventString(event, "weapon", FiredWeapon, sizeof(FiredWeapon));
-					
-					if (!StrEqual(FiredWeapon, "weapon_flashbang"))
-					{
-						if (gShadow_LR_Debug_Enabled == true)
-						{
-							new String:playername[32];
-							GetClientName(client, playername, sizeof(playername));
-							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for using other weapon in DodgeBall", playername);
-						}
-						DecideRebelsFate(client, idx, -1);
-					}
 			}
 		}
 	}
@@ -2187,6 +2225,7 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:damage, &damage
 							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for using other weapon Roulette", playername);
 						}
 						DecideRebelsFate(attacker, idx, victim);
+						RightKnifeAntiCheat(attacker, idx);
 					}
 					
 					// null any damage
@@ -2226,16 +2265,18 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:damage, &damage
 				{
 					return Plugin_Continue;
 				}
-				else if (Type == LR_RockPaperScissors || Type == LR_Race || Type == LR_JumpContest)
+				else if (Type == LR_RockPaperScissors || Type == LR_Race || Type == LR_JumpContest || Type == LR_Shot4Shot || Type == LR_Dodgeball || Type == LR_Mag4Mag && \
+					(attacker == LR_Player_Guard || attacker == LR_Player_Prisoner) && \
+					(victim == LR_Player_Guard || victim == LR_Player_Prisoner))
 				{
-					RightKnifeAntiCheat(attacker, idx);
 					if (gShadow_LR_Debug_Enabled == true)
 					{
 						new String:playername[32];
 						GetClientName(attacker, playername, sizeof(playername));
-						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for using other weapon in RPS/R/JC", playername);
+						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for using other weapon in RPS/R/JC/S4S/DB", playername);
 					}
 					DecideRebelsFate(attacker, idx, -1);
+					RightKnifeAntiCheat(attacker, idx);
 				}				
 				// Allow LR contestants to attack each other
 				else if ((victim == LR_Player_Prisoner && attacker == LR_Player_Guard) || (victim == LR_Player_Guard && attacker == LR_Player_Prisoner))
@@ -2386,7 +2427,6 @@ public Action:OnWeaponEquip(client, weapon)
 			}
 		}
 	}
-
 	return Plugin_Continue;
 }
 
@@ -2429,6 +2469,12 @@ public Action:OnWeaponDrop(client, weapon)
 							GetEdictClassname(weapon, weapon_name, sizeof(weapon_name));
 							if (StrEqual(weapon_name, "weapon_deagle"))
 							{
+								if (gShadow_LR_Debug_Enabled == true)
+								{
+									new String:playername[32];
+									GetClientName(client, playername, sizeof(playername));
+									PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has dropped his deagle", playername);
+								}
 								PrintToChat(client, CHAT_BANNER, "Already Dropped Deagle");
 								return Plugin_Handled;
 							}
@@ -3728,16 +3774,34 @@ public MainPlayerHandler(Handle:playermenu, MenuAction:action, client, iButtonCh
 													if ((game == LR_HotPotato || game == LR_RussianRoulette) && IsClientTooNearObstacle(client))
 													{
 														PrintToChat(client, CHAT_BANNER, "Too Near Obstruction");
+														if (gShadow_LR_Debug_Enabled == true)
+														{
+															new String:playername[32];
+															GetClientName(client, playername, sizeof(playername));
+															PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Too Near Obstacles", playername);
+														}
 													}
 													// player isn't on ground
 													else if ((game == LR_JumpContest) && !(GetEntityFlags(client) & FL_ONGROUND|FL_INWATER))
 													{
 														PrintToChat(client, CHAT_BANNER, "Must Be On Ground");
+														if (gShadow_LR_Debug_Enabled == true)
+														{
+															new String:playername[32];
+															GetClientName(client, playername, sizeof(playername));
+															PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Must be in the ground", playername);
+														}
 													}
 													// make sure they're not ducked
 													else if ((game == LR_JumpContest) && (GetEntityFlags(client) & FL_DUCKING))
 													{
 														PrintToChat(client, CHAT_BANNER, "Too Near Obstruction");
+														if (gShadow_LR_Debug_Enabled == true)
+														{
+															new String:playername[32];
+															GetClientName(client, playername, sizeof(playername));
+															PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Too Near Obstruction", playername);
+														}
 													}
 													else if (IsLastRequestAutoStart(game))
 													{
@@ -3759,6 +3823,12 @@ public MainPlayerHandler(Handle:playermenu, MenuAction:action, client, iButtonCh
 												}
 												else
 												{
+													if (gShadow_LR_Debug_Enabled == true)
+													{
+														new String:playername[32];
+														GetClientName(client, playername, sizeof(playername));
+														PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06Tried to LR, other LR in progress", playername);
+													}
 													PrintToChat(client, CHAT_BANNER, "Another LR In Progress");
 												}
 											}
@@ -3789,6 +3859,12 @@ public MainPlayerHandler(Handle:playermenu, MenuAction:action, client, iButtonCh
 												DisplayMenu(askmenu, ClientIdxOfCT, 6);
 		
 												PrintToChat(client, CHAT_BANNER, "Asking For Permission", ClientIdxOfCT);
+												if (gShadow_LR_Debug_Enabled == true)
+												{
+													new String:playername[32];
+													GetClientName(client, playername, sizeof(playername));
+													PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06asks for LR permission from the Guard", playername);
+												}
 											}
 										}
 										else
@@ -3915,6 +3991,12 @@ public MainAskHandler(Handle:askmenu, MenuAction:action, client, param2)
 			if (IsClientInGame(g_LR_PermissionLookup[client]))
 			{
 				PrintToChat(g_LR_PermissionLookup[client], CHAT_BANNER, "LR Request Decline Or Too Long", client);
+				if (gShadow_LR_Debug_Enabled == true)
+				{
+					new String:playername[32];
+					GetClientName(client, playername, sizeof(playername));
+					PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06Request declined or no response", playername);
+				}
 			}
 		}
 		case MenuAction_End:
@@ -5156,12 +5238,24 @@ public Action:Timer_FarthestJumpDetector(Handle:timer)
 						{
 							PrintToChatAll(CHAT_BANNER, "Farthest Jump Won", LR_Player_Prisoner, LR_Player_Guard, Prisoner_Distance, Guard_Distance);
 							KillAndReward(LR_Player_Guard, LR_Player_Prisoner);
+							if (gShadow_LR_Debug_Enabled == true)
+							{
+								new String:playername[32];
+								GetClientName(LR_Player_Prisoner, playername, sizeof(playername));
+								PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06won the JumpContest as Prisoner", playername);
+							}
 						}
 						// award ties to the guard
 						else if (Guard_Distance >= Prisoner_Distance)
 						{
 							PrintToChatAll(CHAT_BANNER, "Farthest Jump Won", LR_Player_Guard, LR_Player_Prisoner, Guard_Distance, Prisoner_Distance);
 							KillAndReward(LR_Player_Prisoner, LR_Player_Guard);
+							if (gShadow_LR_Debug_Enabled == true)
+							{
+								new String:playername[32];
+								GetClientName(LR_Player_Guard, playername, sizeof(playername));
+								PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06won the JumpContest as Guard", playername);
+							}
 						}						
 					}
 				}
@@ -5200,11 +5294,23 @@ public Action:Timer_JumpContestOver(Handle:timer)
 						{
 							PrintToChatAll(CHAT_BANNER, "Won Jump Contest", LR_Player_Prisoner);
 							KillAndReward(LR_Player_Guard, LR_Player_Prisoner);
+							if (gShadow_LR_Debug_Enabled == true)
+							{
+								new String:playername[32];
+								GetClientName(LR_Player_Prisoner, playername, sizeof(playername));
+								PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06won the JumpContest as Prisoner", playername);
+							}
 						}
 						else
 						{
 							PrintToChatAll(CHAT_BANNER, "Won Jump Contest", LR_Player_Guard);
 							KillAndReward(LR_Player_Prisoner, LR_Player_Guard);
+							if (gShadow_LR_Debug_Enabled == true)
+							{
+								new String:playername[32];
+								GetClientName(LR_Player_Guard, playername, sizeof(playername));
+								PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06won the JumpContest as Guard", playername);
+							}
 						}
 					}
 					case Jump_BrinkOfDeath:
@@ -5699,11 +5805,23 @@ public Action:Timer_Race(Handle:timer)
 					{
 						KillAndReward(LR_Player_Guard, LR_Player_Prisoner);
 						PrintToChatAll(CHAT_BANNER, "Race Won", LR_Player_Prisoner);
+						if (gShadow_LR_Debug_Enabled == true)
+						{
+							new String:playername[32];
+							GetClientName(LR_Player_Guard, playername, sizeof(playername));
+							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06won the JumpContest as Guard", playername);
+						}
 					}
 					else
 					{
 						KillAndReward(LR_Player_Prisoner, LR_Player_Guard);
 						PrintToChatAll(CHAT_BANNER, "Race Won", LR_Player_Guard);
+						if (gShadow_LR_Debug_Enabled == true)
+						{
+							new String:playername[32];
+							GetClientName(LR_Player_Prisoner, playername, sizeof(playername));
+							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06won the JumpContest as Guard", playername);
+						}
 					}
 				}
 				
@@ -6011,6 +6129,13 @@ public Action:Timer_ChickenFight(Handle:timer)
 							gShadow_LR_ChickenFight_C_Blue, 255);
 							
 						bIsChickenFight = false;
+						
+						if (gShadow_LR_Debug_Enabled == true)
+						{
+							new String:playername[32];
+							GetClientName(LR_Player_Prisoner, playername, sizeof(playername));
+							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06won the JumpContest as Prisoner", playername);
+						}
 					}
 				}
 				else if (p2EntityBelow == LR_Player_Prisoner)
@@ -6031,6 +6156,13 @@ public Action:Timer_ChickenFight(Handle:timer)
 							gShadow_LR_ChickenFight_C_Blue, 255);
 							
 						bIsChickenFight = false;
+						
+						if (gShadow_LR_Debug_Enabled == true)
+						{
+							new String:playername[32];
+							GetClientName(LR_Player_Guard, playername, sizeof(playername));
+							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06won the JumpContest as Guard", playername);
+						}
 					}
 				}
 			}
@@ -6318,6 +6450,10 @@ DecideRebelsFate(rebeller, LRIndex, victim=0)
 			else if (victim == -1)
 			{
 				PrintToChatAll(CHAT_BANNER, "LR Cheating Abort", rebeller);
+				if (gShadow_LR_Debug_Enabled == true)
+				{
+					PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06LR has been aborted for cheating");
+				}
 			}
 			else
 			{
@@ -6471,7 +6607,7 @@ GetLastButton(client, buttons, idx)
 						{
 							new String:classname[32];
 							Client_GetActiveWeaponName(client, classname, 32);
-							if ((StrContains(classname, "knife", false) != -1) || StrContains(classname, "bayonet", false) != -1)
+							if ((StrContains(classname, "knife", false) != -1) || (StrContains(classname, "bayonet", false) != -1))
 							{
 								g_TriedToStab[client] = true;
 							}
@@ -6497,7 +6633,9 @@ RightKnifeAntiCheat(client, idx)
 	
 	if (client == LR_Player_Prisoner || client == LR_Player_Guard)
 	{		
-		if (!(type == LR_KnifeFight) && !(type == LR_Rebel))
+		if (!((type == LR_KnifeFight) && !(type == LR_Rebel)) && ((type == LR_JumpContest) || (type == LR_Race) || (type == LR_ChickenFight) || (type == LR_Dodgeball) || \
+			(type == LR_GunToss) || (type == LR_HotPotato) || (type == LR_Shot4Shot) || (type == LR_Mag4Mag) || (type == LR_NoScope) || (type == LR_RockPaperScissors) ||\
+			(type == LR_RussianRoulette)))
 		{
 			if (IsClientInGame(client) && IsPlayerAlive(client))
 			{
