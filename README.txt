@@ -20,27 +20,64 @@ Original plugin, SM_Hosties
 Original author, Databomb
 Tester, Revan
 
-What I really made with the latest release
-Quote:
--Added the SteamWorks include
--Added the smlib include
--Disabled MODULE_FREEKILL (line 63)
--Changed the info (line 123)
--Changed the Announce (line 321)
--Fixed DodgeBall ItemEquip
--Fixed NoScope ItemEquip
--Fixed NoScope StartCheat (More Info Below)
--Fixed TaserCrash
--Fixed KeepingTaserBug
--Fixed KnifeFight Taser Glitch
--Fixed Shot4Shot CheatMissDetection
--Fixed Shot4Shot AmmoReplace
--Fixed LR Pistol ClipBug (More Info Below)
--Fixed LR Health Issues (More Info Below)
--Modified LR End (More Info Below)
--Modified StripAllWeapons (by Databom's original solution)
-...
+What I really made with the latest release:
 
+        Added the SteamWorks include
+        Added the smlib include
+        Added Bayonet to the RightKnifeAntiCheat
+        Added GetLastButton for updates in the future
+        Added new cvar for debug (sm_hosties_debug_enabled 1 or 0)
+        Added support for CSS in Thirdperson KnifeFight
+        Added reset to Thirdperson Toggle
+        Added debug texts (kills only (yet))
+        Added support again for MyJailbreak
+        Added support again for 3RD party LR
+        Added RightKnife to the AntiCheat
+        Added AntiCheat for Shot4Shot
+        Added AntiCheat for Dodgeball
+        Added AntiCheat for NoScope
+        Added AntiCheat for RockPaperScissors
+        Added AntiCheat for Race
+        Modifed Shot4Shot to the AntiCheat
+        Modifed Mag4Mag to the AntiCheat
+        Modifed RockPaperScissorts to the AntiCheat
+        Modifed Race to the AntiCheat
+        Modifed JumpContest to the AntiCheat
+        Changed the info (line 123)
+        Changed the Announce (line 321)
+        Changed sourceban to sourcebanpp include
+        Fixed DodgeBall ItemEquip
+        Fixed NoScope ItemEquip
+        Fixed NoScope StartCheat (More Info Below)
+        Fixed TaserCrash
+        Fixed the Outsider slay in DodgeBall
+        Fixed the AirKnife slay in Race
+        Fixed KeepingTaserBug
+        Fixed KnifeFight Taser Glitch
+        Fixed Thirdperson in Knife Fight
+        Fixed Shot4Shot CheatMissDetection
+        Fixed Shot4Shot AmmoReplace
+        Fixed Shot4Shot Usp Bug (More Info Below)
+        Fixed LR Pistol ClipBug (More Info Below)
+        Fixed LR Health Issues (More Info Below)
+        Modified LR End (More Info Below)
+        Modified the AntiCheat (Won't slay just if you hurt your opponent)
+        Modified StripAllWeapons (by Databomb's original solution)
+        Restricted the AntiCheat to Default LRs
+        Colored the DebugTexts
+        
+
+Requests:
+        Remove Taser at RoundEnd (Completed)
+        Fix KnifeFight Taser-Bug (Completed)
+        Fix Compile Warnings (Completed)
+        Upload Includes for Compile (Completed)
+        Shot4Shot P2000 Bug (Completed)
+        Create a new AntiCheat to Shot4Shot (Completed)
+        RockPaperScissors, NoScope, DodgeBall AntiCheat for Guns (Completed)
+        Thirdperson Knife Fight View Bugfix (Completed)
+        RightKnife bypasses the AntiCheat (Completed)
+        AntiCheat kills for knifing/shooting the ground (AntiCheat full ReWorked)
 
 
 More Info Place
