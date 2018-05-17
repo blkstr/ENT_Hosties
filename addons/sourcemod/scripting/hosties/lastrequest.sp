@@ -1871,6 +1871,18 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 					// set the time to enable burst value to a high value
 					SetEntDataFloat(iClientWeapon, g_Offset_SecAttack, 5000.0);
 				
+					if (iClientWeapon != M4M_Prisoner_Weapon && iClientWeapon != M4M_Guard_Weapon)
+					{
+						if (gShadow_LR_Debug_Enabled == true)
+						{
+							char playername[32];
+							GetClientName(client, playername, sizeof(playername));
+							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for using other weapon in Mag4Mag", playername);
+						}
+						DecideRebelsFate(client, idx, -1);
+						RightKnifeAntiCheat(client, idx);
+					}
+					
 					if (!StrEqual(FiredWeapon, "knife"))
 					{
 						new currentAmmo = GetEntData(iClientWeapon, g_Offset_Clip1);
@@ -1984,14 +1996,14 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 					new Guard_S4S_Pistol = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_GuardData);
 					new S4Slastshot = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_Global1);
 					
-					decl String:FiredWeapon[32];
+					char FiredWeapon[32];
 					GetEventString(event, "weapon", FiredWeapon, sizeof(FiredWeapon));					
 					
 					// get the entity index of the pistol
 					new iClientWeapon = GetPlayerWeaponSlot(client, CS_SLOT_SECONDARY);					
 					
 					// check if we have the same weapon
-					new String:LR_WeaponName[32];
+					char LR_WeaponName[32];
 					if (iClientWeapon != -1)
 					{
 						GetEdictClassname(iClientWeapon, LR_WeaponName, sizeof(LR_WeaponName));
@@ -2002,7 +2014,7 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 						// update who took the last shot
 						SetArrayCell(gH_DArray_LR_Partners, idx, client, _:Block_Global1);
 						// they picked up an identical gun and are using it instead
-						if (iClientWeapon != Prisoner_S4S_Pistol && iClientWeapon != Guard_S4S_Pistol)		    	
+						if (!StrEqual(FiredWeapon, LR_WeaponName))		    	
 						{
 							if (gShadow_LR_Debug_Enabled == true)
 							{
@@ -2098,6 +2110,17 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 							// modify deagle 1s ammo
 							SetEntData(Prisoner_S4S_Pistol, g_Offset_Clip1, 1);
 						}
+					}
+					else
+					{
+						if (gShadow_LR_Debug_Enabled == true)
+						{
+							new String:playername[32];
+							GetClientName(client, playername, sizeof(playername));
+							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for using other weapon in Shot4Shot", playername);
+						}
+						DecideRebelsFate(client, idx, -1);
+						RightKnifeAntiCheat(client, idx);
 					}
 				}	
 			}			
@@ -2265,7 +2288,7 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:damage, &damage
 				{
 					return Plugin_Continue;
 				}
-				else if (Type == LR_RockPaperScissors || Type == LR_Race || Type == LR_JumpContest || Type == LR_Shot4Shot || Type == LR_Dodgeball || Type == LR_Mag4Mag && \
+				else if (Type == LR_RockPaperScissors || Type == LR_Race || Type == LR_JumpContest && \
 					(attacker == LR_Player_Guard || attacker == LR_Player_Prisoner) && \
 					(victim == LR_Player_Guard || victim == LR_Player_Prisoner))
 				{
@@ -2273,11 +2296,31 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:damage, &damage
 					{
 						new String:playername[32];
 						GetClientName(attacker, playername, sizeof(playername));
-						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for using other weapon in RPS/R/JC/S4S/DB", playername);
+						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for using other weapon in RPS/R/JC/S4S", playername);
 					}
 					DecideRebelsFate(attacker, idx, -1);
 					RightKnifeAntiCheat(attacker, idx);
-				}				
+					
+					damage = 0.0;
+				}
+				else if (Type == LR_Dodgeball)
+				{
+					char UsedWeapon[64];
+					GetClientWeapon(attacker, UsedWeapon, sizeof(UsedWeapon));
+					if (!StrEqual(UsedWeapon, "weapon_flashbang"))
+					{
+						if (gShadow_LR_Debug_Enabled == true)
+						{
+							new String:playername[32];
+							GetClientName(attacker, playername, sizeof(playername));
+							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for using other weapon in DodgeBall", playername);
+						}
+						DecideRebelsFate(attacker, idx, -1);
+						RightKnifeAntiCheat(attacker, idx);
+						
+						damage = 0.0;
+					}
+				}
 				// Allow LR contestants to attack each other
 				else if ((victim == LR_Player_Prisoner && attacker == LR_Player_Guard) || (victim == LR_Player_Guard && attacker == LR_Player_Prisoner))
 				{
