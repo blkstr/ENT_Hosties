@@ -39,7 +39,7 @@
 #define 	PLUGIN_VERSION				"2.3.3e"
 #define 	MAX_DISPLAYNAME_SIZE		64
 #define 	MAX_DATAENTRY_SIZE			5
-#define 	SERVERTAG					"SM_Hosties, LR"
+#define 	SERVERTAG					"ENT_Hosties, LR"
 
 // Note: you cannot safely turn these modules on and off yet. Use cvars to disable functionality.
 
@@ -141,9 +141,9 @@ new Handle:gH_Cvar_Display_Advert = INVALID_HANDLE;
 
 public Plugin:myinfo =
 {
-	name        = "SM_Hosties(v2.2) - Entity Version",
+	name        = "ENT_Hosties(v2.3)",
 	author      = "databomb & Entity",
-	description = "SM_Hosties UnOfficial release",
+	description = "SM_Hosties boosted version",
 	version     = "Entity",
 };
 
