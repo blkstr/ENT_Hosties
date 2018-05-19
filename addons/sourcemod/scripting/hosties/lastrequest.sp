@@ -2313,7 +2313,7 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:damage, &damage
 						{
 							new String:playername[32];
 							GetClientName(attacker, playername, sizeof(playername));
-							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for using other weapon in DodgeBall", playername);
+							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%s \x06has been killed for using other weapon in DodgeBall (%s)", playername, UsedWeapon);
 						}
 						DecideRebelsFate(attacker, idx, -1);
 						RightKnifeAntiCheat(attacker, idx);
