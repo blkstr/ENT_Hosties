@@ -5,11 +5,6 @@ ReWorked by Entity
 
  Hello everyone!
 
-Quote:
-Version modified : 2.2.0
-Supported games : csgo (others not tested yet)
-Has new convars : No
-Description of the changes : Below
 I started to fix the latest version from SM_Hosties (damn there is much to do).
 First of all I want to appriciate Databomb's hard work with his really cool plugins!
 He helped me A LOT. Really thanks!
