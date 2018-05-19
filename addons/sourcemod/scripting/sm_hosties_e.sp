@@ -36,7 +36,7 @@
 #pragma 	semicolon 					1
 
 // Constants
-#define 	PLUGIN_VERSION				"2.1.3b"
+#define 	PLUGIN_VERSION				"2.3.3e"
 #define 	MAX_DISPLAYNAME_SIZE		64
 #define 	MAX_DATAENTRY_SIZE			5
 #define 	SERVERTAG					"SM_Hosties, LR"
