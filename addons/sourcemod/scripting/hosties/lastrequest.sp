@@ -1807,6 +1807,11 @@ public LastRequest_PlayerJump(Handle:event, const String:name[], bool:dontBroadc
 				// we want to grab the last jump position *before* they throw their gun
 				if (client == LR_Player_Prisoner && !GTp1dropped)
 				{
+					if (gShadow_LR_Debug_Enabled == true)
+					{
+						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06dropped his deagle", client);
+					}
+					
 					// record position
 					decl Float:Prisoner_Position[3];
 					GetClientAbsOrigin(LR_Player_Prisoner, Prisoner_Position);
@@ -1819,9 +1824,18 @@ public LastRequest_PlayerJump(Handle:event, const String:name[], bool:dontBroadc
 					WritePackFloat(JumpPackPosition, Prisoner_Position[0]);
 					WritePackFloat(JumpPackPosition, Prisoner_Position[1]);
 					WritePackFloat(JumpPackPosition, Prisoner_Position[2]);
+					if (gShadow_LR_Debug_Enabled == true)
+					{
+						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06: %s %s %s", client, Prisoner_Position[0], Prisoner_Position[1], Prisoner_Position[2]);
+					}
 				}
 				else if (client == LR_Player_Guard && !GTp2dropped)
 				{
+					if (gShadow_LR_Debug_Enabled == true)
+					{
+						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06dropped his deagle", client);
+					}
+					
 					// record position
 					decl Float:Guard_Position[3];
 					GetClientAbsOrigin(LR_Player_Guard, Guard_Position);
@@ -1834,6 +1848,10 @@ public LastRequest_PlayerJump(Handle:event, const String:name[], bool:dontBroadc
 					WritePackFloat(JumpPackPosition, Guard_Position[0]);
 					WritePackFloat(JumpPackPosition, Guard_Position[1]);
 					WritePackFloat(JumpPackPosition, Guard_Position[2]);
+					if (gShadow_LR_Debug_Enabled == true)
+					{
+						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06: %s %s %s", client, Guard_Position[0], Guard_Position[1], Guard_Position[2]);
+					}
 				}
 			}
 		}
@@ -2286,45 +2304,26 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:damage, &damage
 					}
 				}
 				else if (Type == LR_Shot4Shot || Type == LR_Mag4Mag && \
-					((attacker == LR_Player_Guard || attacker == LR_Player_Prisoner) && \
-					(victim == LR_Player_Guard || victim == LR_Player_Prisoner)))
+					((attacker == LR_Player_Guard && victim == LR_Player_Prisoner) || \
+					(attacker == LR_Player_Prisoner && victim == LR_Player_Guard)))
 				{
-					char g_ActiveWeapon[64];
-					char p_ActiveWeapon[64];
+					char ActiveWeapon[64];
 					
-					Client_GetActiveWeaponName(LR_Player_Guard, g_ActiveWeapon, sizeof(g_ActiveWeapon));
-					ReplaceString(g_ActiveWeapon, sizeof(g_ActiveWeapon), "weapon_", "", false); 
+					Client_GetActiveWeaponName(attacker, ActiveWeapon, sizeof(ActiveWeapon));
+					ReplaceString(ActiveWeapon, sizeof(ActiveWeapon), "weapon_", "", false); 
 					if (gShadow_LR_Debug_Enabled == true)
 					{
-						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06current weapon is %s, picked is %s", LR_Player_Guard, g_ActiveWeapon, Picked_Pistol[LR_Player_Guard]);
+						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06current weapon is %s, picked is %s", attacker, ActiveWeapon, Picked_Pistol[attacker]);
 					}
 					
-					Client_GetActiveWeaponName(LR_Player_Prisoner, p_ActiveWeapon, sizeof(p_ActiveWeapon));
-					ReplaceString(p_ActiveWeapon, sizeof(p_ActiveWeapon), "weapon_", "", false); 
-					if (gShadow_LR_Debug_Enabled == true)
+					if (!StrEqual(Picked_Pistol[attacker], "") && !StrEqual(ActiveWeapon, ""))
 					{
-						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06current weapon is %s, picked is %s", LR_Player_Prisoner, p_ActiveWeapon, Picked_Pistol[LR_Player_Prisoner]);
-					}
-					
-					if (!StrEqual(Picked_Pistol[LR_Player_Guard], "") && !StrEqual(g_ActiveWeapon, ""))
-					{
-						if (!StrEqual(Picked_Pistol[LR_Player_Guard], g_ActiveWeapon))
+						if (!StrEqual(Picked_Pistol[attacker], ActiveWeapon))
 						{
 							damage = 0.0;
-							RightKnifeAntiCheat(LR_Player_Guard, idx);
-							DecideRebelsFate(LR_Player_Guard, idx);
-							PrintToChatAll("\x01[\x07ENT_Hosties\x01] \x10%N \x06has been slayed switched weapon to %s, but the picked is %s", LR_Player_Guard, g_ActiveWeapon, Picked_NSW[LR_Player_Guard]);
-						}
-					}
-					
-					if (!StrEqual(Picked_Pistol[LR_Player_Prisoner], "") && !StrEqual(g_ActiveWeapon, ""))
-					{
-						if (!StrEqual(Picked_Pistol[LR_Player_Prisoner], p_ActiveWeapon))
-						{
-							damage = 0.0;
-							RightKnifeAntiCheat(LR_Player_Prisoner, idx);
-							DecideRebelsFate(LR_Player_Prisoner, idx);
-							PrintToChatAll("\x01[\x07ENT_Hosties\x01] \x10%N \x06has been slayed switched weapon to %s, but the picked is %s", LR_Player_Prisoner, p_ActiveWeapon, Picked_NSW[LR_Player_Prisoner]);
+							RightKnifeAntiCheat(attacker, idx);
+							DecideRebelsFate(attacker, idx);
+							PrintToChatAll("\x01[\x07ENT_Hosties\x01] \x10%N \x06has been slayed switched weapon to %s, but the picked is %s", attacker, ActiveWeapon, Picked_Pistol[attacker]);
 						}
 					}
 				}
@@ -2434,6 +2433,10 @@ public Action:OnWeaponEquip(client, weapon)
 						if (StrEqual(weapon_name, "weapon_deagle"))
 						{
 							SetArrayCell(gH_DArray_LR_Partners, idx, true, _:Block_Global3);
+							if (gShadow_LR_Debug_Enabled == true)
+							{
+								PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06blocked from picking up the deagle", client);
+							}
 						}			
 					}
 					else if (client == LR_Player_Guard && GTp2dropped && !GTp2done)
@@ -2443,6 +2446,10 @@ public Action:OnWeaponEquip(client, weapon)
 						if (StrEqual(weapon_name, "weapon_deagle"))
 						{
 							SetArrayCell(gH_DArray_LR_Partners, idx, true, _:Block_Global4);
+							if (gShadow_LR_Debug_Enabled == true)
+							{
+								PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06blocked from picking up the deagle", client);
+							}
 						}						
 					}	
 				}
@@ -2540,7 +2547,10 @@ public Action:OnWeaponDrop(client, weapon)
 							
 							if (weapon == GTdeagle1)
 							{
-
+								if (gShadow_LR_Debug_Enabled == true)
+								{
+									PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has dropped the weapon", client);
+								}
 								decl Float:GTp1droppos[3];
 								GetClientAbsOrigin(LR_Player_Prisoner, GTp1droppos);
 								#if SOURCEMOD_V_MAJOR >= 1 && SOURCEMOD_V_MINOR >= 8
@@ -2552,6 +2562,10 @@ public Action:OnWeaponDrop(client, weapon)
 								WritePackFloat(PositionDataPack, GTp1droppos[1]);
 								WritePackFloat(PositionDataPack, GTp1droppos[2]);
 								SetArrayCell(gH_DArray_LR_Partners, idx, true, _:Block_Global1);
+								if (gShadow_LR_Debug_Enabled == true)
+								{
+									PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06: %s %s %s", client, GTp1droppos[0], GTp1droppos[1], GTp1droppos[2]);
+								}
 							}
 						}
 						else if (client == LR_Player_Guard)
@@ -2563,6 +2577,10 @@ public Action:OnWeaponDrop(client, weapon)
 
 							if (weapon == GTdeagle2)
 							{
+								if (gShadow_LR_Debug_Enabled == true)
+								{
+									PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has dropped the weapon", client);
+								}
 								decl Float:GTp2droppos[3];
 								GetClientAbsOrigin(LR_Player_Guard, GTp2droppos);
 								#if SOURCEMOD_V_MAJOR >= 1 && SOURCEMOD_V_MINOR >= 8
@@ -2572,9 +2590,12 @@ public Action:OnWeaponDrop(client, weapon)
 								#endif
 								WritePackFloat(PositionDataPack, GTp2droppos[0]);
 								WritePackFloat(PositionDataPack, GTp2droppos[1]);
-								WritePackFloat(PositionDataPack, GTp2droppos[2]);
-								
+								WritePackFloat(PositionDataPack, GTp2droppos[2]);							
 								SetArrayCell(gH_DArray_LR_Partners, idx, true, _:Block_Global2);
+								if (gShadow_LR_Debug_Enabled == true)
+								{
+									PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06: %s %s %s", client, GTp2droppos[0], GTp2droppos[1], GTp2droppos[2]);
+								}
 							}
 						}	
 						
@@ -4174,7 +4195,6 @@ InitializeGame(iPartnersIndex)
 			{
 				case Pistol_Deagle:
 				{
-					//Picked_Pistol[client] = "weapon_deagle";
 					Pistol_Prisoner = GivePlayerItem(LR_Player_Prisoner, "weapon_deagle");
 					Pistol_Guard = GivePlayerItem(LR_Player_Guard, "weapon_deagle");
 					Picked_Pistol[LR_Player_Prisoner] = "weapon_deagle";
@@ -4419,6 +4439,11 @@ InitializeGame(iPartnersIndex)
 				// set ammo (Clip1)
 				SetEntData(GTdeagle1, g_Offset_Clip1, 0);
 				SetEntData(GTdeagle2, g_Offset_Clip1, 0);
+				
+				if (gShadow_LR_Debug_Enabled == true)
+				{
+					PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06StartMode is 1");
+				}
 				
 				SetEntityRenderMode(GTdeagle1, RENDER_TRANSCOLOR);
 				SetEntityRenderColor(GTdeagle1, 255, 0, 0);
