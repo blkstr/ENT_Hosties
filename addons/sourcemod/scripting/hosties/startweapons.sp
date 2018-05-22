@@ -22,6 +22,7 @@
 #include <cstrike>
 #include <hosties>
 
+
 new Handle:gH_Cvar_StartWeaponsOn = INVALID_HANDLE;
 new Handle:gH_Cvar_T_Weapons = INVALID_HANDLE;
 new Handle:gH_Cvar_CT_Weapons = INVALID_HANDLE;
@@ -107,7 +108,7 @@ public StartWeapons_Spawn(Handle:event, const String:name[], bool:dontBroadcast)
 	
 	if (gShadow_LR_Debug_Enabled == true)
 	{
-		PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Starting weapons config executed");
+		PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Starting weapons config executed on \x10%N", client);
 	}
 }
 
