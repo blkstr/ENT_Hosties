@@ -1824,10 +1824,6 @@ public LastRequest_PlayerJump(Handle:event, const String:name[], bool:dontBroadc
 					WritePackFloat(JumpPackPosition, Prisoner_Position[0]);
 					WritePackFloat(JumpPackPosition, Prisoner_Position[1]);
 					WritePackFloat(JumpPackPosition, Prisoner_Position[2]);
-					if (gShadow_LR_Debug_Enabled == true)
-					{
-						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06: %s %s %s", client, Prisoner_Position[0], Prisoner_Position[1], Prisoner_Position[2]);
-					}
 				}
 				else if (client == LR_Player_Guard && !GTp2dropped)
 				{
@@ -1848,10 +1844,6 @@ public LastRequest_PlayerJump(Handle:event, const String:name[], bool:dontBroadc
 					WritePackFloat(JumpPackPosition, Guard_Position[0]);
 					WritePackFloat(JumpPackPosition, Guard_Position[1]);
 					WritePackFloat(JumpPackPosition, Guard_Position[2]);
-					if (gShadow_LR_Debug_Enabled == true)
-					{
-						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06: %s %s %s", client, Guard_Position[0], Guard_Position[1], Guard_Position[2]);
-					}
 				}
 			}
 		}
@@ -2428,6 +2420,10 @@ public Action:OnWeaponEquip(client, weapon)
 					
 					if (client == LR_Player_Prisoner && GTp1dropped && !GTp1done)
 					{
+						if (gShadow_LR_Debug_Enabled == true)
+						{
+							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10Prisoner \x06weapon dropped, guard not yet", client);
+						}
 						decl String:weapon_name[32];
 						GetEdictClassname(weapon, weapon_name, sizeof(weapon_name));
 						if (StrEqual(weapon_name, "weapon_deagle"))
@@ -2441,6 +2437,10 @@ public Action:OnWeaponEquip(client, weapon)
 					}
 					else if (client == LR_Player_Guard && GTp2dropped && !GTp2done)
 					{
+						if (gShadow_LR_Debug_Enabled == true)
+						{
+							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10Guard \x06weapon dropped, prisoner not yet", client);
+						}
 						decl String:weapon_name[32];
 						GetEdictClassname(weapon, weapon_name, sizeof(weapon_name));
 						if (StrEqual(weapon_name, "weapon_deagle"))
@@ -2562,10 +2562,6 @@ public Action:OnWeaponDrop(client, weapon)
 								WritePackFloat(PositionDataPack, GTp1droppos[1]);
 								WritePackFloat(PositionDataPack, GTp1droppos[2]);
 								SetArrayCell(gH_DArray_LR_Partners, idx, true, _:Block_Global1);
-								if (gShadow_LR_Debug_Enabled == true)
-								{
-									PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06: %s %s %s", client, GTp1droppos[0], GTp1droppos[1], GTp1droppos[2]);
-								}
 							}
 						}
 						else if (client == LR_Player_Guard)
@@ -2592,10 +2588,6 @@ public Action:OnWeaponDrop(client, weapon)
 								WritePackFloat(PositionDataPack, GTp2droppos[1]);
 								WritePackFloat(PositionDataPack, GTp2droppos[2]);							
 								SetArrayCell(gH_DArray_LR_Partners, idx, true, _:Block_Global2);
-								if (gShadow_LR_Debug_Enabled == true)
-								{
-									PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06: %s %s %s", client, GTp2droppos[0], GTp2droppos[1], GTp2droppos[2]);
-								}
 							}
 						}	
 						
@@ -4439,11 +4431,6 @@ InitializeGame(iPartnersIndex)
 				// set ammo (Clip1)
 				SetEntData(GTdeagle1, g_Offset_Clip1, 0);
 				SetEntData(GTdeagle2, g_Offset_Clip1, 0);
-				
-				if (gShadow_LR_Debug_Enabled == true)
-				{
-					PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06StartMode is 1");
-				}
 				
 				SetEntityRenderMode(GTdeagle1, RENDER_TRANSCOLOR);
 				SetEntityRenderColor(GTdeagle1, 255, 0, 0);
@@ -6533,10 +6520,12 @@ public Action:Timer_GunToss(Handle:timer)
 				// broadcast distance
 				if (gShadow_LR_GunToss_ShowMeter)
 				{
+					new LR_Player_Prisoner = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_Prisoner);
+					new LR_Player_Guard = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_Guard);
 					new Float:f_GuardDistance;
 					if (GTp2dropped)
 					{
-						f_GuardDistance = GetVectorDistance(GTp2jumppos, GTdeagle2lastpos);
+						f_GuardDistance = GetVectorDistance(GTp2jumppos, GTdeagle2lastpos); //Gets the Guard Distance
 					}
 					else
 					{
@@ -6546,16 +6535,14 @@ public Action:Timer_GunToss(Handle:timer)
 					new Float:f_PrisonerDistance;
 					if (GTp1dropped)
 					{
-						f_PrisonerDistance = GetVectorDistance(GTp1jumppos, GTdeagle1lastpos);
+						f_PrisonerDistance = GetVectorDistance(GTp1jumppos, GTdeagle1lastpos);  //Gets the Prisoner Distance
 					}
 					else
 					{
 						f_PrisonerDistance = 0.0;
 					}
-
-					new LR_Player_Prisoner = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_Prisoner);
-					new LR_Player_Guard = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_Guard);
-					if (!gShadow_SendGlobalMsgs)
+					
+					if (!gShadow_SendGlobalMsgs) //Prints the Distances
 					{
 						if (g_Game == Game_CSS)
 						{
@@ -6861,7 +6848,7 @@ RightKnifeAntiCheat(client, idx)
 	if (client == LR_Player_Prisoner || client == LR_Player_Guard)
 	{		
 		if (!((type == LR_KnifeFight) && !(type == LR_Rebel)) && ((type == LR_JumpContest) || (type == LR_Race) || (type == LR_ChickenFight) || (type == LR_Dodgeball) || \
-			(type == LR_GunToss) || (type == LR_HotPotato) || (type == LR_Shot4Shot) || (type == LR_Mag4Mag) || (type == LR_NoScope) || (type == LR_RockPaperScissors) ||\
+			(type == LR_HotPotato) || (type == LR_Shot4Shot) || (type == LR_Mag4Mag) || (type == LR_NoScope) || (type == LR_RockPaperScissors) ||\
 			(type == LR_RussianRoulette)))
 		{
 			if (IsClientInGame(client) && IsPlayerAlive(client))

@@ -35,6 +35,7 @@ new String:gShadow_MuteImmune[37];
 new Handle:gH_Cvar_MuteCT = INVALID_HANDLE;
 new bool:gShadow_MuteCT = false;
 new gAdmFlags_MuteImmunity = 0;
+bool MutedInThisRound[MAXPLAYERS + 1] = false;
 
 MutePrisoners_OnPluginStart()
 {
@@ -207,10 +208,22 @@ public MutePrisoners_PlayerSpawn(Handle:event, const String:name[], bool:dontBro
 
 public Action:Timer_Mute(Handle:timer, any:client)
 {
-	if (IsClientInGame(client))
+	if (IsClientInGame(client) && MutedInThisRound[client] == false)
 	{
 		MutePlayer(client);
+		MutedInThisRound[client] = true;
 		PrintToChat(client, CHAT_BANNER, "Now Muted");
+		if (gShadow_LR_Debug_Enabled == true)
+		{
+			PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been muted", client);
+		}
+	}
+	else
+	{
+		if (gShadow_LR_Debug_Enabled == true)
+		{
+			PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06was muted so not getting muted this time", client);
+		}
 	}
 	
 	return Plugin_Stop;
@@ -257,6 +270,14 @@ public MutePrisoners_RoundEnd(Handle:event, const String:name[], bool:dontBroadc
 	{
 		CloseHandle(gH_Timer_Unmuter);
 		gH_Timer_Unmuter = INVALID_HANDLE;
+	}
+	
+	for(int i = 1; i <= MaxClients; i++)
+	{
+		if (IsClientInGame(i))
+		{
+			MutedInThisRound[i] = false;
+		}
 	}
 }
 
