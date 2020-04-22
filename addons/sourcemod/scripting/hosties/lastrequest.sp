@@ -2963,7 +2963,7 @@ public Action:Command_LastRequest(client, args)
 									RoundTime = GetConVarInt(g_cvRoundTime);
 									GraceTime = GetConVarInt(g_cvGraceTime);
 									
-									if ((RoundTime*60) < ((RoundTime*60) - GraceTime - 1))
+									if (GetTime() < ((RoundTime*60) - GraceTime - 1))
 									{
 										DisplayLastRequestMenu(client, Ts, CTs);
 									}
