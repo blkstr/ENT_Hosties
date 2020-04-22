@@ -8,10 +8,6 @@
 	{
 		"fr"		"Roulette"
 	}
-	"Gun Toss"
-	{
-		"fr"		"Lancer de Deagle"
-	}
 	"Chicken Fight"
 	{
 		"fr"		"Combat de Poulet"
@@ -31,6 +27,10 @@
 	"Rock Paper Scissors"
 	{
 		"fr"		"Pierre Feuille Ciseaux"
+	}
+	"LR Grace TimeBlock"
+	{
+		"fr"		"Vous ne pouvez pas lancer de DV tant que les joueurs peuvent encore rejoindre."
 	}
 	"Russian Roulette"
 	{
@@ -215,10 +215,6 @@
 	"LR S4S Start"
 	{
 		"fr"		"{1} a choisis de faire une Roulette avec {2}."
-	}
-	"LR GT Start"
-	{
-		"fr"		"{1} a choisis de faire un Lancer de Deagle avec {2}."
 	}
 	"LR CF Start"
 	{

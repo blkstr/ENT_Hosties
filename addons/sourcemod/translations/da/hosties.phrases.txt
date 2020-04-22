@@ -8,10 +8,6 @@
 	{
 		"da"		"Skud For Skud"
 	}
-	"Gun Toss"
-	{
-		"da"		"Pistolkast"
-	}
 	"Chicken Fight"
 	{
 		"da"		"Kyllingekamp"
@@ -215,10 +211,6 @@
 	"LR S4S Start"
 	{
 		"da"		"{1} Valgte at lave skud for skud med {2}."
-	}
-	"LR GT Start"
-	{
-		"da"		"{1} valgte at lave pistolkast med {2}."
 	}
 	"LR CF Start"
 	{

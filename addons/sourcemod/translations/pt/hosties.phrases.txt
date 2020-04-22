@@ -8,10 +8,6 @@
 	{
 		"pt"		"Shot4Shot"
 	}
-	"Gun Toss"
-	{
-		"pt"		"Gun Toss"
-	}
 	"Chicken Fight"
 	{
 		"pt"		"Chicken Fight"
@@ -215,10 +211,6 @@
 	"LR S4S Start"
 	{
 		"pt"		"{1} escolheu ter Tiro por tiro com {2}."
-	}
-	"LR GT Start"
-	{
-		"pt"		"{1} escolheu ter Arremesso de Deagle com {2}."
 	}
 	"LR CF Start"
 	{

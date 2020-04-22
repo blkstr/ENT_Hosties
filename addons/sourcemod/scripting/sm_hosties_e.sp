@@ -36,10 +36,10 @@
 #pragma 	semicolon 					1
 
 // Constants
-#define 	PLUGIN_VERSION				"2.3.5E"
+#define 	PLUGIN_VERSION				"3.0"
 #define 	MAX_DISPLAYNAME_SIZE		64
 #define 	MAX_DATAENTRY_SIZE			5
-#define 	SERVERTAG					"ENT_Hosties, LR"
+#define 	SERVERTAG					"ENT_Hosties, LR, LastRequest"
 
 // Note: you cannot safely turn these modules on and off yet. Use cvars to disable functionality.
 
@@ -141,7 +141,7 @@ new Handle:gH_Cvar_Display_Advert = INVALID_HANDLE;
 
 public Plugin:myinfo =
 {
-	name        = "ENT_Hosties(v2.3)",
+	name        = "ENT_Hosties(V3)",
 	author      = "databomb & Entity",
 	description = "SM_Hosties boosted version",
 	version     = "Entity",
@@ -294,7 +294,11 @@ public OnConfigsExecuted()
 {
 	if (GetConVarInt(gH_Cvar_Add_ServerTag) == 1)
 	{
-		ServerCommand("sv_tags %s\n", SERVERTAG);
+		char tags[256];
+		ConVar g_cvSvTags = FindConVar("sv_tags");
+		g_cvSvTags.GetString(tags, sizeof(tags));
+		Format(tags, sizeof(tags), "sv_tags %s,%s", tags, SERVERTAG);
+		ServerCommand(tags);
 	}
 	
 	#if (MODULE_FREEKILL == 1)
