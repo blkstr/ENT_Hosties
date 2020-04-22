@@ -43,6 +43,10 @@ Handle StripZeus[MAXPLAYERS+1];
 char Picked_NSW[32][MAXPLAYERS+1];
 char Picked_Pistol[32][MAXPLAYERS+1];
 
+ConVar g_hRoundTime;
+int g_RoundTime;
+Handle RoundTimeTicker;
+Handle TickerState = INVALID_HANDLE;
 new Float:After_Jump_pos[MAXPLAYERS+1][3];
 new Float:Before_Jump_pos[MAXPLAYERS+1][3];
 new bool:LR_Player_Jumped[MAXPLAYERS+1] = false;
@@ -289,6 +293,8 @@ new String:g_sLastRequestPhrase[LastRequest][MAX_DISPLAYNAME_SIZE];
 
 LastRequest_OnPluginStart()
 {
+	g_hRoundTime = FindConVar("mp_roundtime");
+
 	// Populate translation entries
 	// no longer pulling LANG_SERVER
 	g_sLastRequestPhrase[LR_KnifeFight] = "Knife Fight";
@@ -902,8 +908,29 @@ Local_IsClientInLR(client)
 	return 0;
 }
 
+public Action Timer_RoundTimeLeft(Handle timer, int RoundTime)
+{
+	if (g_RoundTime != 0)
+	{
+		g_RoundTime = g_RoundTime - 1;
+	}
+	return Plugin_Continue;
+}
+
 public LastRequest_RoundStart(Handle:event, const String:name[], bool:dontBroadcast)
 {
+	g_hRoundTime = FindConVar("mp_roundtime");
+	g_RoundTime = GetConVarInt(g_hRoundTime) * 60;
+	if (TickerState == INVALID_HANDLE)
+	{
+		RoundTimeTicker = CreateTimer(1.0, Timer_RoundTimeLeft, g_RoundTime, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
+	}
+	else
+	{
+		KillTimer(RoundTimeTicker);
+		RoundTimeTicker = CreateTimer(1.0, Timer_RoundTimeLeft, g_RoundTime, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
+	}
+
 	g_bAnnouncedThisRound = false;
 	
 	// Set variable to know that the round has started
@@ -960,6 +987,11 @@ StopActiveLRs(client)
 
 public LastRequest_RoundEnd(Handle:event, const String:name[], bool:dontBroadcast)
 {
+	if (TickerState != INVALID_HANDLE)
+	{
+		KillTimer(RoundTimeTicker);
+	}
+
 	// Block LRs and reset
 	g_bIsLRAvailable = false;
 	
@@ -2963,12 +2995,20 @@ public Action:Command_LastRequest(client, args)
 									RoundTime = GetConVarInt(g_cvRoundTime);
 									GraceTime = GetConVarInt(g_cvGraceTime);
 									
-									if (GetTime() < ((RoundTime*60) - GraceTime - 1))
+									if (g_RoundTime < ((RoundTime*60) - GraceTime - 1))
 									{
+										if (gShadow_LR_Debug_Enabled == true)
+										{
+											PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Roundtime: %i", g_RoundTime);
+										}
 										DisplayLastRequestMenu(client, Ts, CTs);
 									}
 									else
 									{
+										if (gShadow_LR_Debug_Enabled == true)
+										{
+											PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Roundtime: %i", g_RoundTime);
+										}
 										PrintToChat(client, CHAT_BANNER, "LR Grace TimeBlock");
 									}
 								}
