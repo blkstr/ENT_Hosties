@@ -1,24 +1,27 @@
--- 2020-04-22 (v.3.0)
-* Added Armor removal on LR start
-* Added Health set on LR start
-* Added Shield to weapon cleanup
-* Added Healthshot to weapon cleanup
-* Added Snowball to weapon cleanup
-* Added Breachcharge to weapon cleanup
-* Added Tagrenade to weapon cleanup
-* Added Bumpmine to weapon cleanup
-* Added HeavySuit to armor removal
-* Added Dodgeball Anti-Pickup (AntiCheat)
-* Added Race Anti-Pickup (AntiCheat)
-* Added JumpContest Anti-Pickup (AntiCheat)
-* Added mp_join_grace_time support to LR (Thanks for the report for Kubad)
-* Fixed S4S and M4M Pistol Choice Checker
-* Fixed S4S and M4M USP and HKP2000 bug
-* Fixed LR Start Initializer
-* Fixed LR CleanUp
-* Fixed Jump Farthest
-* Fixed Drugged Knife Fight (CSGO Version)
-* Fixed Collision bug in some LR
-* Fixed LR menu start bug (Thanks for the report for Kubad)
-* Fixed RockPaperScissors bug after tie (Thanks for the report to Yvano)
-* Deleted GunToss 
+Added Hungarian translation (Thanks for tbence99)
+Updated French translation (Thanks for Yvano)
+Updated Russian Translation September
+Added Armor removal on LR start
+Added Health set on LR start
+Added Shield to weapon cleanup
+Added Healthshot to weapon cleanup
+Added Snowball to weapon cleanup
+Added Breachcharge to weapon cleanup
+Added Tagrenade to weapon cleanup
+Added Bumpmine to weapon cleanup
+Added HeavySuit to armor removal
+Added Dodgeball Anti-Pickup (AntiCheat)
+Added Race Anti-Pickup (AntiCheat)
+Added JumpContest Anti-Pickup (AntiCheat)
+Added mp_join_grace_time support to LR (Thanks for the report for Kubad)
+Fixed Datapack problems (Needs test)
+Fixed S4S and M4M Pistol Choice Checker
+Fixed S4S and M4M USP and HKP2000 bug
+Fixed LR Start Initializer
+Fixed LR CleanUp
+Fixed Jump Farthest
+Fixed Drugged Knife Fight (CSGO Version)
+Fixed Collision bug in some LR
+Fixed LR menu start bug (Thanks for the report for Kubad)
+Fixed RockPaperScissors bug after tie (Thanks for the report to Yvano)
+Deleted GunToss
