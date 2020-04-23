@@ -1,3 +1,19 @@
+---2020.04.24
+Added new Cvar (sm_hosties_chat_banner)
+Added ColorSupport from multicolors
+Added Option to change [SM] in chat
+Added a file for easier translations (translate_this.txt)
+Changed !rules menu to use more than one page
+Changed !rules menu to use exit button correctly
+Fixed T Mute on Startup bugs
+Fixed every text to use the custom set banner
+Fixed Hungarian translation
+Fixed Russian Translation
+Fixed Portuguese Translation
+Fixed Version
+Fixed Compatibility with JailbreakTeamBalance (?)
+
+
 ---2020.04.23
 StripZeus checks for valid client
 DecideRebelsFate checks for valid client

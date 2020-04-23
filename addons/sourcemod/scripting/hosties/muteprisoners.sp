@@ -20,6 +20,7 @@
 #include <sourcemod>
 #include <cstrike>
 #include <sdkhooks>
+#include <multicolors>
 #undef REQUIRE_PLUGIN
 #include <basecomm>
 #define REQUIRE_PLUGIN
@@ -74,7 +75,7 @@ MutePrisoners_AllPluginsLoaded()
 	}
 	else
 	{
-		PrintToServer("Hosties Mute System Disabled. Upgrade to SM >= 1.4.0");
+		CPrintToServer("Hosties Mute System Disabled. Upgrade to SM >= 1.4.0");
 		LogMessage("Hosties Mute System Disabled. Upgrade to SM >= 1.4.0");
 	}
 }
@@ -212,17 +213,17 @@ public Action:Timer_Mute(Handle:timer, any:client)
 	{
 		MutePlayer(client);
 		MutedInThisRound[client] = true;
-		PrintToChat(client, CHAT_BANNER, "Now Muted");
+		CPrintToChat(client, "%s %t", ChatBanner, "Now Muted");
 		if (gShadow_LR_Debug_Enabled == true)
 		{
-			PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been muted", client);
+			CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been muted", client);
 		}
 	}
 	else
 	{
 		if (gShadow_LR_Debug_Enabled == true)
 		{
-			PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06was muted so not getting muted this time", client);
+			CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06was muted so not getting muted this time", client);
 		}
 	}
 	
@@ -268,7 +269,7 @@ public MutePrisoners_RoundEnd(Handle:event, const String:name[], bool:dontBroadc
 	
 	if (gH_Timer_Unmuter != INVALID_HANDLE)
 	{
-		CloseHandle(gH_Timer_Unmuter);
+		KillTimer(gH_Timer_Unmuter);
 		gH_Timer_Unmuter = INVALID_HANDLE;
 	}
 	
@@ -303,17 +304,32 @@ public MutePrisoners_RoundStart(Handle:event, const String:name[], bool:dontBroa
 		}
 		
 		// Unmute Timer
-		gH_Timer_Unmuter = CreateTimer(gShadow_MuteLength, Timer_UnmutePrisoners, _, TIMER_FLAG_NO_MAPCHANGE);
+		if (gH_Timer_Unmuter == INVALID_HANDLE)
+		{
+			gH_Timer_Unmuter = CreateTimer(gShadow_MuteLength, Timer_UnmutePrisoners, _, TIMER_FLAG_NO_MAPCHANGE);
+		}
+		else
+		{
+			KillTimer(gH_Timer_Unmuter);
+			gH_Timer_Unmuter = INVALID_HANDLE;
+			
+			gH_Timer_Unmuter = CreateTimer(gShadow_MuteLength, Timer_UnmutePrisoners, _, TIMER_FLAG_NO_MAPCHANGE);
+		}
 		
-		PrintToChatAll(CHAT_BANNER, "Ts Muted", RoundToNearest(gShadow_MuteLength));
+		CPrintToChatAll("%s %t", ChatBanner, "Ts Muted", RoundToNearest(gShadow_MuteLength));
 	}
 }
 
 public Action:Timer_UnmutePrisoners(Handle:timer)
 {
-	UnmuteAlive();
-	PrintToChatAll(CHAT_BANNER, "Ts Can Speak Again");
-	gH_Timer_Unmuter = INVALID_HANDLE;
+	if (gH_Timer_Unmuter != INVALID_HANDLE)
+	{
+		UnmuteAlive();
+		CPrintToChatAll("%s %t", ChatBanner, "Ts Can Speak Again");
+	
+		KillTimer(gH_Timer_Unmuter);
+		gH_Timer_Unmuter = INVALID_HANDLE;
+	}
 	
 	return Plugin_Stop;
 }

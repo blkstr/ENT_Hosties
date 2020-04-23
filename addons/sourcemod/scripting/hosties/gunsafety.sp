@@ -21,6 +21,7 @@
 #include <cstrike>
 #include <sdktools>
 #include <hosties>
+#include <multicolors>
 
 new Handle:gH_Cvar_Strip_On_Slay = INVALID_HANDLE;
 new Handle:gH_Cvar_Strip_On_Kick = INVALID_HANDLE;
@@ -253,22 +254,22 @@ public MenuHandler_Slay(Handle:menu, MenuAction:action, param1, param2)
 
 		if ((target = GetClientOfUserId(userid)) == 0)
 		{
-			PrintToChat(param1, "[SM] %t", "Player no longer available");
+			CPrintToChat(param1, "%s %t", ChatBanner, "Player no longer available");
 		}
 		else if (!CanUserTarget(param1, target))
 		{
-			PrintToChat(param1, "[SM] %t", "Unable to target");
+			CPrintToChat(param1, "%s %t", ChatBanner, "Unable to target");
 		}
 		else if (!IsPlayerAlive(target))
 		{
-			ReplyToCommand(param1, "[SM] %t", "Player has since died");
+			CReplyToCommand(param1, "%s %t", ChatBanner, "Player has since died");
 		}
 		else
 		{
 			decl String:name[32];
 			GetClientName(target, name, sizeof(name));
 			PerformSlay(param1, target);
-			ShowActivity2(param1, "[SM] ", "%t", "Slayed target", "_s", name);
+			CShowActivity2(param1, ChatBanner, "%t", "Slayed target", "_s", name);
 		}
 		
 		DisplaySlayMenu(param1);
@@ -346,17 +347,17 @@ public MenuHandler_Kick(Handle:menu, MenuAction:action, param1, param2)
 
 		if ((target = GetClientOfUserId(userid)) == 0)
 		{
-			PrintToChat(param1, "[SM] %t", "Player no longer available");
+			CPrintToChat(param1, "%s %t", ChatBanner, "Player no longer available");
 		}
 		else if (!CanUserTarget(param1, target))
 		{
-			PrintToChat(param1, "[SM] %t", "Unable to target");
+			CPrintToChat(param1, "%s %t", ChatBanner, "Unable to target");
 		}
 		else
 		{
 			decl String:name[MAX_NAME_LENGTH];
 			GetClientName(target, name, sizeof(name));
-			ShowActivity2(param1, "[SM] ", "%t", "Kicked target", "_s", name);
+			CShowActivity2(param1, ChatBanner, "%t", "Kicked target", "_s", name);
 			PerformKick(param1, target, "");
 		}
 		
@@ -377,11 +378,11 @@ PrepareBan(client, target, time, const String:reason[])
 	{
 		if (client == 0)
 		{
-			PrintToServer("[SM] %t", "Player no longer available");
+			CPrintToServer("%s %t", ChatBanner, "Player no longer available");
 		}
 		else
 		{
-			PrintToChat(client, "[SM] %t", "Player no longer available");
+			CPrintToChat(client, "%s %t", ChatBanner, "Player no longer available");
 		}
 
 		return;
@@ -395,16 +396,16 @@ PrepareBan(client, target, time, const String:reason[])
 	{
 		if (reason[0] == '\0')
 		{
-			ShowActivity(client, "%t", "Permabanned player", name);
+			CShowActivity(client, "%t", "Permabanned player", name);
 		} else {
-			ShowActivity(client, "%t", "Permabanned player reason", name, reason);
+			CShowActivity(client, "%t", "Permabanned player reason", name, reason);
 		}
 	} else {
 		if (reason[0] == '\0')
 		{
-			ShowActivity(client, "%t", "Banned player", name, time);
+			CShowActivity(client, "%t", "Banned player", name, time);
 		} else {
-			ShowActivity(client, "%t", "Banned player reason", name, time, reason);
+			CShowActivity(client, "%t", "Banned player reason", name, time, reason);
 		}
 	}
 
@@ -563,11 +564,11 @@ public MenuHandler_BanPlayerList(Handle:menu, MenuAction:action, param1, param2)
 
 		if ((target = GetClientOfUserId(userid)) == 0)
 		{
-			PrintToChat(param1, "[SM] %t", "Player no longer available");
+			CPrintToChat(param1, "%s %t", ChatBanner, "Player no longer available");
 		}
 		else if (!CanUserTarget(param1, target))
 		{
-			PrintToChat(param1, "[SM] %t", "Unable to target");
+			CPrintToChat(param1, "%s %t", ChatBanner, "Unable to target");
 		}
 		else
 		{

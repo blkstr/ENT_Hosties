@@ -21,6 +21,7 @@
 #include <sdktools>
 #include <cstrike>
 #include <hosties>
+#include <multicolors>
 
 new Float:g_DeathLocation[MAXPLAYERS+1][3];
 
@@ -35,7 +36,7 @@ public Action:Command_Respawn(client, args)
 {
 	if (args < 1)
 	{
-		ReplyToCommand(client, "[SM] Usage: sm_hrespawn <#userid|name>");
+		CReplyToCommand(client, "%s Usage: sm_hrespawn <#userid|name>", ChatBanner);
 		return Plugin_Handled;
 	}
 
@@ -64,7 +65,7 @@ public Action:Command_Respawn(client, args)
 		PerformRespawn(client, target_list[i]);
 	}
 	
-	ShowActivity(client, CHAT_BANNER, "Respawned Target", target_name);
+	CShowActivity(client, "%s %t", ChatBanner, "Respawned Target", target_name);
 	
 	return Plugin_Handled;
 }
@@ -88,7 +89,7 @@ PerformRespawn(client, target)
 	if (g_DeathLocation[target][0] == 0.0 && g_DeathLocation[target][1] == 0.0 && g_DeathLocation[target][2] == 0.0)
 	{
 		// no death location was available
-		ReplyToCommand(client, CHAT_BANNER, "Respawn Data Unavailable", target);
+		CReplyToCommand(client, "%s %t", ChatBanner, "Respawn Data Unavailable", target);
 	}
 	else
 	{
@@ -109,7 +110,7 @@ DisplayRespawnMenu(client)
 	new targets_added = AddTargetsToMenu2(menu, client, COMMAND_FILTER_DEAD);
 	if (targets_added == 0)
 	{
-		ReplyToCommand(client, CHAT_BANNER, "Target is not in game");
+		CReplyToCommand(client, "%s %t", ChatBanner, "Target is not in game");
 		if (gH_TopMenu != INVALID_HANDLE)
 		{
 			DisplayTopMenu(gH_TopMenu, client, TopMenuPosition_LastCategory);
@@ -161,22 +162,22 @@ public MenuHandler_Respawn(Handle:menu, MenuAction:action, param1, param2)
 
 		if ((target = GetClientOfUserId(userid)) == 0)
 		{
-			PrintToChat(param1, CHAT_BANNER, "Player no longer available");
+			CPrintToChat(param1, "%s %t", ChatBanner, "Player no longer available");
 		}
 		else if (!CanUserTarget(param1, target))
 		{
-			PrintToChat(param1, CHAT_BANNER, "Unable to target");
+			CPrintToChat(param1, "%s %t", ChatBanner, "Unable to target");
 		}
 		else if (IsPlayerAlive(target))
 		{
-			ReplyToCommand(param1, CHAT_BANNER, "Player Alive");
+			CReplyToCommand(param1, "%s %t", ChatBanner, "Player Alive");
 		}
 		else
 		{
 			decl String:name[32];
 			GetClientName(target, name, sizeof(name));
 			PerformRespawn(param1, target);
-			ShowActivity(param1, CHAT_BANNER, "Respawned Target", name);
+			CShowActivity(param1, "%s %t", ChatBanner, "Respawned Target", name);
 		}
 		
 		DisplayRespawnMenu(param1);

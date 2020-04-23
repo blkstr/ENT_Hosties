@@ -21,6 +21,7 @@
 #include <cstrike>
 #include <sdktools>
 #include <hosties>
+#include <multicolors>
 
 new Handle:gH_Cvar_RulesOn = INVALID_HANDLE;
 new bool:gShadow_RulesOn;
@@ -69,7 +70,7 @@ public Rules_RoundStart(Handle:event, const String:name[], bool:dontBroadcast)
 {
 	if (gShadow_Announce_Rules)
 	{
-		PrintToChatAll(CHAT_BANNER, "Please Follow Rules");
+		CPrintToChatAll("%s %t", ChatBanner, "Please Follow Rules");
 	}
 }
 
@@ -134,22 +135,19 @@ public Action:Command_Rules(client, args)
 				
 				if (iNumOfRules > 0)
 				{
-					new Handle:Hosties_Rules_Panel = CreatePanel();
 					decl String:sPanelText[256];	
 					Format(sPanelText, sizeof(sPanelText), "%t", "Server Rules");
-					SetPanelTitle(Hosties_Rules_Panel, sPanelText);
-					DrawPanelText(Hosties_Rules_Panel, " ");		
+					
+					Menu menu = CreateMenu(MenuRule);
+					menu.SetTitle(sPanelText);
+					menu.AddItem("spacer", " ", ITEMDRAW_RAWLINE);	
 					
 					for (new line = 0; line < iNumOfRules; line++)
 					{
 						GetArrayString(gH_DArray_Rules, line, sPanelText, sizeof(sPanelText));
-						DrawPanelText(Hosties_Rules_Panel, sPanelText);
-					}
-					
-					DrawPanelText(Hosties_Rules_Panel, "0. to Exit");
-					
-					SendPanelToClient(Hosties_Rules_Panel, client, Panel_Handler, MENU_TIME_FOREVER);
-					CloseHandle(Hosties_Rules_Panel);
+						menu.AddItem("rule", sPanelText, ITEMDRAW_DISABLED);
+					}					
+					menu.Display(client, MENU_TIME_FOREVER);
 				}
 			}
 			case 2:
@@ -162,7 +160,7 @@ public Action:Command_Rules(client, args)
 	return Plugin_Handled;
 }
 
-public Panel_Handler(Handle:panel, MenuAction:action, param1, param2)
+public int MenuRule(Menu menu, MenuAction action, int client, int itemNum)
 {
 	// regardless of what the MenuAction is, do nothing
 }

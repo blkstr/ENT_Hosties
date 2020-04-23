@@ -30,6 +30,7 @@
 #include <hosties>
 #include <lastrequest>
 #include <smlib>
+#include <multicolors>
 
 // Compiler options
 #pragma semicolon 1
@@ -944,7 +945,7 @@ public LastRequest_RoundStart(Handle:event, const String:name[], bool:dontBroadc
 
 		if (gShadow_Announce_Delay_Enable)
 		{
-			PrintToChatAll(CHAT_BANNER, "LR Delay Announcement", RoundToNearest(gShadow_LR_Delay_Enable_Time));
+			CPrintToChatAll("%s %t", ChatBanner, "LR Delay Announcement", RoundToNearest(gShadow_LR_Delay_Enable_Time));
 		}
 	}
 	else
@@ -982,7 +983,7 @@ StopActiveLRs(client)
 		RemoveFromArray(gH_DArray_LR_Partners, iArraySize-1);
 		iArraySize--;
 	}
-	ShowActivity(client, "%t", "LR Aborted");
+	CShowActivity(client, "%t", "LR Aborted");
 }
 
 public LastRequest_RoundEnd(Handle:event, const String:name[], bool:dontBroadcast)
@@ -1034,13 +1035,13 @@ public LastRequest_PlayerDeath(Handle:event, const String:name[], bool:dontBroad
 				{
 					if (!gShadow_LR_NonContKiller_Action)
 					{
-						PrintToChatAll(CHAT_BANNER, "Non LR Kill LR Abort", attacker, victim);
+						CPrintToChatAll("%s %t", ChatBanner, "Non LR Kill LR Abort", attacker, victim);
 					}
 					else
 					{
 						if (gShadow_LR_Debug_Enabled == true)
 						{
-							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06PlayerDeath Rebel Decided", attacker);
+							CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06PlayerDeath Rebel Decided", attacker);
 						}
 						DecideRebelsFate(attacker, idx);
 						return;
@@ -1060,12 +1061,12 @@ public LastRequest_PlayerDeath(Handle:event, const String:name[], bool:dontBroad
 	{
 		if (gShadow_SendGlobalMsgs)
 		{
-			PrintToChatAll(CHAT_BANNER, "Rebel Kill", attacker, victim);
+			CPrintToChatAll("%s %t", ChatBanner, "Rebel Kill", attacker, victim);
 		}
 		else
 		{
-			PrintToChat(attacker, CHAT_BANNER, "Rebel Kill", attacker, victim);
-			PrintToChat(victim, CHAT_BANNER, "Rebel Kill", attacker, victim);
+			CPrintToChat(attacker, "%s %t", ChatBanner, "Rebel Kill", attacker, victim);
+			CPrintToChat(victim, "%s %t", ChatBanner, "Rebel Kill", attacker, victim);
 		}
 	}
 	
@@ -1092,7 +1093,7 @@ public LastRequest_PlayerDeath(Handle:event, const String:name[], bool:dontBroad
 		
 			if (gShadow_Announce_LR)
 			{
-				PrintToChatAll(CHAT_BANNER, "LR Available");
+				CPrintToChatAll("%s %t", ChatBanner, "LR Available");
 				
 				if ((strlen(gShadow_LR_Sound) > 0) && !StrEqual(gShadow_LR_Sound, "-1"))
 				{
@@ -1136,12 +1137,12 @@ public LastRequest_PlayerHurt(Handle:event, const String:name[], bool:dontBroadc
 					{
 						if (gShadow_SendGlobalMsgs)
 						{
-							PrintToChatAll(CHAT_BANNER, "New Rebel", attacker);
+							CPrintToChatAll("%s %t", ChatBanner, "New Rebel", attacker);
 						}
 						else
 						{
-							PrintToChat(attacker, CHAT_BANNER, "New Rebel", attacker);
-							PrintToChat(target, CHAT_BANNER, "New Rebel", attacker);
+							CPrintToChat(attacker, "%s %t", ChatBanner, "New Rebel", attacker);
+							CPrintToChat(target, "%s %t", ChatBanner, "New Rebel", attacker);
 						}
 					}
 				}
@@ -1152,7 +1153,7 @@ public LastRequest_PlayerHurt(Handle:event, const String:name[], bool:dontBroadc
 			{
 				if (gShadow_LR_Debug_Enabled == true)
 				{
-					PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed for attacking someone else", attacker);
+					CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed for attacking someone else", attacker);
 				}
 				DecideRebelsFate(attacker, idx, target);
 			}
@@ -1173,7 +1174,7 @@ public LastRequest_PlayerHurt(Handle:event, const String:name[], bool:dontBroadc
 						{	
 							if (gShadow_LR_Debug_Enabled == true)
 							{
-								PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed for using other weapon", attacker);
+								CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed for using other weapon", attacker);
 							}
 							DecideRebelsFate(attacker, idx, target);
 						}
@@ -1184,7 +1185,7 @@ public LastRequest_PlayerHurt(Handle:event, const String:name[], bool:dontBroadc
 						{
 							if (gShadow_LR_Debug_Enabled == true)
 							{
-								PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed for using other weapon", attacker);
+								CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed for using other weapon", attacker);
 							}
 							DecideRebelsFate(attacker, idx, target);
 						}
@@ -1193,7 +1194,7 @@ public LastRequest_PlayerHurt(Handle:event, const String:name[], bool:dontBroadc
 					{
 						if (gShadow_LR_Debug_Enabled == true)
 						{
-							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed for using other weapon", attacker);
+							CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed for using other weapon", attacker);
 						}
 						DecideRebelsFate(attacker, idx, target);
 					}
@@ -1208,7 +1209,7 @@ public LastRequest_PlayerHurt(Handle:event, const String:name[], bool:dontBroadc
 				{
 					if (gShadow_LR_Debug_Enabled == true)
 					{
-						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed for using other weapon in HP", attacker);
+						CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed for using other weapon in HP", attacker);
 					}
 					DecideRebelsFate(attacker, idx, target);
 				}
@@ -1226,12 +1227,12 @@ public LastRequest_PlayerHurt(Handle:event, const String:name[], bool:dontBroadc
 			{
 				if (gShadow_SendGlobalMsgs)
 				{
-					PrintToChatAll(CHAT_BANNER, "New Rebel", attacker);
+					CPrintToChatAll("%s %t", ChatBanner, "New Rebel", attacker);
 				}
 				else
 				{
-					PrintToChat(attacker, CHAT_BANNER, "New Rebel", attacker);
-					PrintToChat(target, CHAT_BANNER, "New Rebel", attacker);
+					CPrintToChat(attacker, "%s %t", ChatBanner, "New Rebel", attacker);
+					CPrintToChat(target, "%s %t", ChatBanner, "New Rebel", attacker);
 				}
 			}
 			if (gShadow_ColorRebels)
@@ -1260,11 +1261,11 @@ public LastRequest_PlayerHurt(Handle:event, const String:name[], bool:dontBroadc
 						{
 							if(gShadow_Announce_CT_FreeHit != 2)
 							{
-								PrintToConsole(idx, CHAT_BANNER, "CT Attack T Gun", attacker, target);
+								PrintToConsole(idx, "%s %t", ChatBanner, "CT Attack T Gun", attacker, target);
 							}
 							if(gShadow_Announce_CT_FreeHit >= 2)
 							{
-								PrintToChat(idx, CHAT_BANNER, "CT Attack T Gun", attacker, target);
+								CPrintToChat(idx, "%s %t", ChatBanner, "CT Attack T Gun", attacker, target);
 							}
 						}
 					}
@@ -1278,11 +1279,11 @@ public LastRequest_PlayerHurt(Handle:event, const String:name[], bool:dontBroadc
 					{
 						if(gShadow_Announce_CT_FreeHit != 2)
 						{
-							PrintToConsole(idx, CHAT_BANNER, "Freeattack", attacker, target);
+							PrintToConsole(idx, "%s %t", ChatBanner, "Freeattack", attacker, target);
 						}
 						if(gShadow_Announce_CT_FreeHit >= 2)
 						{
-							PrintToChat(idx, CHAT_BANNER, "Freeattack", attacker, target);
+							CPrintToChat(idx, "%s %t", ChatBanner, "Freeattack", attacker, target);
 						}
 					}
 				}
@@ -1306,10 +1307,10 @@ public LastRequest_PlayerDisconnect(Handle:event, const String:name[], bool:dont
 			{
 				CleanupLastRequest(client, idx);
 				RemoveFromArray(gH_DArray_LR_Partners, idx);
-				PrintToChatAll(CHAT_BANNER, "LR Player Disconnect", client);
+				CPrintToChatAll("%s %t", ChatBanner, "LR Player Disconnect", client);
 				if (gShadow_LR_Debug_Enabled == true)
 				{
-					PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06disconnected, CleanUP done", client);
+					CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06disconnected, CleanUP done", client);
 				}
 			}
 		}
@@ -1354,7 +1355,7 @@ CleanupLastRequest(loser, arrayIndex)
 
 					if (gShadow_LR_Debug_Enabled == true)
 					{
-						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after Drunk/Drugges KnifeFight");
+						CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after Drunk/Drugges KnifeFight");
 					}
 					
 					if (g_Game == Game_CSGO)
@@ -1376,7 +1377,7 @@ CleanupLastRequest(loser, arrayIndex)
 
 					if (gShadow_LR_Debug_Enabled == true)
 					{
-						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after LowGrav KnifeFight");
+						CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after LowGrav KnifeFight");
 					}
 				}
 				case Knife_HiSpeed:
@@ -1392,7 +1393,7 @@ CleanupLastRequest(loser, arrayIndex)
 
 					if (gShadow_LR_Debug_Enabled == true)
 					{
-						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after HiSpeed KnifeFight");
+						CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after HiSpeed KnifeFight");
 					}
 				}
 				case Knife_ThirdPerson:
@@ -1435,7 +1436,7 @@ CleanupLastRequest(loser, arrayIndex)
 
 					if (gShadow_LR_Debug_Enabled == true)
 					{
-						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after ThirdPerson KnifeFight");
+						CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after ThirdPerson KnifeFight");
 					}
 				}
 			}
@@ -1451,7 +1452,7 @@ CleanupLastRequest(loser, arrayIndex)
 			}
 			if (gShadow_LR_Debug_Enabled == true)
 			{
-				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after ChickenFight");
+				CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after ChickenFight");
 			}
 		}
 		case LR_HotPotato:
@@ -1470,7 +1471,7 @@ CleanupLastRequest(loser, arrayIndex)
 			}
 			if (gShadow_LR_Debug_Enabled == true)
 			{
-				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after HotPotato");
+				CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after HotPotato");
 			}
 		}
 		case LR_Dodgeball:
@@ -1499,7 +1500,7 @@ CleanupLastRequest(loser, arrayIndex)
 			}
 			if (gShadow_LR_Debug_Enabled == true)
 			{
-				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after Dodgeball");
+				CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after Dodgeball");
 			}
 		}
 		case LR_Race:
@@ -1515,7 +1516,7 @@ CleanupLastRequest(loser, arrayIndex)
 			}
 			if (gShadow_LR_Debug_Enabled == true)
 			{
-				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after Race");
+				CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after Race");
 			}
 		}
 		case LR_JumpContest:
@@ -1537,7 +1538,7 @@ CleanupLastRequest(loser, arrayIndex)
 			}
 			if (gShadow_LR_Debug_Enabled == true)
 			{
-				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after JumpContest");
+				CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP after JumpContest");
 			}
 		}
 		default:
@@ -1556,7 +1557,7 @@ CleanupLastRequest(loser, arrayIndex)
 			
 			if (gShadow_LR_Debug_Enabled == true)
 			{
-				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP by default");
+				CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Succesfull CleanUP by default");
 			}
 		}
 	}
@@ -1584,7 +1585,7 @@ CleanupLastRequest(loser, arrayIndex)
 		
 		if (gShadow_LR_Debug_Enabled == true)
 		{
-			PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Cleaned player %N", LR_Player_Prisoner);
+			CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Cleaned player %N", LR_Player_Prisoner);
 		}
 	}
 	
@@ -1605,7 +1606,7 @@ CleanupLastRequest(loser, arrayIndex)
 		
 		if (gShadow_LR_Debug_Enabled == true)
 		{
-			PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Cleaned player %N", LR_Player_Guard);
+			CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Cleaned player %N", LR_Player_Guard);
 		}
 	}
 }
@@ -1626,11 +1627,11 @@ public LastRequest_BulletImpact(Handle:event, const String:name[], bool:dontBroa
 		{
 			if (gShadow_SendGlobalMsgs)
 			{
-				PrintToChatAll(CHAT_BANNER, "New Rebel", attacker);
+				CPrintToChatAll("%s %t", ChatBanner, "New Rebel", attacker);
 			}
 			else
 			{
-				PrintToChat(attacker, CHAT_BANNER, "New Rebel", attacker);
+				CPrintToChat(attacker, "%s %t", ChatBanner, "New Rebel", attacker);
 			}
 		}
 	}
@@ -1721,7 +1722,7 @@ public LastRequest_PlayerJump(Handle:event, const String:name[], bool:dontBroadc
 							
 							if (gShadow_LR_Debug_Enabled == true)
 							{
-								PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06jumped and saved the position.", LR_Player_Prisoner);
+								CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06jumped and saved the position.", LR_Player_Prisoner);
 							}
 						}
 						else if ((client == LR_Player_Guard) && !LR_Player_Jumped[LR_Player_Guard])
@@ -1731,14 +1732,14 @@ public LastRequest_PlayerJump(Handle:event, const String:name[], bool:dontBroadc
 							
 							if (gShadow_LR_Debug_Enabled == true)
 							{
-								PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06jumped and saved the position.", LR_Player_Guard);
+								CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06jumped and saved the position.", LR_Player_Guard);
 							}
 						}
 						else
 						{
 							if (gShadow_LR_Debug_Enabled == true)
 							{
-								PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06what.", LR_Player_Guard);
+								CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06what.", LR_Player_Guard);
 							}
 						}
 					}
@@ -1793,12 +1794,12 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 								{
 									if (gShadow_SendGlobalMsgs)
 									{
-										PrintToChatAll(CHAT_BANNER, "M4M Mag Used", client);
+										CPrintToChatAll("%s %t", ChatBanner, "M4M Mag Used", client);
 									}
 									else
 									{
-										PrintToChat(LR_Player_Guard, CHAT_BANNER, "M4M Mag Used", client);
-										PrintToChat(LR_Player_Prisoner, CHAT_BANNER, "M4M Mag Used", client);
+										CPrintToChat(LR_Player_Guard, "%s %t", ChatBanner, "M4M Mag Used", client);
+										CPrintToChat(LR_Player_Prisoner, "%s %t", ChatBanner, "M4M Mag Used", client);
 									}
 								}
 
@@ -1843,12 +1844,12 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 					{
 						if (gShadow_SendGlobalMsgs)
 						{
-							PrintToChatAll(CHAT_BANNER, "S4S Shot Taken", client);
+							CPrintToChatAll("%s %t", ChatBanner, "S4S Shot Taken", client);
 						}
 						else
 						{
-							PrintToChat(LR_Player_Guard, CHAT_BANNER, "S4S Shot Taken", client);
-							PrintToChat(LR_Player_Prisoner, CHAT_BANNER, "S4S Shot Taken", client);
+							CPrintToChat(LR_Player_Guard, "%s %t", ChatBanner, "S4S Shot Taken", client);
+							CPrintToChat(LR_Player_Prisoner, "%s %t", ChatBanner, "S4S Shot Taken", client);
 						}
 					}
 					
@@ -1911,7 +1912,7 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 						{
 							if (gShadow_LR_Debug_Enabled == true)
 							{
-								PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed for using other weapon in S4S", client);
+								CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed for using other weapon in S4S", client);
 							}
 							DecideRebelsFate(client, idx, -1);
 						}
@@ -1924,7 +1925,7 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 								// this should no longer be possible to do without extra manipulation	
 								if (gShadow_LR_Debug_Enabled == true)
 								{
-									PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed for DoubleShot in S4S", client);
+									CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed for DoubleShot in S4S", client);
 								}								
 								DecideRebelsFate(client, idx, -1);
 							}
@@ -1934,12 +1935,12 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 								{
 									if (gShadow_SendGlobalMsgs)
 									{
-										PrintToChatAll(CHAT_BANNER, "S4S Shot Taken", client);
+										CPrintToChatAll("%s %t", ChatBanner, "S4S Shot Taken", client);
 									}
 									else
 									{
-										PrintToChat(LR_Player_Guard, CHAT_BANNER, "S4S Shot Taken", client);
-										PrintToChat(LR_Player_Prisoner, CHAT_BANNER, "S4S Shot Taken", client);
+										CPrintToChat(LR_Player_Guard, "%s %t", ChatBanner, "S4S Shot Taken", client);
+										CPrintToChat(LR_Player_Prisoner, "%s %t", ChatBanner, "S4S Shot Taken", client);
 									}
 								}
 								
@@ -1979,12 +1980,12 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 						{
 							if (gShadow_SendGlobalMsgs)
 							{
-								PrintToChatAll(CHAT_BANNER, "S4S Shot Taken", client);
+								CPrintToChatAll("%s %t", ChatBanner, "S4S Shot Taken", client);
 							}
 							else
 							{
-								PrintToChat(LR_Player_Guard, CHAT_BANNER, "S4S Shot Taken", client);
-								PrintToChat(LR_Player_Prisoner, CHAT_BANNER, "S4S Shot Taken", client);
+								CPrintToChat(LR_Player_Guard, "%s %t", ChatBanner, "S4S Shot Taken", client);
+								CPrintToChat(LR_Player_Prisoner, "%s %t", ChatBanner, "S4S Shot Taken", client);
 							}
 						}
 						
@@ -2074,7 +2075,7 @@ public LastRequest_WeaponFire(Handle:event, const String:name[], bool:dontBroadc
 						RightKnifeAntiCheat(client, idx);
 						if (gShadow_LR_Debug_Enabled == true)
 						{
-							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed for using other weapon in NoScope", client);
+							CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed for using other weapon in NoScope", client);
 						}
 						DecideRebelsFate(client, idx, -1);
 					}
@@ -2119,7 +2120,7 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:damage, &damage
 					{
 						if (gShadow_LR_Debug_Enabled == true)
 						{
-							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed for using other weapon Roulette", attacker);
+							CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed for using other weapon Roulette", attacker);
 						}
 						DecideRebelsFate(attacker, idx, victim);
 						RightKnifeAntiCheat(attacker, idx);
@@ -2135,19 +2136,19 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:damage, &damage
 						case 1:
 						{
 							KillAndReward(victim, attacker);
-							PrintToChatAll(CHAT_BANNER, "Russian Roulette - Hit", victim);
+							CPrintToChatAll("%s %t", ChatBanner, "Russian Roulette - Hit", victim);
 
 						}
 						default:
 						{
 							if (gShadow_SendGlobalMsgs)
 							{						
-								PrintToChatAll(CHAT_BANNER, "Russian Roulette - Miss");
+								CPrintToChatAll("%s %t", ChatBanner, "Russian Roulette - Miss");
 							}
 							else
 							{
-								PrintToChat(LR_Player_Prisoner, CHAT_BANNER, "Russian Roulette - Miss");
-								PrintToChat(LR_Player_Guard, CHAT_BANNER, "Russian Roulette - Miss");
+								CPrintToChat(LR_Player_Prisoner, "%s %t", ChatBanner, "Russian Roulette - Miss");
+								CPrintToChat(LR_Player_Guard, "%s %t", ChatBanner, "Russian Roulette - Miss");
 							}
 						}
 					}
@@ -2160,7 +2161,7 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:damage, &damage
 				{
 					if (gShadow_LR_Debug_Enabled == true)
 					{
-						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed for using other weapon in RPS/R/JC/S4S", attacker);
+						CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed for using other weapon in RPS/R/JC/S4S", attacker);
 					}
 					DecideRebelsFate(attacker, idx, -1);
 					RightKnifeAntiCheat(attacker, idx);
@@ -2178,7 +2179,7 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:damage, &damage
 					{
 						if (gShadow_LR_Debug_Enabled == true)
 						{
-							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed for using other weapon in DodgeBall (%s)", attacker, UsedWeapon);
+							CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed for using other weapon in DodgeBall (%s)", attacker, UsedWeapon);
 						}
 						DecideRebelsFate(attacker, idx, -1);
 						RightKnifeAntiCheat(attacker, idx);
@@ -2197,7 +2198,7 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:damage, &damage
 					ReplaceString(ActiveWeapon, sizeof(ActiveWeapon), "weapon_", "", false); 
 					if (gShadow_LR_Debug_Enabled == true)
 					{
-						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06current weapon is %s, picked is %s", attacker, ActiveWeapon, Picked_Pistol[attacker]);
+						CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06current weapon is %s, picked is %s", attacker, ActiveWeapon, Picked_Pistol[attacker]);
 					}
 					
 					if (!StrEqual(Picked_Pistol[attacker], "") && !StrEqual(ActiveWeapon, ""))
@@ -2207,7 +2208,7 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:damage, &damage
 						{
 							if (gShadow_LR_Debug_Enabled == true)
 							{
-								PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has triggered the usp/hkp weapon check", attacker);
+								CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has triggered the usp/hkp weapon check", attacker);
 								return Plugin_Continue;
 							}
 						}
@@ -2216,7 +2217,7 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:damage, &damage
 							damage = 0.0;
 							RightKnifeAntiCheat(attacker, idx);
 							DecideRebelsFate(attacker, idx);
-							PrintToChatAll("\x01[\x07ENT_Hosties\x01] \x10%N \x06has been slayed switched weapon to %s, but the picked is %s", attacker, ActiveWeapon, Picked_Pistol[attacker]);
+							CPrintToChatAll("\x01[\x07ENT_Hosties\x01] \x10%N \x06has been slayed switched weapon to %s, but the picked is %s", attacker, ActiveWeapon, Picked_Pistol[attacker]);
 							return Plugin_Changed;
 						}
 					}
@@ -2344,12 +2345,12 @@ public Action:OnWeaponEquip(client, weapon)
 						{
 							if (gShadow_SendGlobalMsgs)
 							{
-								PrintToChatAll(CHAT_BANNER, "Hot Potato PickUp", client);
+								CPrintToChatAll("%s %t", ChatBanner, "Hot Potato PickUp", client);
 							}
 							else
 							{
-								PrintToChat(LR_Player_Prisoner, CHAT_BANNER, "Hot Potato Pickup", client);
-								PrintToChat(LR_Player_Guard, CHAT_BANNER, "Hot Potato Pickup", client);
+								CPrintToChat(LR_Player_Prisoner, "%s %t", ChatBanner, "Hot Potato Pickup", client);
+								CPrintToChat(LR_Player_Guard, "%s %t", ChatBanner, "Hot Potato Pickup", client);
 							}
 						}
 					}
@@ -2975,7 +2976,7 @@ public Action:Command_LastRequest(client, args)
 				{
 					if (g_bIsARebel[client] && !gShadow_RebelHandling)
 					{
-						PrintToChat(client, CHAT_BANNER, "LR Rebel Not Allowed");
+						CPrintToChat(client, "%s %t", ChatBanner, "LR Rebel Not Allowed");
 					}
 					else
 					{
@@ -2999,7 +3000,7 @@ public Action:Command_LastRequest(client, args)
 									{
 										if (gShadow_LR_Debug_Enabled == true)
 										{
-											PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Roundtime: %i", g_RoundTime);
+											CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Roundtime: %i", g_RoundTime);
 										}
 										DisplayLastRequestMenu(client, Ts, CTs);
 									}
@@ -3007,45 +3008,45 @@ public Action:Command_LastRequest(client, args)
 									{
 										if (gShadow_LR_Debug_Enabled == true)
 										{
-											PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Roundtime: %i", g_RoundTime);
+											CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Roundtime: %i", g_RoundTime);
 										}
-										PrintToChat(client, CHAT_BANNER, "LR Grace TimeBlock");
+										CPrintToChat(client, "%s %t", ChatBanner, "LR Grace TimeBlock");
 									}
 								}
 								else
 								{
-									PrintToChat(client, CHAT_BANNER, "LR No CTs Available");
+									CPrintToChat(client, "%s %t", ChatBanner, "LR No CTs Available");
 								}
 							}
 							else
 							{
-								PrintToChat(client, CHAT_BANNER, "No CTs Alive");
+								CPrintToChat(client, "%s %t", ChatBanner, "No CTs Alive");
 							}
 						}
 						else
 						{
-							PrintToChat(client, CHAT_BANNER, "Too Many Ts");
+							CPrintToChat(client, "%s %t", ChatBanner, "Too Many Ts");
 						}
 					}
 				}
 				else
 				{
-					PrintToChat(client, CHAT_BANNER, "Not Alive Or In Wrong Team");
+					CPrintToChat(client, "%s %t", ChatBanner, "Not Alive Or In Wrong Team");
 				}
 			}
 			else
 			{
-				PrintToChat(client, CHAT_BANNER, "Another LR In Progress");
+				CPrintToChat(client, "%s %t", ChatBanner, "Another LR In Progress");
 			}
 		}
 		else
 		{
-			PrintToChat(client, CHAT_BANNER, "LR Not Available");
+			CPrintToChat(client, "%s %t", ChatBanner, "LR Not Available");
 		}
 	}
 	else
 	{
-		PrintToChat(client, CHAT_BANNER, "LR Not Available");
+		CPrintToChat(client, "%s %t", ChatBanner, "LR Not Available");
 	}
 
 	return Plugin_Handled;
@@ -3249,7 +3250,7 @@ public LR_Selection_Handler(Handle:menu, MenuAction:action, client, iButtonChoic
 									{
 										if (IsClientInGame(idx) && IsPlayerAlive(idx) && (GetClientTeam(idx) == CS_TEAM_CT))
 										{
-											PrintToChat(idx, CHAT_BANNER, "Race Could Start Soon", client);
+											CPrintToChat(idx, "%s %t", ChatBanner, "Race Could Start Soon", client);
 										}
 									}
 								}
@@ -3298,17 +3299,17 @@ public LR_Selection_Handler(Handle:menu, MenuAction:action, client, iButtonChoic
 					}
 					else
 					{
-						PrintToChat(client, CHAT_BANNER, "Not Alive Or In Wrong Team");
+						CPrintToChat(client, "%s %t", ChatBanner, "Not Alive Or In Wrong Team");
 					}
 				}
 				else
 				{
-					PrintToChat(client, CHAT_BANNER, "Another LR In Progress");
+					CPrintToChat(client, "%s %t", ChatBanner, "Another LR In Progress");
 				}
 			}
 			else
 			{
-				PrintToChat(client, CHAT_BANNER, "LR Not Available");
+				CPrintToChat(client, "%s %t", ChatBanner, "LR Not Available");
 			}
 		}
 		case MenuAction_End:
@@ -3357,7 +3358,7 @@ CreateMainPlayerHandler(client)
 
 	if (iNumCTsAvailable == 0)
 	{
-		PrintToChat(client, CHAT_BANNER, "LR No CTs Available");
+		CPrintToChat(client, "%s %t", ChatBanner, "LR No CTs Available");
 		if (client > 0 && client < MAXPLAYERS+1)
 		{
 			if (gH_BuildLR[client] != INVALID_HANDLE)
@@ -3390,17 +3391,17 @@ public SubLRType_MenuHandler(Handle:SelectionMenu, MenuAction:action, client, iM
 				}
 				else
 				{
-					PrintToChat(client, CHAT_BANNER, "Not Alive Or In Wrong Team");
+					CPrintToChat(client, "%s %t", ChatBanner, "Not Alive Or In Wrong Team");
 				}
 			}
 			else
 			{
-				PrintToChat(client, CHAT_BANNER, "Too Slow Another LR In Progress");
+				CPrintToChat(client, "%s %t", ChatBanner, "Too Slow Another LR In Progress");
 			}
 		}
 		else
 		{
-			PrintToChat(client, CHAT_BANNER, "LR Not Available");
+			CPrintToChat(client, "%s %t", ChatBanner, "LR Not Available");
 		}
 	}
 	else if (action == MenuAction_End)
@@ -3457,27 +3458,27 @@ public RaceEndPointHandler(Handle:menu, MenuAction:action, client, param2)
 						}
 						else
 						{
-							PrintToChat(client, CHAT_BANNER, "Race Points too Close");
+							CPrintToChat(client, "%s %t", ChatBanner, "Race Points too Close");
 						}
 					}
 					else
 					{
-						PrintToChat(client, CHAT_BANNER, "Must Be On Ground");
+						CPrintToChat(client, "%s %t", ChatBanner, "Must Be On Ground");
 					}
 				}
 				else
 				{
-					PrintToChat(client, CHAT_BANNER, "Not Alive Or In Wrong Team");
+					CPrintToChat(client, "%s %t", ChatBanner, "Not Alive Or In Wrong Team");
 				}
 			}
 			else
 			{
-				PrintToChat(client, CHAT_BANNER, "Too Slow Another LR In Progress");
+				CPrintToChat(client, "%s %t", ChatBanner, "Too Slow Another LR In Progress");
 			}
 		}
 		else
 		{
-			PrintToChat(client, CHAT_BANNER, "LR Not Available");
+			CPrintToChat(client, "%s %t", ChatBanner, "LR Not Available");
 		}
 	}
 	else if (action == MenuAction_End)
@@ -3523,22 +3524,22 @@ public RaceStartPointHandler(Handle:menu, MenuAction:action, client, param2)
 					}
 					else
 					{
-						PrintToChat(client, CHAT_BANNER, "Must Be On Ground");
+						CPrintToChat(client, "%s %t", ChatBanner, "Must Be On Ground");
 					}
 				}
 				else
 				{
-					PrintToChat(client, CHAT_BANNER, "Not Alive Or In Wrong Team");
+					CPrintToChat(client, "%s %t", ChatBanner, "Not Alive Or In Wrong Team");
 				}
 			}
 			else
 			{
-				PrintToChat(client, CHAT_BANNER, "Too Slow Another LR In Progress");
+				CPrintToChat(client, "%s %t", ChatBanner, "Too Slow Another LR In Progress");
 			}
 		}
 		else
 		{
-			PrintToChat(client, CHAT_BANNER, "LR Not Available");
+			CPrintToChat(client, "%s %t", ChatBanner, "LR Not Available");
 		}
 	}
 	else if (action == MenuAction_End)
@@ -3603,28 +3604,28 @@ public MainPlayerHandler(Handle:playermenu, MenuAction:action, client, iButtonCh
 													new LastRequest:game = g_LRLookup[client];
 													if ((game == LR_HotPotato || game == LR_RussianRoulette) && IsClientTooNearObstacle(client))
 													{
-														PrintToChat(client, CHAT_BANNER, "Too Near Obstruction");
+														CPrintToChat(client, "%s %t", ChatBanner, "Too Near Obstruction");
 														if (gShadow_LR_Debug_Enabled == true)
 														{
-															PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Too Near Obstacles");
+															CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Too Near Obstacles");
 														}
 													}
 													// player isn't on ground
 													else if ((game == LR_JumpContest) && !(GetEntityFlags(client) & FL_ONGROUND|FL_INWATER))
 													{
-														PrintToChat(client, CHAT_BANNER, "Must Be On Ground");
+														CPrintToChat(client, "%s %t", ChatBanner, "Must Be On Ground");
 														if (gShadow_LR_Debug_Enabled == true)
 														{
-															PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Must be in the ground");
+															CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Must be in the ground");
 														}
 													}
 													// make sure they're not ducked
 													else if ((game == LR_JumpContest) && (GetEntityFlags(client) & FL_DUCKING))
 													{
-														PrintToChat(client, CHAT_BANNER, "Too Near Obstruction");
+														CPrintToChat(client, "%s %t", ChatBanner, "Too Near Obstruction");
 														if (gShadow_LR_Debug_Enabled == true)
 														{
-															PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Too Near Obstruction");
+															CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Too Near Obstruction");
 														}
 													}
 													else if (IsLastRequestAutoStart(game))
@@ -3649,9 +3650,9 @@ public MainPlayerHandler(Handle:playermenu, MenuAction:action, client, iButtonCh
 												{
 													if (gShadow_LR_Debug_Enabled == true)
 													{
-														PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06Tried to LR, other LR in progress", client);
+														CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06Tried to LR, other LR in progress", client);
 													}
-													PrintToChat(client, CHAT_BANNER, "Another LR In Progress");
+													CPrintToChat(client, "%s %t", ChatBanner, "Another LR In Progress");
 												}
 											}
 											else
@@ -3680,51 +3681,51 @@ public MainPlayerHandler(Handle:playermenu, MenuAction:action, client, iButtonCh
 												SetMenuExitButton(askmenu, true);
 												DisplayMenu(askmenu, ClientIdxOfCT, 6);
 		
-												PrintToChat(client, CHAT_BANNER, "Asking For Permission", ClientIdxOfCT);
+												CPrintToChat(client, "%s %t", ChatBanner, "Asking For Permission", ClientIdxOfCT);
 												if (gShadow_LR_Debug_Enabled == true)
 												{
-													PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06asks for LR permission from the Guard", client);
+													CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06asks for LR permission from the Guard", client);
 												}
 											}
 										}
 										else
 										{
-											PrintToChat(client, CHAT_BANNER, "LR Not With Bot");
+											CPrintToChat(client, "%s %t", ChatBanner, "LR Not With Bot");
 										}
 									}
 									else
 									{
-										PrintToChat(client, CHAT_BANNER, "LR No CTs Available");
+										CPrintToChat(client, "%s %t", ChatBanner, "LR No CTs Available");
 									}
 								}
 								else
 								{
-									PrintToChat(client, CHAT_BANNER, "No CTs Alive");
+									CPrintToChat(client, "%s %t", ChatBanner, "No CTs Alive");
 								}
 							}
 							else
 							{
-								PrintToChat(client, CHAT_BANNER, "Too Many Ts");
+								CPrintToChat(client, "%s %t", ChatBanner, "Too Many Ts");
 							}
 						}
 						else
 						{
-							PrintToChat(client, CHAT_BANNER, "Target Is Not Alive Or In Wrong Team");
+							CPrintToChat(client, "%s %t", ChatBanner, "Target Is Not Alive Or In Wrong Team");
 						}
 					}
 					else
 					{
-						PrintToChat(client, CHAT_BANNER, "Not Alive Or In Wrong Team");
+						CPrintToChat(client, "%s %t", ChatBanner, "Not Alive Or In Wrong Team");
 					}
 				}
 				else
 				{
-					PrintToChat(client, CHAT_BANNER, "Another LR In Progress");
+					CPrintToChat(client, "%s %t", ChatBanner, "Another LR In Progress");
 				}
 			}
 			else
 			{
-				PrintToChat(client, CHAT_BANNER, "LR Not Available");
+				CPrintToChat(client, "%s %t", ChatBanner, "LR Not Available");
 			}	
 		}
 		case MenuAction_End:
@@ -3788,46 +3789,46 @@ public MainAskHandler(Handle:askmenu, MenuAction:action, client, param2)
 										}
 									}
 									else
-										PrintToChat(client, CHAT_BANNER, "Too Many Ts");
+										CPrintToChat(client, "%s %t", ChatBanner, "Too Many Ts");
 								}
 								else
 								{
-									PrintToChat(client, CHAT_BANNER, "Too Slow Another LR In Progress");
+									CPrintToChat(client, "%s %t", ChatBanner, "Too Slow Another LR In Progress");
 								}
 							}
 							else
 							{
-								PrintToChat(g_LR_PermissionLookup[client], CHAT_BANNER, "Declined LR Request", client);
+								CPrintToChat(g_LR_PermissionLookup[client], "%s %t", ChatBanner, "Declined LR Request", client);
 							}
 						}
 						else
 						{
-							PrintToChat(client, CHAT_BANNER, "Not Alive Or In Wrong Team");
+							CPrintToChat(client, "%s %t", ChatBanner, "Not Alive Or In Wrong Team");
 						}
 					}
 					else
 					{
-						PrintToChat(client, CHAT_BANNER, "LR Partner Died");
+						CPrintToChat(client, "%s %t", ChatBanner, "LR Partner Died");
 					}
 				}
 				else
 				{
-					PrintToChat(client, CHAT_BANNER, "Too Slow Another LR In Progress");
+					CPrintToChat(client, "%s %t", ChatBanner, "Too Slow Another LR In Progress");
 				}
 			}
 			else
 			{
-				PrintToChat(client, CHAT_BANNER, "LR Not Available");
+				CPrintToChat(client, "%s %t", ChatBanner, "LR Not Available");
 			}
 		}
 		case MenuAction_Cancel:
 		{
 			if (IsClientInGame(g_LR_PermissionLookup[client]))
 			{
-				PrintToChat(g_LR_PermissionLookup[client], CHAT_BANNER, "LR Request Decline Or Too Long", client);
+				CPrintToChat(g_LR_PermissionLookup[client], "%s %t", ChatBanner, "LR Request Decline Or Too Long", client);
 				if (gShadow_LR_Debug_Enabled == true)
 				{
-					PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06Request declined or no response", client);
+					CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06Request declined or no response", client);
 				}
 			}
 		}
@@ -3955,7 +3956,7 @@ InitializeGame(iPartnersIndex)
 			GivePlayerItem(LR_Player_Guard, "weapon_knife");
 
 			// announce LR
-			PrintToChatAll(CHAT_BANNER, "LR KF Start", LR_Player_Prisoner, LR_Player_Guard);		
+			CPrintToChatAll("%s %t", ChatBanner, "LR KF Start", LR_Player_Prisoner, LR_Player_Guard);		
 		}
 		case LR_Shot4Shot:
 		{
@@ -4086,16 +4087,16 @@ InitializeGame(iPartnersIndex)
 			ReplaceString(Picked_Pistol[LR_Player_Guard], sizeof(Picked_Pistol), "weapon_", "", false); 
 			if (gShadow_LR_Debug_Enabled == true)
 			{
-				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06picked %s", LR_Player_Guard, Picked_Pistol[LR_Player_Guard]);
+				CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06picked %s", LR_Player_Guard, Picked_Pistol[LR_Player_Guard]);
 			}
 
 			ReplaceString(Picked_Pistol[LR_Player_Prisoner], sizeof(Picked_Pistol), "weapon_", "", false); 
 			if (gShadow_LR_Debug_Enabled == true)
 			{
-				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06picked %s", LR_Player_Prisoner, Picked_Pistol[LR_Player_Prisoner]);
+				CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06picked %s", LR_Player_Prisoner, Picked_Pistol[LR_Player_Prisoner]);
 			}
 			
-			PrintToChatAll(CHAT_BANNER, "LR S4S Start", LR_Player_Prisoner, LR_Player_Guard);
+			CPrintToChatAll("%s %t", ChatBanner, "LR S4S Start", LR_Player_Prisoner, LR_Player_Guard);
 			// randomize who starts first
 			new s4sPlayerFirst = GetRandomInt(0, 1);
 			if (s4sPlayerFirst == 0)
@@ -4105,12 +4106,12 @@ InitializeGame(iPartnersIndex)
 				SetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, LR_Player_Prisoner, _:Block_Global1);
 				if (gShadow_SendGlobalMsgs)
 				{
-					PrintToChatAll(CHAT_BANNER, "Randomly Chose First Player", LR_Player_Guard);
+					CPrintToChatAll("%s %t", ChatBanner, "Randomly Chose First Player", LR_Player_Guard);
 				}
 				else
 				{
-					PrintToChat(LR_Player_Prisoner, CHAT_BANNER, "Randomly Chose First Player", LR_Player_Guard);
-					PrintToChat(LR_Player_Guard, CHAT_BANNER, "Randomly Chose First Player", LR_Player_Guard);
+					CPrintToChat(LR_Player_Prisoner, "%s %t", ChatBanner, "Randomly Chose First Player", LR_Player_Guard);
+					CPrintToChat(LR_Player_Guard, "%s %t", ChatBanner, "Randomly Chose First Player", LR_Player_Guard);
 				}
 			}
 			else
@@ -4120,12 +4121,12 @@ InitializeGame(iPartnersIndex)
 				SetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, LR_Player_Guard, _:Block_Global1);
 				if (gShadow_SendGlobalMsgs)
 				{
-					PrintToChatAll(CHAT_BANNER, "Randomly Chose First Player", LR_Player_Prisoner);
+					CPrintToChatAll("%s %t", ChatBanner, "Randomly Chose First Player", LR_Player_Prisoner);
 				}
 				else
 				{
-					PrintToChat(LR_Player_Prisoner, CHAT_BANNER, "Randomly Chose First Player", LR_Player_Prisoner);
-					PrintToChat(LR_Player_Guard, CHAT_BANNER, "Randomly Chose First Player", LR_Player_Prisoner);				
+					CPrintToChat(LR_Player_Prisoner, "%s %t", ChatBanner, "Randomly Chose First Player", LR_Player_Prisoner);
+					CPrintToChat(LR_Player_Guard, "%s %t", ChatBanner, "Randomly Chose First Player", LR_Player_Prisoner);				
 				}
 			}
 
@@ -4159,7 +4160,7 @@ InitializeGame(iPartnersIndex)
 			}
 
 			// announce LR
-			PrintToChatAll(CHAT_BANNER, "LR CF Start", LR_Player_Prisoner, LR_Player_Guard);
+			CPrintToChatAll("%s %t", ChatBanner, "LR CF Start", LR_Player_Prisoner, LR_Player_Guard);
 		}
 		case LR_HotPotato:
 		{
@@ -4255,7 +4256,7 @@ InitializeGame(iPartnersIndex)
 			}
 			
 			// announce LR
-			PrintToChatAll(CHAT_BANNER, "LR HP Start", LR_Player_Prisoner, LR_Player_Guard);
+			CPrintToChatAll("%s %t", ChatBanner, "LR HP Start", LR_Player_Prisoner, LR_Player_Guard);
 		}
 		case LR_Dodgeball:
 		{
@@ -4298,7 +4299,7 @@ InitializeGame(iPartnersIndex)
 			}
 
 			// announce LR
-			PrintToChatAll(CHAT_BANNER, "LR DB Start", LR_Player_Prisoner, LR_Player_Guard);
+			CPrintToChatAll("%s %t", ChatBanner, "LR DB Start", LR_Player_Prisoner, LR_Player_Guard);
 		}
 		case LR_NoScope:
 		{
@@ -4336,7 +4337,7 @@ InitializeGame(iPartnersIndex)
 			
 			SetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, WeaponChoice, _:Block_Global2);
 			
-			PrintToChatAll(CHAT_BANNER, "LR NS Start", LR_Player_Prisoner, LR_Player_Guard);
+			CPrintToChatAll("%s %t", ChatBanner, "LR NS Start", LR_Player_Prisoner, LR_Player_Guard);
 			if (gShadow_LR_NoScope_Delay > 0)
 			{
 				SetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, gShadow_LR_NoScope_Delay, _:Block_Global1);
@@ -4432,13 +4433,13 @@ InitializeGame(iPartnersIndex)
 				ReplaceString(Picked_NSW[LR_Player_Guard], sizeof(Picked_NSW), "weapon_", "", false); 
 				if (gShadow_LR_Debug_Enabled == true)
 				{
-					PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06picked %s", LR_Player_Guard, Picked_NSW[LR_Player_Guard]);
+					CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06picked %s", LR_Player_Guard, Picked_NSW[LR_Player_Guard]);
 				}
 
 				ReplaceString(Picked_NSW[LR_Player_Prisoner], sizeof(Picked_NSW), "weapon_", "", false); 
 				if (gShadow_LR_Debug_Enabled == true)
 				{
-					PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06picked %s", LR_Player_Prisoner, Picked_NSW[LR_Player_Prisoner]);
+					CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06picked %s", LR_Player_Prisoner, Picked_NSW[LR_Player_Prisoner]);
 				}
 				SetEntPropEnt(LR_Player_Prisoner, Prop_Send, "m_hActiveWeapon", NSW_Prisoner);
 				SetEntPropEnt(LR_Player_Guard, Prop_Send, "m_hActiveWeapon", NSW_Guard);
@@ -4486,7 +4487,7 @@ InitializeGame(iPartnersIndex)
 			DisplayMenu(rpsmenu2, LR_Player_Guard, 15);
 
 			// announce LR
-			PrintToChatAll(CHAT_BANNER, "LR RPS Start", LR_Player_Prisoner, LR_Player_Guard);
+			CPrintToChatAll("%s %t", ChatBanner, "LR RPS Start", LR_Player_Prisoner, LR_Player_Guard);
 		}
 		case LR_Rebel:
 		{
@@ -4526,7 +4527,7 @@ InitializeGame(iPartnersIndex)
 			SetEntData(LR_Player_Prisoner, g_Offset_Health, numCTsAlive*100+50);
 			
 			// announce LR
-			PrintToChatAll(CHAT_BANNER, "LR Has Chosen to Rebel!", LR_Player_Prisoner);
+			CPrintToChatAll("%s %t", ChatBanner, "LR Has Chosen to Rebel!", LR_Player_Prisoner);
 		}
 		case LR_Mag4Mag:
 		{
@@ -4659,19 +4660,19 @@ InitializeGame(iPartnersIndex)
 			ReplaceString(Picked_Pistol[LR_Player_Guard], sizeof(Picked_Pistol), "weapon_", "", false); 
 			if (gShadow_LR_Debug_Enabled == true)
 			{
-				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06picked %s", LR_Player_Guard, Picked_Pistol[LR_Player_Guard]);
+				CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06picked %s", LR_Player_Guard, Picked_Pistol[LR_Player_Guard]);
 			}
 
 			ReplaceString(Picked_Pistol[LR_Player_Prisoner], sizeof(Picked_Pistol), "weapon_", "", false); 
 			if (gShadow_LR_Debug_Enabled == true)
 			{
-				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06picked %s", LR_Player_Prisoner, Picked_Pistol[LR_Player_Prisoner]);
+				CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06picked %s", LR_Player_Prisoner, Picked_Pistol[LR_Player_Prisoner]);
 			}
 			
 			SetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, Pistol_Prisoner, _:Block_PrisonerData);
 			SetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, Pistol_Guard, _:Block_GuardData);
 			
-			PrintToChatAll(CHAT_BANNER, "LR Mag4Mag Start", LR_Player_Prisoner, LR_Player_Guard);
+			CPrintToChatAll("%s %t", ChatBanner, "LR Mag4Mag Start", LR_Player_Prisoner, LR_Player_Guard);
 			
 			SetEntDataFloat(Pistol_Prisoner, g_Offset_SecAttack, 5000.0);
 			SetEntDataFloat(Pistol_Guard, g_Offset_SecAttack, 5000.0);
@@ -4683,12 +4684,12 @@ InitializeGame(iPartnersIndex)
 				SetEntData(Pistol_Guard, g_Offset_Clip1, gShadow_LR_M4M_MagCapacity);
 				if (gShadow_SendGlobalMsgs)
 				{
-					PrintToChatAll(CHAT_BANNER, "Randomly Chose First Player", LR_Player_Guard);
+					CPrintToChatAll("%s %t", ChatBanner, "Randomly Chose First Player", LR_Player_Guard);
 				}
 				else
 				{
-					PrintToChat(LR_Player_Prisoner, CHAT_BANNER, "Randomly Chose First Player", LR_Player_Guard);
-					PrintToChat(LR_Player_Guard, CHAT_BANNER, "Randomly Chose First Player", LR_Player_Guard);
+					CPrintToChat(LR_Player_Prisoner, "%s %t", ChatBanner, "Randomly Chose First Player", LR_Player_Guard);
+					CPrintToChat(LR_Player_Guard, "%s %t", ChatBanner, "Randomly Chose First Player", LR_Player_Guard);
 				}
 				SetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, LR_Player_Guard, _:Block_Global1); // S4Slastshot
 			}
@@ -4698,12 +4699,12 @@ InitializeGame(iPartnersIndex)
 				SetEntData(Pistol_Guard, g_Offset_Clip1, 0);			
 				if (gShadow_SendGlobalMsgs)
 				{
-					PrintToChatAll(CHAT_BANNER, "Randomly Chose First Player", LR_Player_Prisoner);
+					CPrintToChatAll("%s %t", ChatBanner, "Randomly Chose First Player", LR_Player_Prisoner);
 				}
 				else
 				{
-					PrintToChat(LR_Player_Prisoner, CHAT_BANNER, "Randomly Chose First Player", LR_Player_Prisoner);
-					PrintToChat(LR_Player_Guard, CHAT_BANNER, "Randomly Chose First Player", LR_Player_Prisoner);
+					CPrintToChat(LR_Player_Prisoner, "%s %t", ChatBanner, "Randomly Chose First Player", LR_Player_Prisoner);
+					CPrintToChat(LR_Player_Guard, "%s %t", ChatBanner, "Randomly Chose First Player", LR_Player_Prisoner);
 				}
 				SetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, LR_Player_Prisoner, _:Block_Global1);
 			}
@@ -4790,7 +4791,7 @@ InitializeGame(iPartnersIndex)
 			SetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, Pistol_PrisonerEntRef, _:Block_PrisonerData);
 			SetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, Pistol_GuardEntRef, _:Block_GuardData);		
 				
-			PrintToChatAll(CHAT_BANNER, "LR RR Start", LR_Player_Prisoner, LR_Player_Guard);
+			CPrintToChatAll("%s %t", ChatBanner, "LR RR Start", LR_Player_Prisoner, LR_Player_Guard);
 			
 			// randomize who starts first
 			if (GetRandomInt(0, 1) == 0)
@@ -4799,12 +4800,12 @@ InitializeGame(iPartnersIndex)
 				SetEntData(Pistol_Guard, g_Offset_Clip1, 1);
 				if (gShadow_SendGlobalMsgs)
 				{
-					PrintToChatAll(CHAT_BANNER, "Randomly Chose First Player", LR_Player_Guard);
+					CPrintToChatAll("%s %t", ChatBanner, "Randomly Chose First Player", LR_Player_Guard);
 				}
 				else
 				{
-					PrintToChat(LR_Player_Prisoner, CHAT_BANNER, "Randomly Chose First Player", LR_Player_Guard);
-					PrintToChat(LR_Player_Guard, CHAT_BANNER, "Randomly Chose First Player", LR_Player_Guard);
+					CPrintToChat(LR_Player_Prisoner, "%s %t", ChatBanner, "Randomly Chose First Player", LR_Player_Guard);
+					CPrintToChat(LR_Player_Guard, "%s %t", ChatBanner, "Randomly Chose First Player", LR_Player_Guard);
 				}
 			}
 			else
@@ -4813,12 +4814,12 @@ InitializeGame(iPartnersIndex)
 				SetEntData(Pistol_Guard, g_Offset_Clip1, 0);
 				if (gShadow_SendGlobalMsgs)
 				{
-					PrintToChatAll(CHAT_BANNER, "Randomly Chose First Player", LR_Player_Prisoner);
+					CPrintToChatAll("%s %t", ChatBanner, "Randomly Chose First Player", LR_Player_Prisoner);
 				}
 				else
 				{
-					PrintToChat(LR_Player_Prisoner, CHAT_BANNER, "Randomly Chose First Player", LR_Player_Prisoner);
-					PrintToChat(LR_Player_Guard, CHAT_BANNER, "Randomly Chose First Player", LR_Player_Prisoner);				
+					CPrintToChat(LR_Player_Prisoner, "%s %t", ChatBanner, "Randomly Chose First Player", LR_Player_Prisoner);
+					CPrintToChat(LR_Player_Guard, "%s %t", ChatBanner, "Randomly Chose First Player", LR_Player_Prisoner);				
 				}
 			}
 
@@ -4860,7 +4861,7 @@ InitializeGame(iPartnersIndex)
 						g_CountdownTimer = CreateTimer(1.0, Timer_Countdown, iPartnersIndex, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 					}
 					
-					PrintToChatAll(CHAT_BANNER, "Start Jump Contest", LR_Player_Prisoner, LR_Player_Guard);
+					CPrintToChatAll("%s %t", ChatBanner, "Start Jump Contest", LR_Player_Prisoner, LR_Player_Guard);
 					
 					if (!gShadow_NoBlock)
 					{
@@ -4893,7 +4894,7 @@ InitializeGame(iPartnersIndex)
 					LR_Player_Landed[LR_Player_Guard] = false;
 					LR_Player_Landed[LR_Player_Prisoner] = false;			
 					
-					PrintToChatAll(CHAT_BANNER, "Start Farthest Jump", LR_Player_Prisoner, LR_Player_Guard);
+					CPrintToChatAll("%s %t", ChatBanner, "Start Farthest Jump", LR_Player_Prisoner, LR_Player_Guard);
 					
 					// start detection timer
 					if (g_FarthestJumpTimer == INVALID_HANDLE)
@@ -4913,7 +4914,7 @@ InitializeGame(iPartnersIndex)
 					GetClientAbsOrigin(LR_Player_Prisoner, Prisoner_Position);
 					TeleportEntity(LR_Player_Guard, Prisoner_Position, NULL_VECTOR, NULL_VECTOR);
 					
-					PrintToChatAll(CHAT_BANNER, "Start Brink of Death", LR_Player_Prisoner, LR_Player_Guard);
+					CPrintToChatAll("%s %t", ChatBanner, "Start Brink of Death", LR_Player_Prisoner, LR_Player_Guard);
 					
 					// timer to quit the LR
 					CreateTimer(22.0, Timer_JumpContestOver, _, TIMER_FLAG_NO_MAPCHANGE);
@@ -5026,7 +5027,7 @@ public Action:Timer_FarthestJumpDetector(Handle:timer)
 						
 						if (gShadow_LR_Debug_Enabled == true)
 						{
-							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06Jumped and Landed succesfully. Frozen.", LR_Player_Prisoner);
+							CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06Jumped and Landed succesfully. Frozen.", LR_Player_Prisoner);
 						}
 					}
 					
@@ -5039,7 +5040,7 @@ public Action:Timer_FarthestJumpDetector(Handle:timer)
 						
 						if (gShadow_LR_Debug_Enabled == true)
 						{
-							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06Jumped and Landed succesfully. Frozen.", LR_Player_Guard);
+							CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06Jumped and Landed succesfully. Frozen.", LR_Player_Guard);
 						}
 					}
 					
@@ -5050,21 +5051,21 @@ public Action:Timer_FarthestJumpDetector(Handle:timer)
 						
 						if (Prisoner_Distance > Guard_Distance)
 						{
-							PrintToChatAll(CHAT_BANNER, "Farthest Jump Won", LR_Player_Prisoner, LR_Player_Guard, Prisoner_Distance, Guard_Distance);
+							CPrintToChatAll("%s %t", ChatBanner, "Farthest Jump Won", LR_Player_Prisoner, LR_Player_Guard, Prisoner_Distance, Guard_Distance);
 							KillAndReward(LR_Player_Guard, LR_Player_Prisoner);
 							if (gShadow_LR_Debug_Enabled == true)
 							{
-								PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06won the JumpContest as Prisoner", LR_Player_Prisoner);
+								CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06won the JumpContest as Prisoner", LR_Player_Prisoner);
 							}
 						}
 						
 						else if (Guard_Distance >= Prisoner_Distance)
 						{
-							PrintToChatAll(CHAT_BANNER, "Farthest Jump Won", LR_Player_Guard, LR_Player_Prisoner, Guard_Distance, Prisoner_Distance);
+							CPrintToChatAll("%s %t", ChatBanner, "Farthest Jump Won", LR_Player_Guard, LR_Player_Prisoner, Guard_Distance, Prisoner_Distance);
 							KillAndReward(LR_Player_Prisoner, LR_Player_Guard);
 							if (gShadow_LR_Debug_Enabled == true)
 							{
-								PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06won the JumpContest as Guard", LR_Player_Guard);
+								CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06won the JumpContest as Guard", LR_Player_Guard);
 							}
 						}	
 					}
@@ -5102,20 +5103,20 @@ public Action:Timer_JumpContestOver(Handle:timer)
 						
 						if (Prisoner_JumpCount > Guard_JumpCount)
 						{
-							PrintToChatAll(CHAT_BANNER, "Won Jump Contest", LR_Player_Prisoner);
+							CPrintToChatAll("%s %t", ChatBanner, "Won Jump Contest", LR_Player_Prisoner);
 							KillAndReward(LR_Player_Guard, LR_Player_Prisoner);
 							if (gShadow_LR_Debug_Enabled == true)
 							{
-								PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06won the JumpContest as Prisoner", LR_Player_Prisoner);
+								CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06won the JumpContest as Prisoner", LR_Player_Prisoner);
 							}
 						}
 						else
 						{
-							PrintToChatAll(CHAT_BANNER, "Won Jump Contest", LR_Player_Guard);
+							CPrintToChatAll("%s %t", ChatBanner, "Won Jump Contest", LR_Player_Guard);
 							KillAndReward(LR_Player_Prisoner, LR_Player_Guard);
 							if (gShadow_LR_Debug_Enabled == true)
 							{
-								PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06won the JumpContest as Guard", LR_Player_Guard);
+								CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06won the JumpContest as Guard", LR_Player_Guard);
 							}
 						}
 					}
@@ -5146,7 +5147,7 @@ public Action:Timer_JumpContestOver(Handle:timer)
 							}
 						}						
 						
-						PrintToChatAll(CHAT_BANNER, "Won Jump Contest", winner);
+						CPrintToChatAll("%s %t", ChatBanner, "Won Jump Contest", winner);
 					}
 				}
 			}
@@ -5499,13 +5500,13 @@ public Action:Timer_Countdown(Handle:timer)
 			ReplaceString(Picked_NSW[LR_Player_Guard], sizeof(Picked_NSW), "weapon_", "", false); 
 			if (gShadow_LR_Debug_Enabled == true)
 			{
-				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06picked %s", LR_Player_Guard, Picked_NSW[LR_Player_Guard]);
+				CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06picked %s", LR_Player_Guard, Picked_NSW[LR_Player_Guard]);
 			}
 
 			ReplaceString(Picked_NSW[LR_Player_Prisoner], sizeof(Picked_NSW), "weapon_", "", false); 
 			if (gShadow_LR_Debug_Enabled == true)
 			{
-				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06picked %s", LR_Player_Prisoner, Picked_NSW[LR_Player_Prisoner]);
+				CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06picked %s", LR_Player_Prisoner, Picked_NSW[LR_Player_Prisoner]);
 			}
 			SetEntPropEnt(LR_Player_Prisoner, Prop_Send, "m_hActiveWeapon", NSW_Prisoner);
 			SetEntPropEnt(LR_Player_Guard, Prop_Send, "m_hActiveWeapon", NSW_Guard);
@@ -5569,20 +5570,20 @@ public Action:Timer_Countdown(Handle:timer)
 					ReplaceString(g_ActiveWeapon, sizeof(g_ActiveWeapon), "weapon_", "", false); 
 					if (gShadow_LR_Debug_Enabled == true)
 					{
-						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06current weapon is %s, picked is %s", LR_Player_Guard, g_ActiveWeapon, Picked_NSW[LR_Player_Guard]);
+						CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06current weapon is %s, picked is %s", LR_Player_Guard, g_ActiveWeapon, Picked_NSW[LR_Player_Guard]);
 					}
 					
 					Client_GetActiveWeaponName(LR_Player_Prisoner, p_ActiveWeapon, sizeof(p_ActiveWeapon));
 					ReplaceString(p_ActiveWeapon, sizeof(p_ActiveWeapon), "weapon_", "", false); 
 					if (gShadow_LR_Debug_Enabled == true)
 					{
-						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06current weapon is %s, picked is %s", LR_Player_Prisoner, p_ActiveWeapon, Picked_NSW[LR_Player_Prisoner]);
+						CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06current weapon is %s, picked is %s", LR_Player_Prisoner, p_ActiveWeapon, Picked_NSW[LR_Player_Prisoner]);
 					}
 					
 					if (!StrEqual(Picked_NSW[LR_Player_Guard], g_ActiveWeapon))
 					{
 						DecideRebelsFate(LR_Player_Guard, idx);
-						PrintToChatAll("\x01[\x07ENT_Hosties\x01] \x10%N \x06has been slayed switched weapon to %s, but the picked is %s", LR_Player_Guard, g_ActiveWeapon, Picked_NSW[LR_Player_Guard]);
+						CPrintToChatAll("\x01[\x07ENT_Hosties\x01] \x10%N \x06has been slayed switched weapon to %s, but the picked is %s", LR_Player_Guard, g_ActiveWeapon, Picked_NSW[LR_Player_Guard]);
 					}
 					else
 					{
@@ -5592,7 +5593,7 @@ public Action:Timer_Countdown(Handle:timer)
 					if (!StrEqual(Picked_NSW[LR_Player_Prisoner], p_ActiveWeapon))
 					{
 						DecideRebelsFate(LR_Player_Prisoner, idx);
-						PrintToChatAll("\x01[\x07ENT_Hosties\x01] \x10%N \x06has been slayed switched weapon to %s, but the picked is %s", LR_Player_Prisoner, p_ActiveWeapon, Picked_NSW[LR_Player_Prisoner]);
+						CPrintToChatAll("\x01[\x07ENT_Hosties\x01] \x10%N \x06has been slayed switched weapon to %s, but the picked is %s", LR_Player_Prisoner, p_ActiveWeapon, Picked_NSW[LR_Player_Prisoner]);
 					}
 					else
 					{
@@ -5668,19 +5669,19 @@ public Action:Timer_Race(Handle:timer)
 					if (f_PrisonerDistance < f_GuardDistance)
 					{
 						KillAndReward(LR_Player_Guard, LR_Player_Prisoner);
-						PrintToChatAll(CHAT_BANNER, "Race Won", LR_Player_Prisoner);
+						CPrintToChatAll("%s %t", ChatBanner, "Race Won", LR_Player_Prisoner);
 						if (gShadow_LR_Debug_Enabled == true)
 						{
-							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06won the JumpContest as Guard", LR_Player_Guard);
+							CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06won the JumpContest as Guard", LR_Player_Guard);
 						}
 					}
 					else
 					{
 						KillAndReward(LR_Player_Prisoner, LR_Player_Guard);
-						PrintToChatAll(CHAT_BANNER, "Race Won", LR_Player_Guard);
+						CPrintToChatAll("%s %t", ChatBanner, "Race Won", LR_Player_Guard);
 						if (gShadow_LR_Debug_Enabled == true)
 						{
-							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06won the JumpContest as Guard", LR_Player_Prisoner);
+							CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06won the JumpContest as Guard", LR_Player_Prisoner);
 						}
 					}
 				}
@@ -5773,24 +5774,24 @@ public RPSmenuHandler(Handle:menu, MenuAction:action, client, param2)
 							{
 								if (gShadow_SendGlobalMsgs)
 								{
-									PrintToChatAll(CHAT_BANNER, "LR RPS Tie", LR_Player_Prisoner, RPSc2, LR_Player_Guard, RPSc1);
+									CPrintToChatAll("%s %t", ChatBanner, "LR RPS Tie", LR_Player_Prisoner, RPSc2, LR_Player_Guard, RPSc1);
 								}
 								else
 								{
-									PrintToChat(LR_Player_Prisoner, CHAT_BANNER, "LR RPS Tie", LR_Player_Prisoner, RPSc2, LR_Player_Guard, RPSc1);
-									PrintToChat(LR_Player_Guard, CHAT_BANNER, "LR RPS Tie", LR_Player_Prisoner, RPSc2, LR_Player_Guard, RPSc1);
+									CPrintToChat(LR_Player_Prisoner, "%s %t", ChatBanner, "LR RPS Tie", LR_Player_Prisoner, RPSc2, LR_Player_Guard, RPSc1);
+									CPrintToChat(LR_Player_Guard, "%s %t", ChatBanner, "LR RPS Tie", LR_Player_Prisoner, RPSc2, LR_Player_Guard, RPSc1);
 								}
 							}
 							else
 							{
 								if (gShadow_SendGlobalMsgs)
 								{
-									PrintToChatAll(CHAT_BANNER, "LR RPS Tie", LR_Player_Guard, RPSc1, LR_Player_Prisoner, RPSc2);
+									CPrintToChatAll("%s %t", ChatBanner, "LR RPS Tie", LR_Player_Guard, RPSc1, LR_Player_Prisoner, RPSc2);
 								}
 								else
 								{
-									PrintToChat(LR_Player_Guard, CHAT_BANNER, "LR RPS Tie", LR_Player_Guard, RPSc1, LR_Player_Prisoner, RPSc2);
-									PrintToChat(LR_Player_Prisoner, CHAT_BANNER, "LR RPS Tie", LR_Player_Guard, RPSc1, LR_Player_Prisoner, RPSc2);
+									CPrintToChat(LR_Player_Guard, "%s %t", ChatBanner, "LR RPS Tie", LR_Player_Guard, RPSc1, LR_Player_Prisoner, RPSc2);
+									CPrintToChat(LR_Player_Prisoner, "%s %t", ChatBanner, "LR RPS Tie", LR_Player_Guard, RPSc1, LR_Player_Prisoner, RPSc2);
 								}
 							}
 							
@@ -5831,13 +5832,13 @@ public RPSmenuHandler(Handle:menu, MenuAction:action, client, param2)
 						else if ((RPS_Guard_Choice == 0 && RPS_Prisoner_Choice == 2) || (RPS_Guard_Choice == 1 && RPS_Prisoner_Choice == 0) || (RPS_Guard_Choice == 2 && RPS_Prisoner_Choice == 1))
 						{
 							KillAndReward(LR_Player_Prisoner, LR_Player_Guard);
-							PrintToChatAll(CHAT_BANNER, "LR RPS Done", LR_Player_Prisoner, RPSc1, LR_Player_Guard, RPSc2, LR_Player_Guard);
+							CPrintToChatAll("%s %t", ChatBanner, "LR RPS Done", LR_Player_Prisoner, RPSc1, LR_Player_Guard, RPSc2, LR_Player_Guard);
 						}
 						// otherwise THIS player has lost
 						else
 						{
 							KillAndReward(LR_Player_Guard, LR_Player_Prisoner);
-							PrintToChatAll(CHAT_BANNER, "LR RPS Done", LR_Player_Prisoner, RPSc1, LR_Player_Guard, RPSc2, LR_Player_Prisoner);
+							CPrintToChatAll("%s %t", ChatBanner, "LR RPS Done", LR_Player_Prisoner, RPSc1, LR_Player_Guard, RPSc2, LR_Player_Prisoner);
 						}				
 					}				
 				}		
@@ -5859,7 +5860,7 @@ public RPSmenuHandler(Handle:menu, MenuAction:action, client, param2)
 					if (IsClientInGame(client) && IsPlayerAlive(client))
 					{
 						ForcePlayerSuicide(client);
-						PrintToChatAll(CHAT_BANNER, "LR RPS No Answer", client);
+						CPrintToChatAll("%s %t", ChatBanner, "LR RPS No Answer", client);
 					}
 				}	
 			}
@@ -5925,7 +5926,7 @@ public Action:Timer_HotPotatoDone(Handle:timer, any:HotPotato_ID)
 				new HPwinner = ((HPloser == LR_Player_Prisoner) ? LR_Player_Guard : LR_Player_Prisoner);
 				
 				KillAndReward(HPloser, HPwinner);
-				PrintToChatAll(CHAT_BANNER, "HP Win", HPwinner, HPloser);
+				CPrintToChatAll("%s %t", ChatBanner, "HP Win", HPwinner, HPloser);
 				
 				if (gShadow_LR_HotPotato_Mode != 2)
 				{
@@ -5958,13 +5959,13 @@ public Action:Timer_ChickenFight(Handle:timer)
 				{
 					if (gShadow_LR_ChickenFight_Slay)
 					{
-						PrintToChatAll(CHAT_BANNER, "Chicken Fight Win And Slay", LR_Player_Prisoner, LR_Player_Guard);
+						CPrintToChatAll("%s %t", ChatBanner, "Chicken Fight Win And Slay", LR_Player_Prisoner, LR_Player_Guard);
 						KillAndReward(LR_Player_Guard, LR_Player_Prisoner);
 					}
 					else
 					{
-						PrintToChatAll(CHAT_BANNER, "Chicken Fight Win", LR_Player_Prisoner);
-						PrintToChat(LR_Player_Prisoner, "Chicken Fight Kill Loser", LR_Player_Guard);
+						CPrintToChatAll("%s %t", ChatBanner, "Chicken Fight Win", LR_Player_Prisoner);
+						CPrintToChat(LR_Player_Prisoner, "Chicken Fight Kill Loser", LR_Player_Guard);
 						
 						GivePlayerItem(LR_Player_Prisoner, "weapon_knife");
 						
@@ -5975,7 +5976,7 @@ public Action:Timer_ChickenFight(Handle:timer)
 						
 						if (gShadow_LR_Debug_Enabled == true)
 						{
-							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06won the ChickenFight as Prisoner", LR_Player_Prisoner);
+							CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06won the ChickenFight as Prisoner", LR_Player_Prisoner);
 						}
 					}
 				}
@@ -5983,13 +5984,13 @@ public Action:Timer_ChickenFight(Handle:timer)
 				{
 					if (gShadow_LR_ChickenFight_Slay)
 					{
-						PrintToChatAll(CHAT_BANNER, "Chicken Fight Win And Slay", LR_Player_Guard, LR_Player_Prisoner);
+						CPrintToChatAll("%s %t", ChatBanner, "Chicken Fight Win And Slay", LR_Player_Guard, LR_Player_Prisoner);
 						KillAndReward(LR_Player_Prisoner, LR_Player_Guard);
 					}
 					else
 					{
-						PrintToChatAll(CHAT_BANNER, "Chicken Fight Win", LR_Player_Guard);
-						PrintToChat(LR_Player_Guard, "Chicken Fight Kill Loser", LR_Player_Prisoner);
+						CPrintToChatAll("%s %t", ChatBanner, "Chicken Fight Win", LR_Player_Guard);
+						CPrintToChat(LR_Player_Guard, "Chicken Fight Kill Loser", LR_Player_Prisoner);
 						
 						GivePlayerItem(LR_Player_Guard, "weapon_knife");
 						
@@ -6000,7 +6001,7 @@ public Action:Timer_ChickenFight(Handle:timer)
 						
 						if (gShadow_LR_Debug_Enabled == true)
 						{
-							PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06won the ChickenFight as Guard", LR_Player_Guard);
+							CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06won the ChickenFight as Guard", LR_Player_Guard);
 						}
 					}
 				}
@@ -6071,19 +6072,19 @@ DecideRebelsFate(rebeller, LRIndex, victim=0)
 				RemoveFromArray(gH_DArray_LR_Partners, LRIndex);
 				if (victim == 0)
 				{
-					PrintToChatAll(CHAT_BANNER, "LR Interference Abort - No Victim", rebeller, sWeaponName);
+					CPrintToChatAll("%s %t", ChatBanner, "LR Interference Abort - No Victim", rebeller, sWeaponName);
 				}
 				else if (victim == -1)
 				{
-					PrintToChatAll(CHAT_BANNER, "LR Cheating Abort", rebeller);
+					CPrintToChatAll("%s %t", ChatBanner, "LR Cheating Abort", rebeller);
 					if (gShadow_LR_Debug_Enabled == true)
 					{
-						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06LR has been aborted for cheating");
+						CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x06LR has been aborted for cheating");
 					}
 				}
 				else
 				{
-					PrintToChatAll(CHAT_BANNER, "LR Interference Abort", rebeller, victim, sWeaponName);	
+					CPrintToChatAll("%s %t", ChatBanner, "LR Interference Abort", rebeller, victim, sWeaponName);	
 				}	
 			}
 			case 2:
@@ -6094,15 +6095,15 @@ DecideRebelsFate(rebeller, LRIndex, victim=0)
 				}
 				if (victim == 0)
 				{
-					PrintToChatAll(CHAT_BANNER, "LR Interference Slay - No Victim", rebeller, sWeaponName);
+					CPrintToChatAll("%s %t", ChatBanner, "LR Interference Slay - No Victim", rebeller, sWeaponName);
 				}
 				else if (victim == -1)
 				{
-					PrintToChatAll(CHAT_BANNER, "LR Cheating Slay", rebeller);
+					CPrintToChatAll("%s %t", ChatBanner, "LR Cheating Slay", rebeller);
 				}
 				else
 				{
-					PrintToChatAll(CHAT_BANNER, "LR Interference Slay", rebeller, victim, sWeaponName);	
+					CPrintToChatAll("%s %t", ChatBanner, "LR Interference Slay", rebeller, victim, sWeaponName);	
 				}		
 			}
 		}
@@ -6262,7 +6263,7 @@ public Action:Timer_StripZeus(Handle:timer, int client)
 			Client_RemoveWeapon(client, "weapon_taser", false);
 			if (gShadow_LR_Debug_Enabled == true)
 			{
-				PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Zeus Stripped from \x10%s", client);
+				CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Zeus Stripped from \x10%s", client);
 			}
 		}
 	}
@@ -6319,7 +6320,7 @@ RightKnifeAntiCheat(client, idx)
 				{					
 					if (gShadow_LR_Debug_Enabled == true)
 					{
-						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed by RightKnifeAntiCheat", client);
+						CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x10%N \x06has been killed by RightKnifeAntiCheat", client);
 					}
 					DecideRebelsFate(client, idx);
 					g_TriedToStab[client] = false;
@@ -6331,7 +6332,7 @@ RightKnifeAntiCheat(client, idx)
 
 public Action:DroppedItem(client, const String:cmd[], argc)
 {
-	PrintToChatAll("%N dropped an item.", client);
+	CPrintToChatAll("%N dropped an item.", client);
 	return Plugin_Continue;
 }
 

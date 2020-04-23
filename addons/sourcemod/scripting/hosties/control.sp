@@ -21,6 +21,7 @@
 #include <sdktools>
 #include <cstrike>
 #include <hosties>
+#include <multicolors>
 
 // Menus
 #define MENU_SIMON			"##simonsays##"
@@ -407,18 +408,18 @@ public Action:Command_Control(client, args)
 {
 	if (GetClientTeam(client) != 3)
 	{
-		PrintToChat(client, CHAT_BANNER, "Must Be CT");
+		CPrintToChat(client, "%s %t", ChatBanner, "Must Be CT");
 		return Plugin_Handled;
 	}
 	
 	if(g_bHasController && Control_GetController() != 0)
 	{
-		PrintToChat(client, CHAT_BANNER, "Control Already Taken");
+		CPrintToChat(client, "%s %t", ChatBanner, "Control Already Taken");
 	}
 	else
 	{
 		Control_Controller(client, true, -1, true);
-		PrintToChat(client, CHAT_BANNER, "Control Taken");
+		CPrintToChat(client, "%s %t", ChatBanner, "Control Taken");
 	}
 	
 	return Plugin_Handled;
@@ -459,7 +460,7 @@ public Control_Controller(client, bool:controller, reason, bool:ann)
 			g_bHasController = true;
 			g_iState = 0;
 			Control_Menu(client);
-			PrintToChatAll(CHAT_BANNER, "The New Controller");
+			CPrintToChatAll("%s %t", ChatBanner, "The New Controller");
 		}
 	}
 	else
@@ -472,24 +473,24 @@ public Control_Controller(client, bool:controller, reason, bool:ann)
 			{
 				if(reason == -1)
 				{
-					PrintToChatAll(CHAT_BANNER, "No Longer The Controller", client);
+					CPrintToChatAll("%s %t", ChatBanner, "No Longer The Controller", client);
 				}
 				else if(reason == 0)
 				{
-					PrintToChatAll(CHAT_BANNER, "No Longer The Controller Reason", client, "Disconncted");
+					CPrintToChatAll("%s %t", ChatBanner, "No Longer The Controller Reason", client, "Disconncted");
 				}
 				else if(reason == 1)
 				{
-					PrintToChatAll(CHAT_BANNER, "No Longer The Controller Reason", client, "Died");
+					CPrintToChatAll("%s %t", ChatBanner, "No Longer The Controller Reason", client, "Died");
 				}
 				else if(reason == 2)
 				{
-					PrintToChatAll(CHAT_BANNER, "No Longer The Controller Reason", client, "Stopped controlling");
+					CPrintToChatAll("%s %t", ChatBanner, "No Longer The Controller Reason", client, "Stopped controlling");
 				}
 			}
 			else
 			{
-				PrintToChatAll(CHAT_BANNER, "No Controller");
+				CPrintToChatAll("%s %t", ChatBanner, "No Controller");
 			}
 		}
 	}

@@ -552,4 +552,21 @@
 	{
 		"pt"		"{1} escolheu ter uma Corrida. Olhe atentamente para o ponto de INICIO e TERMINO!"
 	}
+	"Respawned Target"
+    {
+        "pt"        "Renasceu {1}"
+    }
+    "Player Alive"
+    {
+        "pt"        "Ja esta vivo."
+    }
+    "Respawn Player"
+    {
+        "pt"        "Revive Jogador"
+    }
+
+    "Respawn Data Unavailable"
+    {
+        "pt"        "O jogador {1} ainda nao tem dados de posiçao. A retomar a cela"
+    }
 }
