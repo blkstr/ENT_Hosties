@@ -6307,7 +6307,7 @@ RightKnifeAntiCheat(client, idx)
 	new LR_Player_Prisoner = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_Prisoner);
 	new LR_Player_Guard = GetArrayCell(gH_DArray_LR_Partners, idx, _:Block_Guard);
 	
-	if (client == LR_Player_Prisoner || client == LR_Player_Guard)
+	if (client == LR_Player_Prisoner || client == LR_Player_Guard && IsValidClient(client))
 	{		
 		if (!((type == LR_KnifeFight) && !(type == LR_Rebel)) && ((type == LR_JumpContest) || (type == LR_Race) || (type == LR_ChickenFight) || (type == LR_Dodgeball) || \
 			(type == LR_HotPotato) || (type == LR_Shot4Shot) || (type == LR_Mag4Mag) || (type == LR_NoScope) || (type == LR_RockPaperScissors) ||\
