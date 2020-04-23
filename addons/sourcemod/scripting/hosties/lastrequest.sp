@@ -4967,28 +4967,33 @@ InitializeGame(iPartnersIndex)
 		{
 			if (IsClientInGame(LR_Player_Prisoner) && IsPlayerAlive(LR_Player_Prisoner))
 			{
-				SetEntityHealth(LR_Player_Prisoner, 100);
+				if (selection != LR_Rebel)
+				{
+					SetEntityHealth(LR_Player_Prisoner, 100);
+					RemoveDangerZone(LR_Player_Prisoner);
 				
-				RemoveDangerZone(LR_Player_Prisoner);
-				
-				SetEntProp(LR_Player_Prisoner, Prop_Send, "m_bHasHelmet", 0);
-				SetEntProp(LR_Player_Prisoner, Prop_Send, "m_bHasHeavyArmor", 0);
-				SetEntProp(LR_Player_Prisoner, Prop_Send, "m_bWearingSuit", 0);
-				SetEntProp(LR_Player_Prisoner, Prop_Send, "m_ArmorValue", 0, 0);
+					SetEntProp(LR_Player_Prisoner, Prop_Send, "m_bHasHelmet", 0);
+					SetEntProp(LR_Player_Prisoner, Prop_Send, "m_bHasHeavyArmor", 0);
+					SetEntProp(LR_Player_Prisoner, Prop_Send, "m_bWearingSuit", 0);
+					SetEntProp(LR_Player_Prisoner, Prop_Send, "m_ArmorValue", 0, 0);
+				}
 
 				StripZeus[LR_Player_Prisoner] = CreateTimer(0.3, Timer_StripZeus, LR_Player_Prisoner, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 			}
 			
 			if (IsClientInGame(LR_Player_Guard) && IsPlayerAlive(LR_Player_Guard))
 			{
-				SetEntityHealth(LR_Player_Guard, 100);
-				
-				RemoveDangerZone(LR_Player_Guard);
-				
-				SetEntProp(LR_Player_Guard, Prop_Send, "m_bHasHelmet", 0);
-				SetEntProp(LR_Player_Guard, Prop_Send, "m_bHasHeavyArmor", 0);
-				SetEntProp(LR_Player_Guard, Prop_Send, "m_bWearingSuit", 0);
-				SetEntProp(LR_Player_Guard, Prop_Send, "m_ArmorValue", 0, 0);
+				if (selection != LR_Rebel)
+				{
+					SetEntityHealth(LR_Player_Guard, 100);					
+					RemoveDangerZone(LR_Player_Guard);
+
+					SetEntProp(LR_Player_Guard, Prop_Send, "m_bHasHelmet", 0);
+					SetEntProp(LR_Player_Guard, Prop_Send, "m_bHasHeavyArmor", 0);
+					SetEntProp(LR_Player_Guard, Prop_Send, "m_bWearingSuit", 0);
+					SetEntProp(LR_Player_Guard, Prop_Send, "m_ArmorValue", 0, 0);
+				}
+			
 				
 				StripZeus[LR_Player_Guard] = CreateTimer(0.3, Timer_StripZeus, LR_Player_Guard, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 			}
@@ -6013,90 +6018,93 @@ public Action:Timer_ChickenFight(Handle:timer)
 
 DecideRebelsFate(rebeller, LRIndex, victim=0)
 {
-	decl String:sWeaponName[32];
-	new iClientWeapon = GetEntDataEnt2(rebeller, g_Offset_ActiveWeapon);
-	if (IsValidEdict(iClientWeapon))
+	if (IsValidClient(rebeller))
 	{
-		GetEdictClassname(iClientWeapon, sWeaponName, sizeof(sWeaponName));
-		ReplaceString(sWeaponName, sizeof(sWeaponName), "weapon_", "");
-	}
-	else
-	{
-		Format(sWeaponName, sizeof(sWeaponName), "unknown");
-	}
-	
-	// grab the current LR and override default rebel action if requested (backward compatibility)
-	new rebelAction;	
-	new LastRequest:type = GetArrayCell(gH_DArray_LR_Partners, LRIndex, _:Block_LRType);
-	switch (type)
-	{
-		case LR_KnifeFight:
+		decl String:sWeaponName[32];
+		new iClientWeapon = GetEntDataEnt2(rebeller, g_Offset_ActiveWeapon);
+		if (IsValidEdict(iClientWeapon))
 		{
-			rebelAction = gShadow_LR_KnifeFight_Rebel+1;
+			GetEdictClassname(iClientWeapon, sWeaponName, sizeof(sWeaponName));
+			ReplaceString(sWeaponName, sizeof(sWeaponName), "weapon_", "");
 		}
-		case LR_ChickenFight:
+		else
 		{
-			rebelAction = gShadow_LR_ChickenFight_Rebel+1;
+			Format(sWeaponName, sizeof(sWeaponName), "unknown");
 		}
-		case LR_HotPotato:
+		
+		// grab the current LR and override default rebel action if requested (backward compatibility)
+		new rebelAction;	
+		new LastRequest:type = GetArrayCell(gH_DArray_LR_Partners, LRIndex, _:Block_LRType);
+		switch (type)
 		{
-			rebelAction = gShadow_LR_HotPotato_Rebel+1;
-		}		
-		default:
-		{
-			rebelAction = gShadow_RebelAction;
-		}
-	}
-	
-	switch (rebelAction)
-	{
-		case 0:
-		{
-			// take no action here (for now)
-		}
-		case 1:
-		{
-			if (IsPlayerAlive(rebeller))
+			case LR_KnifeFight:
 			{
-				StripAllWeapons(rebeller);
+				rebelAction = gShadow_LR_KnifeFight_Rebel+1;
 			}
-			CleanupLastRequest(rebeller, LRIndex);
-			RemoveFromArray(gH_DArray_LR_Partners, LRIndex);
-			if (victim == 0)
+			case LR_ChickenFight:
 			{
-				PrintToChatAll(CHAT_BANNER, "LR Interference Abort - No Victim", rebeller, sWeaponName);
+				rebelAction = gShadow_LR_ChickenFight_Rebel+1;
 			}
-			else if (victim == -1)
+			case LR_HotPotato:
 			{
-				PrintToChatAll(CHAT_BANNER, "LR Cheating Abort", rebeller);
-				if (gShadow_LR_Debug_Enabled == true)
-				{
-					PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06LR has been aborted for cheating");
-				}
-			}
-			else
-			{
-				PrintToChatAll(CHAT_BANNER, "LR Interference Abort", rebeller, victim, sWeaponName);	
-			}	
-		}
-		case 2:
-		{
-			if (IsPlayerAlive(rebeller))
-			{
-				ForcePlayerSuicide(rebeller);
-			}
-			if (victim == 0)
-			{
-				PrintToChatAll(CHAT_BANNER, "LR Interference Slay - No Victim", rebeller, sWeaponName);
-			}
-			else if (victim == -1)
-			{
-				PrintToChatAll(CHAT_BANNER, "LR Cheating Slay", rebeller);
-			}
-			else
-			{
-				PrintToChatAll(CHAT_BANNER, "LR Interference Slay", rebeller, victim, sWeaponName);	
+				rebelAction = gShadow_LR_HotPotato_Rebel+1;
 			}		
+			default:
+			{
+				rebelAction = gShadow_RebelAction;
+			}
+		}
+		
+		switch (rebelAction)
+		{
+			case 0:
+			{
+				// take no action here (for now)
+			}
+			case 1:
+			{
+				if (IsPlayerAlive(rebeller))
+				{
+					StripAllWeapons(rebeller);
+				}
+				CleanupLastRequest(rebeller, LRIndex);
+				RemoveFromArray(gH_DArray_LR_Partners, LRIndex);
+				if (victim == 0)
+				{
+					PrintToChatAll(CHAT_BANNER, "LR Interference Abort - No Victim", rebeller, sWeaponName);
+				}
+				else if (victim == -1)
+				{
+					PrintToChatAll(CHAT_BANNER, "LR Cheating Abort", rebeller);
+					if (gShadow_LR_Debug_Enabled == true)
+					{
+						PrintToChatAll("\x01[\x07Entity-Debug\x01] \x06LR has been aborted for cheating");
+					}
+				}
+				else
+				{
+					PrintToChatAll(CHAT_BANNER, "LR Interference Abort", rebeller, victim, sWeaponName);	
+				}	
+			}
+			case 2:
+			{
+				if (IsPlayerAlive(rebeller))
+				{
+					ForcePlayerSuicide(rebeller);
+				}
+				if (victim == 0)
+				{
+					PrintToChatAll(CHAT_BANNER, "LR Interference Slay - No Victim", rebeller, sWeaponName);
+				}
+				else if (victim == -1)
+				{
+					PrintToChatAll(CHAT_BANNER, "LR Cheating Slay", rebeller);
+				}
+				else
+				{
+					PrintToChatAll(CHAT_BANNER, "LR Interference Slay", rebeller, victim, sWeaponName);	
+				}		
+			}
 		}
 	}
 }
@@ -6246,7 +6254,7 @@ GetLastButton(client, buttons, idx)
 
 public Action:Timer_StripZeus(Handle:timer, int client)
 {
-	if (StripZeus[client] != null)
+	if (StripZeus[client] != null && IsValidClient(client))
 	{	
 		int TaserAmmo = Client_GetWeaponPlayerAmmo(client, "weapon_taser");
 		if (TaserAmmo != 0)
@@ -6355,3 +6363,12 @@ UpdatePlayerCounts(&Prisoners, &Guards, &iNumGuardsAvailable)
 		}
 	}
 } 
+
+stock bool IsValidClient(int client, bool alive = false, bool bots = false)
+{
+	if (client > 0 && client <= MaxClients && IsClientInGame(client) && (alive == false || IsPlayerAlive(client)) && (bots == false && !IsFakeClient(client)))
+	{
+		return true;
+	}
+	return false;
+}
