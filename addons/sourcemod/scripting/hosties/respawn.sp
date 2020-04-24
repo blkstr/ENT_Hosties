@@ -107,7 +107,7 @@ DisplayRespawnMenu(client)
 	SetMenuTitle(menu, title);
 	SetMenuExitBackButton(menu, true);
 	
-	new targets_added = AddTargetsToMenu2(menu, client, COMMAND_FILTER_DEAD);
+	new targets_added = AddTargetsToMenu2(menu, client, COMMAND_FILTER_DEAD|COMMAND_TARGET_IMMUNE|COMMAND_FILTER_NO_BOTS );
 	if (targets_added == 0)
 	{
 		CReplyToCommand(client, "%s %t", ChatBanner, "Target is not in game");
