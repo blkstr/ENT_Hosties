@@ -20,6 +20,14 @@
 	{
 		"hu"		"Kidobós"
 	}
+	"Gun Toss"
+	{
+		"hu"		"Gun Toss"
+	}
+	"LR GT Start"
+	{
+		"hu"		"{1} Gun Toss-t indított {2} játékossal."
+	}
 	"No Scope Battle"
 	{
 		"hu"		"No Scope Harc"

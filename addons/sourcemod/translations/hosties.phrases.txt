@@ -8,6 +8,10 @@
 	{
 		"en"		"Shot4Shot"
 	}
+	"Gun Toss"
+	{
+		"en"		"Gun Toss"
+	}
 	"Chicken Fight"
 	{
 		"en"		"Chicken Fight"
@@ -242,6 +246,11 @@
 	{
 		"#format"	"{1:N},{2:N}"
 		"en"		"{1} chose to have Shot4Shot with {2}."
+	}
+	"LR GT Start"
+	{
+		"#format"	"{1:N},{2:N}"
+		"en"		"{1} chose to have Gun Toss with {2}."
 	}
 	"LR CF Start"
 	{

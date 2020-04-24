@@ -20,6 +20,14 @@
 	{
 		"sv"		"Spökboll"
 	}
+	"Gun Toss"
+	{
+		"sv"		"Kasta Deagle"
+	}
+	"LR GT Start"
+	{
+		"sv"		"{1} valde att ha Kasta Deagle med {2}."
+	}
 	"No Scope Battle"
 	{
 		"sv"		"No Scope-duell"

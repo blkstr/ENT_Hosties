@@ -16,6 +16,14 @@
 	{
 		"fr"		"Patate Chaude"
 	}
+	"Gun Toss"
+	{
+		"fr"		"Lancer de Deagle"
+	}
+	"LR GT Start"
+	{
+		"fr"		"{1} a choisis de faire un Lancer de Deagle avec {2}."
+	}
 	"Dodgeball"
 	{
 		"fr"		"Balle aux Prisonniers"

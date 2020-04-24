@@ -12,6 +12,14 @@
 	{
 		"chi"		"斗鸡"
 	}
+	"Gun Toss"
+	{
+		"chi"		"丢枪"
+	}
+	"LR GT Start"
+	{
+		"chi"		"{1} 选择与 {2} 进行丢枪比赛"
+	}
 	"Hot Potato"
 	{
 		"chi"		"烫手山芋"

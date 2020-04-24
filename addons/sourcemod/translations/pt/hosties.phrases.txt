@@ -16,6 +16,14 @@
 	{
 		"pt"		"Hot Potato"
 	}
+	"Gun Toss"
+	{
+		"pt"		"Gun Toss"
+	}
+	"LR GT Start"
+	{
+		"pt"		"{1} escolheu ter Arremesso de Deagle com {2}."
+	}
 	"Dodgeball"
 	{
 		"pt"		"Dodgeball"

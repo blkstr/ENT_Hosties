@@ -16,6 +16,14 @@
 	{
 		"da"		"Varm kartoffel"
 	}
+	"Gun Toss"
+	{
+		"da"		"Pistolkast"
+	}
+	"LR GT Start"
+	{
+		"da"		"{1} valgte at lave pistolkast med {2}."
+	}
 	"Dodgeball"
 	{
 		"da"		"Høvdingebold"
