@@ -30,7 +30,6 @@ new Handle:gH_Cvar_MuteStatus = INVALID_HANDLE;
 new gShadow_MuteStatus;
 new Handle:gH_Cvar_MuteLength = INVALID_HANDLE;
 new Float:gShadow_MuteLength;
-new Handle:gH_Timer_Unmuter = INVALID_HANDLE;
 new Handle:gH_Cvar_MuteImmune = INVALID_HANDLE;
 new String:gShadow_MuteImmune[37];
 new Handle:gH_Cvar_MuteCT = INVALID_HANDLE;
@@ -185,22 +184,18 @@ public MutePrisoners_PlayerSpawn(Handle:event, const String:name[], bool:dontBro
 {
 	if (gShadow_MuteStatus == 1 || gShadow_MuteStatus == 3)
 	{
-		// if the timer is anything but invalid, we should mute these new spawners
-		if (gH_Timer_Unmuter != INVALID_HANDLE)
+		new client = GetClientOfUserId(GetEventInt(event, "userid"));
+		if (GetClientTeam(client) == CS_TEAM_T)
 		{
-			new client = GetClientOfUserId(GetEventInt(event, "userid"));
-			if (GetClientTeam(client) == CS_TEAM_T)
+			if (gAdmFlags_MuteImmunity == 0)
 			{
-				if (gAdmFlags_MuteImmunity == 0)
+				CreateTimer(0.1, Timer_Mute, client, TIMER_FLAG_NO_MAPCHANGE);
+			}
+			else
+			{
+				if (!(GetUserFlagBits(client) & gAdmFlags_MuteImmunity))
 				{
 					CreateTimer(0.1, Timer_Mute, client, TIMER_FLAG_NO_MAPCHANGE);
-				}
-				else
-				{
-					if (!(GetUserFlagBits(client) & gAdmFlags_MuteImmunity))
-					{
-						CreateTimer(0.1, Timer_Mute, client, TIMER_FLAG_NO_MAPCHANGE);
-					}
 				}
 			}
 		}
@@ -267,12 +262,6 @@ public MutePrisoners_RoundEnd(Handle:event, const String:name[], bool:dontBroadc
 		CreateTimer(0.2, Timer_UnmuteAll, _, TIMER_FLAG_NO_MAPCHANGE);
 	}
 	
-	if (gH_Timer_Unmuter != INVALID_HANDLE)
-	{
-		KillTimer(gH_Timer_Unmuter);
-		gH_Timer_Unmuter = INVALID_HANDLE;
-	}
-	
 	for(int i = 1; i <= MaxClients; i++)
 	{
 		if (IsClientInGame(i))
@@ -303,18 +292,7 @@ public MutePrisoners_RoundStart(Handle:event, const String:name[], bool:dontBroa
 			}
 		}
 		
-		// Unmute Timer
-		if (gH_Timer_Unmuter == INVALID_HANDLE)
-		{
-			gH_Timer_Unmuter = CreateTimer(gShadow_MuteLength, Timer_UnmutePrisoners, _, TIMER_FLAG_NO_MAPCHANGE);
-		}
-		else
-		{
-			KillTimer(gH_Timer_Unmuter);
-			gH_Timer_Unmuter = INVALID_HANDLE;
-			
-			gH_Timer_Unmuter = CreateTimer(gShadow_MuteLength, Timer_UnmutePrisoners, _, TIMER_FLAG_NO_MAPCHANGE);
-		}
+		CreateTimer(gShadow_MuteLength, Timer_UnmutePrisoners, _, TIMER_FLAG_NO_MAPCHANGE);
 		
 		CPrintToChatAll("%s %t", ChatBanner, "Ts Muted", RoundToNearest(gShadow_MuteLength));
 	}
@@ -322,14 +300,8 @@ public MutePrisoners_RoundStart(Handle:event, const String:name[], bool:dontBroa
 
 public Action:Timer_UnmutePrisoners(Handle:timer)
 {
-	if (gH_Timer_Unmuter != INVALID_HANDLE)
-	{
-		UnmuteAlive();
-		CPrintToChatAll("%s %t", ChatBanner, "Ts Can Speak Again");
-	
-		KillTimer(gH_Timer_Unmuter);
-		gH_Timer_Unmuter = INVALID_HANDLE;
-	}
+	UnmuteAlive();
+	CPrintToChatAll("%s %t", ChatBanner, "Ts Can Speak Again");
 	
 	return Plugin_Stop;
 }
