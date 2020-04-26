@@ -8,6 +8,10 @@
 	{
 		"pt"		"Shot4Shot"
 	}
+	"Gun Toss"
+	{
+		"pt"		"Gun Toss"
+	}
 	"Chicken Fight"
 	{
 		"pt"		"Chicken Fight"
@@ -15,14 +19,6 @@
 	"Hot Potato"
 	{
 		"pt"		"Hot Potato"
-	}
-	"Gun Toss"
-	{
-		"pt"		"Gun Toss"
-	}
-	"LR GT Start"
-	{
-		"pt"		"{1} escolheu ter Arremesso de Deagle com {2}."
 	}
 	"Dodgeball"
 	{
@@ -66,7 +62,7 @@
 	}
 	"Powered By Hosties"
 	{
-		"pt"		"Este servidor utiliza SM_Hosties v2, divirta-se!"
+		"pt"		"This server is being powered by ENT_Hosties V3. Enjoy!"
 	}
 	"Please Follow Rules"
 	{
@@ -219,6 +215,10 @@
 	"LR S4S Start"
 	{
 		"pt"		"{1} escolheu ter Tiro por tiro com {2}."
+	}
+	"LR GT Start"
+	{
+		"pt"		"{1} escolheu ter Arremesso de Deagle com {2}."
 	}
 	"LR CF Start"
 	{
@@ -560,21 +560,4 @@
 	{
 		"pt"		"{1} escolheu ter uma Corrida. Olhe atentamente para o ponto de INICIO e TERMINO!"
 	}
-	"Respawned Target"
-    {
-        "pt"        "Renasceu {1}"
-    }
-    "Player Alive"
-    {
-        "pt"        "Ja esta vivo."
-    }
-    "Respawn Player"
-    {
-        "pt"        "Revive Jogador"
-    }
-
-    "Respawn Data Unavailable"
-    {
-        "pt"        "O jogador {1} ainda nao tem dados de posiçao. A retomar a cela"
-    }
 }

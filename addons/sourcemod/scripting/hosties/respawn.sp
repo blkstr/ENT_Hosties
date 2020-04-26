@@ -23,16 +23,16 @@
 #include <hosties>
 #include <multicolors>
 
-new Float:g_DeathLocation[MAXPLAYERS+1][3];
+float g_DeathLocation[MAXPLAYERS+1][3];
 
-Respawn_OnPluginStart()
+void Respawn_OnPluginStart()
 {
 	RegAdminCmd("sm_hrespawn", Command_Respawn, ADMFLAG_SLAY);
 	RegAdminCmd("sm_1up", Command_Respawn, ADMFLAG_SLAY);
 	HookEvent("player_death", Respawn_PlayerDeath);
 }
 
-public Action:Command_Respawn(client, args)
+public Action Command_Respawn(int client, int args)
 {
 	if (args < 1)
 	{
@@ -40,18 +40,19 @@ public Action:Command_Respawn(client, args)
 		return Plugin_Handled;
 	}
 
-	decl String:arg[65];
+	char arg[65];
 	GetCmdArg(1, arg, sizeof(arg));
 
-	decl String:target_name[MAX_TARGET_LENGTH];
-	decl target_list[MAXPLAYERS], target_count, bool:tn_is_ml;
+	char target_name[MAX_TARGET_LENGTH];
+	int target_list[MAXPLAYERS], target_count;
+	bool tn_is_ml;
 	
 	if ((target_count = ProcessTargetString(
 			arg,
 			client,
 			target_list,
 			MAXPLAYERS,
-			COMMAND_FILTER_DEAD,
+			COMMAND_FILTER_DEAD|COMMAND_TARGET_IMMUNE|COMMAND_FILTER_NO_BOTS,
 			target_name,
 			sizeof(target_name),
 			tn_is_ml)) <= 0)
@@ -60,7 +61,7 @@ public Action:Command_Respawn(client, args)
 		return Plugin_Handled;
 	}
 
-	for (new i = 0; i < target_count; i++)
+	for (int i = 0; i < target_count; i++)
 	{
 		PerformRespawn(client, target_list[i]);
 	}
@@ -70,20 +71,20 @@ public Action:Command_Respawn(client, args)
 	return Plugin_Handled;
 }
 
-public Respawn_PlayerDeath(Handle:event, const String:name[], bool:dontBroadcast)
+public Action Respawn_PlayerDeath(Event event, const char[] name , bool dontBroadcast)
 {
-	new victim = GetClientOfUserId(GetEventInt(event, "userid"));
+	int victim = GetClientOfUserId(GetEventInt(event, "userid"));
 	GetClientAbsOrigin(victim, g_DeathLocation[victim]);
 	// account for eye level versus origin level to avoid clipping
 	g_DeathLocation[victim][2] -= 45.0;
 }
 
-Respawn_Menus(Handle:h_TopMenu, TopMenuObject:obj_Hosties)
+void Respawn_Menus(Handle h_TopMenu, TopMenuObject obj_Hosties)
 {
 	AddToTopMenu(h_TopMenu, "sm_hrespawn", TopMenuObject_Item, AdminMenu_Respawn, obj_Hosties, "sm_hrespawn", ADMFLAG_SLAY);
 }
 
-PerformRespawn(client, target)
+void PerformRespawn(int client, int target)
 {
 	CS_RespawnPlayer(target);
 	if (g_DeathLocation[target][0] == 0.0 && g_DeathLocation[target][1] == 0.0 && g_DeathLocation[target][2] == 0.0)
@@ -98,16 +99,16 @@ PerformRespawn(client, target)
 	LogAction(client, target, "\"%L\" respawned \"%L\"", client, target);
 }
 
-DisplayRespawnMenu(client)
+void DisplayRespawnMenu(int client)
 {
-	new Handle:menu = CreateMenu(MenuHandler_Respawn);
+	Handle menu = CreateMenu(MenuHandler_Respawn);
 	
-	decl String:title[100];
+	char title[100];
 	Format(title, sizeof(title), "%T", "Respawn Player", client);
 	SetMenuTitle(menu, title);
 	SetMenuExitBackButton(menu, true);
 	
-	new targets_added = AddTargetsToMenu2(menu, client, COMMAND_FILTER_DEAD|COMMAND_TARGET_IMMUNE|COMMAND_FILTER_NO_BOTS );
+	int targets_added = AddTargetsToMenu2(menu, client, COMMAND_FILTER_DEAD|COMMAND_TARGET_IMMUNE|COMMAND_FILTER_NO_BOTS);
 	if (targets_added == 0)
 	{
 		CReplyToCommand(client, "%s %t", ChatBanner, "Target is not in game");
@@ -122,12 +123,12 @@ DisplayRespawnMenu(client)
 	}
 }
 
-public AdminMenu_Respawn(Handle:topmenu, 
-					  TopMenuAction:action,
-					  TopMenuObject:object_id,
-					  param,
-					  String:buffer[],
-					  maxlength)
+public void AdminMenu_Respawn(Handle topmenu, 
+					  TopMenuAction action,
+					  TopMenuObject object_id,
+					  int param,
+					  char[] buffer,
+					  int maxlength)
 {
 	if (action == TopMenuAction_DisplayOption)
 	{
@@ -139,7 +140,7 @@ public AdminMenu_Respawn(Handle:topmenu,
 	}
 }
 
-public MenuHandler_Respawn(Handle:menu, MenuAction:action, param1, param2)
+public int MenuHandler_Respawn(Menu menu, MenuAction action, int param1, int param2)
 {
 	if (action == MenuAction_End)
 	{
@@ -154,8 +155,8 @@ public MenuHandler_Respawn(Handle:menu, MenuAction:action, param1, param2)
 	}
 	else if (action == MenuAction_Select)
 	{
-		decl String:info[32];
-		new userid, target;
+		char info[32];
+		int userid, target;
 		
 		GetMenuItem(menu, param2, info, sizeof(info));
 		userid = StringToInt(info);
@@ -174,7 +175,7 @@ public MenuHandler_Respawn(Handle:menu, MenuAction:action, param1, param2)
 		}
 		else
 		{
-			decl String:name[32];
+			char name[32];
 			GetClientName(target, name, sizeof(name));
 			PerformRespawn(param1, target);
 			CShowActivity(param1, "%s %t", ChatBanner, "Respawned Target", name);

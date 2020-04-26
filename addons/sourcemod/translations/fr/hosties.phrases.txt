@@ -8,6 +8,10 @@
 	{
 		"fr"		"Roulette"
 	}
+	"Gun Toss"
+	{
+		"fr"		"Lancer de Deagle"
+	}
 	"Chicken Fight"
 	{
 		"fr"		"Combat de Poulet"
@@ -15,14 +19,6 @@
 	"Hot Potato"
 	{
 		"fr"		"Patate Chaude"
-	}
-	"Gun Toss"
-	{
-		"fr"		"Lancer de Deagle"
-	}
-	"LR GT Start"
-	{
-		"fr"		"{1} a choisis de faire un Lancer de Deagle avec {2}."
 	}
 	"Dodgeball"
 	{
@@ -35,10 +31,6 @@
 	"Rock Paper Scissors"
 	{
 		"fr"		"Pierre Feuille Ciseaux"
-	}
-	"LR Grace TimeBlock"
-	{
-		"fr"		"Vous ne pouvez pas lancer de DV tant que les joueurs peuvent encore rejoindre."
 	}
 	"Russian Roulette"
 	{
@@ -70,7 +62,7 @@
 	}
 	"Powered By Hosties"
 	{
-		"fr"		"Bienvenue sur le Serveur BA_JAIL des Monsieurs"
+		"fr"		"This server is being powered by ENT_Hosties V3. Enjoy!"
 	}
 	"Please Follow Rules"
 	{
@@ -223,6 +215,10 @@
 	"LR S4S Start"
 	{
 		"fr"		"{1} a choisis de faire une Roulette avec {2}."
+	}
+	"LR GT Start"
+	{
+		"fr"		"{1} a choisis de faire un Lancer de Deagle avec {2}."
 	}
 	"LR CF Start"
 	{
@@ -562,6 +558,10 @@
 	}
 	"Race Could Start Soon"
 	{
-		"fr"		"{1} a choisis de faire une Course. Veuillez placer le Point de départ et d'arrivé !"
+		"fr"		"{1} a choisis de faire une Course. Veuillez placer le Point de départ et d'arrivé!"
+	}
+	"Blocked Warmup"
+	{
+		"fr"		"Vous ne pouvez pas lancer une dernière volonté pendant l'échauffement."
 	}
 }

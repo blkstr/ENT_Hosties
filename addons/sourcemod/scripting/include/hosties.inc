@@ -24,7 +24,8 @@
 #define _Hosties_Included_
 
 // Change to include your own clan tag but leave the '%t' intact
-#define 	NORMAL_VISION		90
+#define 	NORMAL_VISION			90
+#define		INVALID_WEAPON			-1
 
 enum GameType
 {
@@ -49,15 +50,15 @@ enum MediaType
 	type_Decal
 };
 
-stock ShowOverlayToClient(client, const String:overlaypath[])
+stock void ShowOverlayToClient(int client, const  char[] overlaypath)
 {
 	ClientCommand(client, "r_screenoverlay \"%s\"", overlaypath);
 }
 
-stock ShowOverlayToAll(const String:overlaypath[])
+stock void ShowOverlayToAll(const char[] overlaypath)
 {
 	// x = client index.
-	for (new x = 1; x <= MaxClients; x++)
+	for (int x = 1; x <= MaxClients; x++)
 	{
 		// If client isn't in-game, then stop.
 		if (IsClientInGame(x) && !IsFakeClient(x))
@@ -67,32 +68,33 @@ stock ShowOverlayToAll(const String:overlaypath[])
 	}
 }
 
-stock StripAllWeapons(client)
+stock void StripAllWeapons(int client)
 {
-	int wepIdx;
+	int iWeaponIndex = INVALID_WEAPON;
 	for (int i = CS_SLOT_PRIMARY; i < CS_SLOT_GRENADE+1; i++)
 	{
-		while ((wepIdx = GetPlayerWeaponSlot(client, i)) != -1)
+		iWeaponIndex = INVALID_WEAPON;
+		while ((iWeaponIndex = GetPlayerWeaponSlot(client, i)) != INVALID_WEAPON)
 		{
-			RemovePlayerItem(client, wepIdx);
-			AcceptEntityInput(wepIdx, "Kill");
+			RemovePlayerItem(client, iWeaponIndex);
+			AcceptEntityInput(iWeaponIndex, "Kill");
 		}
 	}
 }
 
-stock BlockEntity(client, cachedOffset)
+stock void BlockEntity(int client, int cachedOffset)
 {
 	SetEntData(client, cachedOffset, 5, 4, true);
 }
 
-stock UnblockEntity(client, cachedOffset)
+stock void UnblockEntity(int client, int cachedOffset)
 {
 	SetEntData(client, cachedOffset, 2, 4, true);
 }
 
-stock BlockClientAll()
+stock void BlockClientAll()
 {
-	for (new i = 1; i <= MaxClients; i++)
+	for (int i = 1; i <= MaxClients; i++)
 	{
 		if ( IsClientInGame(i) && IsPlayerAlive(i) )
 		{
@@ -101,9 +103,9 @@ stock BlockClientAll()
 	}
 }
 
-stock UnblockClientAll()
+stock void UnblockClientAll()
 {
-	for (new i = 1; i <= MaxClients; i++)
+	for (int i = 1; i <= MaxClients; i++)
 	{
 		if ( IsClientInGame(i) && IsPlayerAlive(i) )
 		{
@@ -112,19 +114,19 @@ stock UnblockClientAll()
 	}
 }
 
-stock MutePlayer(client)
+stock void MutePlayer(int client)
 {
 	SetClientListeningFlags(client, VOICE_MUTED);
 }
 
-stock UnmutePlayer(client)
+stock void UnmutePlayer(int client)
 {
 	SetClientListeningFlags(client, VOICE_NORMAL);
 }
 
-stock CacheTheFile(const String:path[], MediaType:filetype)
+stock void CacheTheFile(const char[] path, MediaType filetype)
 {
-	decl String:sDownloadPath[PLATFORM_MAX_PATH];
+	char sDownloadPath[PLATFORM_MAX_PATH];
 	switch (filetype)
 	{
 		case type_Sound:

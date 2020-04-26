@@ -70,7 +70,7 @@
 	}
 	"Powered By Hosties"
 	{
-		"hu"		"Ezt a szervert az SM_Hosties v2 üzemelteti."
+		"hu"		"Ezt a szervert az ENT_Hosties V3 támogatja. Jó játékot!"
 	}
 	"Please Follow Rules"
 	{
@@ -601,5 +601,9 @@
 	"Respawn Data Unavailable"
 	{
 		"hu"		"{1} játékosnak nincs újraéledési adata még és vissza lett küldve a cellába."
+	}
+	"Blocked Warmup"
+	{
+		"hu"		"Nem indíthatsz LR-t a bemelegítés alatt."
 	}
 }

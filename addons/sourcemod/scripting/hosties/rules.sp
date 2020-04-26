@@ -23,17 +23,17 @@
 #include <hosties>
 #include <multicolors>
 
-new Handle:gH_Cvar_RulesOn = INVALID_HANDLE;
-new bool:gShadow_RulesOn;
-new Handle:gH_Cvar_Announce_Rules = INVALID_HANDLE;
-new bool:gShadow_Announce_Rules;
-new Handle:gH_Cvar_Rules_Mode = INVALID_HANDLE;
-new gShadow_Rules_Mode = 1;
-new Handle:gH_Cvar_Rules_Website = INVALID_HANDLE;
-new String:gShadow_Rules_Website[192];
-new Handle:gH_DArray_Rules = INVALID_HANDLE;
+Handle gH_Cvar_RulesOn = INVALID_HANDLE;
+bool gShadow_RulesOn;
+Handle gH_Cvar_Announce_Rules = INVALID_HANDLE;
+bool gShadow_Announce_Rules;
+Handle gH_Cvar_Rules_Mode = INVALID_HANDLE;
+int gShadow_Rules_Mode = 1;
+Handle gH_Cvar_Rules_Website = INVALID_HANDLE;
+char gShadow_Rules_Website[192];
+Handle gH_DArray_Rules = INVALID_HANDLE;
 
-Rules_OnPluginStart()
+void Rules_OnPluginStart()
 {
 	gH_Cvar_RulesOn = CreateConVar("sm_hosties_rules_enable", "1", "Enable or disable rules showing up at !rules command (if you need to disable the command registration on plugin startup, add a file in your sourcemod/configs/ named hosties_rulesdisable.ini with any content): 0 - disable, 1 - enable", 0, true, 0.0, true, 1.0);
 	gShadow_RulesOn = true;
@@ -55,10 +55,10 @@ Rules_OnPluginStart()
 	HookEvent("round_start", Rules_RoundStart);
 	
 	// Provided for backwards comparibility
-	decl String:file[256];
+	char file[256];
 	BuildPath(Path_SM, file, 255, "configs/hosties_rulesdisable.ini");
-	new Handle:fileh = OpenFile(file, "r");
-	if (fileh == INVALID_HANDLE)
+	Handle fileh = OpenFile(file, "r");
+	if (fileh == null)
 	{
 		RegConsoleCmd("sm_rules", Command_Rules);
 	}
@@ -66,7 +66,7 @@ Rules_OnPluginStart()
 	gH_DArray_Rules = CreateArray(255);
 }
 
-public Rules_RoundStart(Handle:event, const String:name[], bool:dontBroadcast)
+public Action Rules_RoundStart(Event event, const char[] name, bool dontBroadcast)
 {
 	if (gShadow_Announce_Rules)
 	{
@@ -74,7 +74,7 @@ public Rules_RoundStart(Handle:event, const String:name[], bool:dontBroadcast)
 	}
 }
 
-Rules_OnConfigsExecuted()
+void Rules_OnConfigsExecuted()
 {
 	gShadow_RulesOn = GetConVarBool(gH_Cvar_RulesOn);
 	gShadow_Announce_Rules = GetConVarBool(gH_Cvar_Announce_Rules);
@@ -88,13 +88,13 @@ void ParseTheRulesFile()
 {
 	ClearArray(gH_DArray_Rules);
 	
-	decl String:pathRules[PLATFORM_MAX_PATH];
+	char pathRules[PLATFORM_MAX_PATH];
 	BuildPath(Path_SM, pathRules, sizeof(pathRules), "configs/hosties_rules.ini");
-	new Handle:rulesFile = OpenFile(pathRules, "r");
+	Handle rulesFile = OpenFile(pathRules, "r");
 	
-	if (rulesFile != INVALID_HANDLE)
+	if (rulesFile != null)
 	{
-		decl String:sRulesLine[256];
+		char sRulesLine[256];
 		
 		while(ReadFileLine(rulesFile, sRulesLine, sizeof(sRulesLine)))
 		{
@@ -103,15 +103,15 @@ void ParseTheRulesFile()
 	}
 }
 
-public Rules_CvarChanged(Handle:cvar, const String:oldValue[], const String:newValue[])
+public void Rules_CvarChanged(Handle cvar, const char[] oldValue, const char[] newValue)
 {
 	if (cvar == gH_Cvar_RulesOn)
 	{
-		gShadow_RulesOn = bool:StringToInt(newValue);
+		gShadow_RulesOn = view_as<bool>(StringToInt(newValue));
 	}
 	else if (cvar == gH_Cvar_Announce_Rules)
 	{
-		gShadow_Announce_Rules = bool:StringToInt(newValue);
+		gShadow_Announce_Rules = view_as<bool>(StringToInt(newValue));
 	}
 	else if (cvar == gH_Cvar_Rules_Mode)
 	{
@@ -123,7 +123,7 @@ public Rules_CvarChanged(Handle:cvar, const String:oldValue[], const String:newV
 	}
 }
 
-public Action:Command_Rules(client, args)
+public Action Command_Rules(int client, int args)
 {
 	if (gShadow_RulesOn)
 	{
@@ -131,18 +131,18 @@ public Action:Command_Rules(client, args)
 		{
 			case 1:
 			{
-				new iNumOfRules = GetArraySize(gH_DArray_Rules);
+				int iNumOfRules = GetArraySize(gH_DArray_Rules);
 				
 				if (iNumOfRules > 0)
 				{
-					decl String:sPanelText[256];	
+					char sPanelText[256];
 					Format(sPanelText, sizeof(sPanelText), "%t", "Server Rules");
 					
 					Menu menu = CreateMenu(MenuRule);
 					menu.SetTitle(sPanelText);
 					menu.AddItem("spacer", " ", ITEMDRAW_RAWLINE);	
 					
-					for (new line = 0; line < iNumOfRules; line++)
+					for (int line = 0; line < iNumOfRules; line++)
 					{
 						GetArrayString(gH_DArray_Rules, line, sPanelText, sizeof(sPanelText));
 						menu.AddItem("rule", sPanelText, ITEMDRAW_DISABLED);

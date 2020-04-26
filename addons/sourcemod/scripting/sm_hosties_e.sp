@@ -37,7 +37,7 @@
 #pragma 	semicolon 					1
 
 // Constants
-#define 	PLUGIN_VERSION				"3.1.2"
+#define 	PLUGIN_VERSION				"3.1.5b"
 #define 	MAX_DISPLAYNAME_SIZE		64
 #define 	MAX_DATAENTRY_SIZE			5
 #define 	SERVERTAG					"ENT_Hosties, LR, LastRequest"
@@ -75,29 +75,29 @@
 
 // Global vars
 char ChatBanner[256];
-new bool:g_bSBAvailable = false; // SourceBans
-new GameType:g_Game = Game_Unknown;
+bool g_bSBAvailable = false; // SourceBans
+GameType g_Game = Game_Unknown;
 
-new Handle:gH_TopMenu = INVALID_HANDLE;
-new TopMenuObject:gM_Hosties = INVALID_TOPMENUOBJECT;
+Handle gH_TopMenu = INVALID_HANDLE;
+TopMenuObject gM_Hosties = INVALID_TOPMENUOBJECT;
 
-new Handle:gH_Cvar_LR_Debug_Enabled = INVALID_HANDLE;
-new bool:gShadow_LR_Debug_Enabled = false;
+Handle gH_Cvar_LR_Debug_Enabled = INVALID_HANDLE;
+bool gShadow_LR_Debug_Enabled = false;
 
 #if (MODULE_FREEKILL == 1)
-new Handle:gH_Cvar_Freekill_Sound = INVALID_HANDLE;
-new Handle:gH_Cvar_Freekill_Threshold = INVALID_HANDLE;
-new Handle:gH_Cvar_Freekill_Notify = INVALID_HANDLE;
-new Handle:gH_Cvar_Freekill_BanLength = INVALID_HANDLE;
-new Handle:gH_Cvar_Freekill_Punishment = INVALID_HANDLE;
-new Handle:gH_Cvar_Freekill_Reset = INVALID_HANDLE;
-new String:gShadow_Freekill_Sound[PLATFORM_MAX_PATH];
-new gShadow_Freekill_Threshold;
-new gShadow_Freekill_BanLength;
-new gShadow_Freekill_Reset;
-new FreekillPunishment:gShadow_Freekill_Punishment;
-new bool:gShadow_Freekill_Notify;
-new gA_FreekillsOfCT[MAXPLAYERS+1];
+Handle gH_Cvar_Freekill_Sound = INVALID_HANDLE;
+Handle gH_Cvar_Freekill_Threshold = INVALID_HANDLE;
+Handle gH_Cvar_Freekill_Notify = INVALID_HANDLE;
+Handle gH_Cvar_Freekill_BanLength = INVALID_HANDLE;
+Handle gH_Cvar_Freekill_Punishment = INVALID_HANDLE;
+Handle gH_Cvar_Freekill_Reset = INVALID_HANDLE;
+char gShadow_Freekill_Sound[PLATFORM_MAX_PATH];
+int gShadow_Freekill_Threshold;
+int gShadow_Freekill_BanLength;
+int gShadow_Freekill_Reset;
+FreekillPunishment gShadow_Freekill_Punishment;
+bool gShadow_Freekill_Notify;
+int gA_FreekillsOfCT[MAXPLAYERS+1];
 #endif
 
 #if (MODULE_NOBLOCK == 1)
@@ -138,11 +138,11 @@ new gA_FreekillsOfCT[MAXPLAYERS+1];
 #endif
 
 // ConVars
-new Handle:gH_Cvar_Add_ServerTag = INVALID_HANDLE;
-new Handle:gH_Cvar_Display_Advert = INVALID_HANDLE;
-new Handle:gH_Cvar_ChatTag = INVALID_HANDLE;
+Handle gH_Cvar_Add_ServerTag = INVALID_HANDLE;
+Handle gH_Cvar_Display_Advert = INVALID_HANDLE;
+Handle gH_Cvar_ChatTag = INVALID_HANDLE;
 
-public Plugin:myinfo =
+public Plugin myinfo =
 {
 	name        = "ENT_Hosties(V3)",
 	author      = "databomb & Entity",
@@ -150,7 +150,7 @@ public Plugin:myinfo =
 	version     = "Entity",
 };
 
-public OnPluginStart()
+public void OnPluginStart()
 {
 	// Load translations
 	LoadTranslations("common.phrases");
@@ -214,7 +214,7 @@ public OnPluginStart()
 	AutoExecConfig(true, "sm_hosties2");
 }
 
-public OnMapStart()
+public void OnMapStart()
 {
 	#if (MODULE_TEAMOVERLAYS == 1)
 	TeamOverlays_OnMapStart();
@@ -227,21 +227,21 @@ public OnMapStart()
 	#endif
 }
 
-public OnMapEnd()
+public void OnMapEnd()
 {
 	#if (MODULE_FREEKILL == 1)	
 	Freekillers_OnMapEnd();
 	#endif
 }
 
-public OnAllPluginsLoaded()
+public void OnAllPluginsLoaded()
 {
 	if (LibraryExists("sourcebans"))
 	{
 		g_bSBAvailable = true;
 	}
 	
-	new Handle:h_TopMenu = GetAdminTopMenu();
+	Handle h_TopMenu = GetAdminTopMenu();
 	if (LibraryExists("adminmenu") && (h_TopMenu != INVALID_HANDLE))
 	{
 		OnAdminMenuReady(h_TopMenu);
@@ -252,7 +252,7 @@ public OnAllPluginsLoaded()
 	#endif
 }
 
-public APLRes:AskPluginLoad2(Handle:h_Myself, bool:bLateLoaded, String:sError[], error_max)
+public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
 	if (GetEngineVersion() == Engine_CSS)
 	{
@@ -276,7 +276,7 @@ public APLRes:AskPluginLoad2(Handle:h_Myself, bool:bLateLoaded, String:sError[],
 	return APLRes_Success;
 }
 
-public OnLibraryAdded(const String:name[])
+public void OnLibraryAdded(const char[] name)
 {
 	if (StrEqual(name, "sourcebans"))
 	{
@@ -288,7 +288,7 @@ public OnLibraryAdded(const String:name[])
 	}
 }
 
-public OnLibraryRemoved(const String:name[])
+public void OnLibraryRemoved(const char[] name)
 {
 	if (StrEqual(name, "sourcebans"))
 	{
@@ -300,15 +300,22 @@ public OnLibraryRemoved(const String:name[])
 	}
 }
 
-public OnConfigsExecuted()
+public void OnConfigsExecuted()
 {
 	if (GetConVarInt(gH_Cvar_Add_ServerTag) == 1)
 	{
-		char tags[256];
-		ConVar g_cvSvTags = FindConVar("sv_tags");
-		g_cvSvTags.GetString(tags, sizeof(tags));
-		Format(tags, sizeof(tags), "sv_tags %s,%s", tags, SERVERTAG);
-		ServerCommand(tags);
+		Handle hTags = FindConVar("sv_tags");
+		char sTags[128];
+		GetConVarString(hTags, sTags, sizeof(sTags));
+		if (StrContains(sTags, SERVERTAG, false) == -1)
+		{
+			char sTagsFormat[128];
+			Format(sTagsFormat, sizeof(sTagsFormat), ", %s", SERVERTAG);
+			
+			StrCat(sTags, sizeof(sTags), sTagsFormat);
+			SetConVarString(hTags, sTags);
+		}
+		CloseHandle(hTags);
 	}
 	
 	#if (MODULE_FREEKILL == 1)
@@ -340,22 +347,26 @@ public OnConfigsExecuted()
 	#endif
 }
 
-public OnClientPutInServer(client)
+public void OnClientPutInServer(int client)
 {
+	#if (MODULE_LASTREQUEST == 1)
 	LastRequest_ClientPutInServer(client);
+	#endif
+	#if (MODULE_FREEKILL == 1)
 	Freekillers_ClientPutInServer(client);
+	#endif
 }
 
-public Event_RoundStart(Handle:event, const String:name[], bool:dontBroadcast)
+public Action Event_RoundStart(Event event, const char[] name , bool dontBroadcast)
 {
 	if (GetConVarInt(gH_Cvar_Display_Advert))
 	{
 		// Print out a messages about SM_Hosties 
-		CPrintToChatAll("%s %s", ChatBanner, "The server is Powered By Hosties(Entity-Edition)");
+		CPrintToChatAll("%s %t", ChatBanner, "Powered By Hosties");
 	}
 }
 
-public OnAdminMenuReady(Handle:h_TopMenu)
+public void OnAdminMenuReady(Handle h_TopMenu)
 {
 	// block double calls
 	if (h_TopMenu == gH_TopMenu)
@@ -374,9 +385,15 @@ public OnAdminMenuReady(Handle:h_TopMenu)
 	}
 	
 	// Let other modules add menu objects
+	#if (MODULE_LASTREQUEST == 1)
 	LastRequest_Menus(gH_TopMenu, gM_Hosties);
+	#endif
+	#if (MODULE_GUNSAFETY == 1)
 	GunSafety_Menus(gH_TopMenu, gM_Hosties);
+	#endif
+	#if (MODULE_RESPAWN == 1)
 	Respawn_Menus(gH_TopMenu, gM_Hosties);
+	#endif
 }
 
 public void OnCvarChange_ChatTag(ConVar cvar, char[] oldvalue, char[] newvalue)
@@ -384,13 +401,13 @@ public void OnCvarChange_ChatTag(ConVar cvar, char[] oldvalue, char[] newvalue)
 	Format(ChatBanner, sizeof(ChatBanner), "%s {lime}", newvalue);
 }
 
-public Action:Command_HostiesAdmin(client, args)
+public Action Command_HostiesAdmin(int client, int args)
 {
 	DisplayTopMenu(gH_TopMenu, client, TopMenuPosition_LastRoot);
 	return Plugin_Handled;
 }
 
-public HostiesCategoryHandler(Handle:h_TopMenu, TopMenuAction:action, TopMenuObject:item, param, String:buffer[], maxlength)
+public void HostiesCategoryHandler(Handle topmenu, TopMenuAction action, TopMenuObject item, int param, char[] buffer, int maxlength)
 {
 	switch (action)
 	{

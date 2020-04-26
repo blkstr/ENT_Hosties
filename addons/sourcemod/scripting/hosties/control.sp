@@ -21,7 +21,6 @@
 #include <sdktools>
 #include <cstrike>
 #include <hosties>
-#include <multicolors>
 
 // Menus
 #define MENU_SIMON			"##simonsays##"
@@ -50,14 +49,14 @@
 
 #define TASK_COUNT			3
 
-new bool:g_bController[MAXPLAYERS + 1] = false;
-new bool:g_bHasController = false;
-new g_iState = 0;
-new Handle:gH_ControllerMenu = INVALID_HANDLE;
-new String:g_sActionSound[ACTION_COUNT][PLATFORM_MAX_PATH] = {"sm_hosties/control/jump.mp3", "sm_hosties/control/crouch.mp3", "sm_hosties/control/follow.mp3", "sm_hosties/control/go.mp3", "sm_hosties/control/freeday.mp3"};
-new String:g_sTaskSound[TASK_COUNT][PLATFORM_MAX_PATH] = {"sm_hosties/control/simon.mp3", "sm_hosties/control/first.mp3", "sm_hosties/control/last.mp3"};
+bool g_bController[MAXPLAYERS + 1] = false;
+bool g_bHasController = false;
+int g_iState = 0;
+Handle gH_ControllerMenu = null;
+char g_sActionSound[ACTION_COUNT][PLATFORM_MAX_PATH] = {"sm_hosties/control/jump.mp3", "sm_hosties/control/crouch.mp3", "sm_hosties/control/follow.mp3", "sm_hosties/control/go.mp3", "sm_hosties/control/freeday.mp3"};
+char g_sTaskSound[TASK_COUNT][PLATFORM_MAX_PATH] = {"sm_hosties/control/simon.mp3", "sm_hosties/control/first.mp3", "sm_hosties/control/last.mp3"};
 
-Control_OnPluginStart()
+void Control_OnPluginStart()
 {
 	RegConsoleCmd("sm_control", Command_Control);
 	RegConsoleCmd("sm_hostiescontrol", Command_Control);
@@ -66,13 +65,13 @@ Control_OnPluginStart()
 	HookEvent("player_disconnect", Control_PlayerDisconnect);
 }
 
-public Control_Menu(client)
+public void Control_Menu(int client)
 {
 	if(g_bHasController && Control_GetController() == client)
 	{
-		if(gH_ControllerMenu == INVALID_HANDLE)
+		if(gH_ControllerMenu == null)
 		{
-			gH_ControllerMenu = CreateMenu(ControllerMenuHandle, MenuAction:MENU_ACTIONS_ALL);
+			gH_ControllerMenu = CreateMenu(ControllerMenuHandle, view_as<MenuAction>(MENU_ACTIONS_ALL));
 			if(g_iState == 0)
 			{
 				SetMenuTitle(gH_ControllerMenu, "%t", "Control", "Main");
@@ -134,84 +133,21 @@ public Control_Menu(client)
 				AddMenuItem(gH_ControllerMenu, MENU_GOTO, "Goto");
 				AddMenuItem(gH_ControllerMenu, MENU_FREE, "Freeday");
 			}
-			/*
-			AddMenuItem(gH_ControllerMenu, MENU_SIMON, "Simon");
-			AddMenuItem(gH_ControllerMenu, MENU_FIRST, "First");
-			AddMenuItem(gH_ControllerMenu, MENU_LAST, "Last");
-			AddMenuItem(gH_ControllerMenu, MENU_JUMP, "Jump");
-			AddMenuItem(gH_ControllerMenu, MENU_CROUCH, "Crouch");
-			AddMenuItem(gH_ControllerMenu, MENU_FOLLOW, "Follow");
-			AddMenuItem(gH_ControllerMenu, MENU_GOTO, "Goto");
-			AddMenuItem(gH_ControllerMenu, MENU_FREE, "Freeday");
-			AddMenuItem(gH_ControllerMenu, MENU_NONE, "None");*/
 			SetMenuExitButton(gH_ControllerMenu, true);
 			DisplayMenu(gH_ControllerMenu, client, 0);
 		}
 	}
 }
 
-public ControllerMenuHandle(Handle:menu, MenuAction:action, param1, param2)
+public int ControllerMenuHandle(Handle menu, MenuAction action, int param1, int param2)
 {
-	/*if(action == MenuAction_DisplayItem)
-	{
-		if(GetMenuItemCount(menu) - 1 == param2)
-		{
-			decl String:selection[64], String:buffer[255];
-			GetMenuItem(menu, param2, selection, sizeof(selection));
-			if(strcmp(selection, MENU_SIMON, false) == 0)
-			{
-				Format(buffer, sizeof(buffer), "%T", "Simon", param1);
-				return RedrawMenuItem(buffer);
-			}
-			else if(strcmp(selection, MENU_FIRST, false) == 0)
-			{
-				Format(buffer, sizeof(buffer), "%T", "First", param1);
-				return RedrawMenuItem(buffer);					
-			}
-			else if(strcmp(selection, MENU_LAST, false) == 0)
-			{
-				Format(buffer, sizeof(buffer), "%T", "Last", param1);
-				return RedrawMenuItem(buffer);
-			}
-			else if(strcmp(selection, MENU_JUMP, false) == 0)
-			{
-				Format(buffer, sizeof(buffer), "%T", "Jump", param1);
-				return RedrawMenuItem(buffer);					
-			}
-			else if(strcmp(selection, MENU_CROUCH, false) == 0)
-			{
-				Format(buffer, sizeof(buffer), "%T", "Crouch", param1);
-				return RedrawMenuItem(buffer);
-			}
-			else if(strcmp(selection, MENU_FOLLOW, false) == 0)
-			{
-				Format(buffer, sizeof(buffer), "%T", "Follow", param1);
-				return RedrawMenuItem(buffer);					
-			}
-			else if(strcmp(selection, MENU_GOTO, false) == 0)
-			{
-				Format(buffer, sizeof(buffer), "%T", "Goto", param1);
-				return RedrawMenuItem(buffer);
-			}
-			else if(strcmp(selection, MENU_FREE, false) == 0)
-			{
-				Format(buffer, sizeof(buffer), "%T", "Freeday", param1);
-				return RedrawMenuItem(buffer);					
-			}
-			else if(strcmp(selection, MENU_NONE, false) == 0)
-			{
-				Format(buffer, sizeof(buffer), "%T", "None", param1);
-				return RedrawMenuItem(buffer);					
-			}
-		}
-	}*/
 	if (action == MenuAction_Select)
 	{
 		if(GetMenuItemCount(menu) - 1 == param2)
 		{
-			decl String:selection[64];
+			char selection[64];
 			GetMenuItem(menu, param2, selection, sizeof(selection));
-			new bool:ReturnMenu = true;
+			bool ReturnMenu = true;
 			if(strcmp(selection, MENU_SIMON, false) == 0)
 			{
 				g_iState = 1;
@@ -341,7 +277,7 @@ public ControllerMenuHandle(Handle:menu, MenuAction:action, param1, param2)
 			}
 			if(ReturnMenu)
 			{
-				gH_ControllerMenu = INVALID_HANDLE;
+				gH_ControllerMenu = null;
 				Control_Menu(param1);
 			}
 			CloseHandle(menu);
@@ -353,7 +289,7 @@ public ControllerMenuHandle(Handle:menu, MenuAction:action, param1, param2)
 	}
 }
 
-public Control_PlayAction(String:Act[])
+public void Control_PlayAction(char[] Act)
 {
 	if(StrEqual(Act, "Jump"))
 	{
@@ -361,7 +297,7 @@ public Control_PlayAction(String:Act[])
 	}
 }
 
-Control_OnMapStart()
+void Control_OnMapStart()
 {
 	if (g_Game == Game_CSS)
 	{
@@ -378,7 +314,7 @@ Control_OnMapStart()
 		LaserHalo = PrecacheModel("materials/sprites/light_glow02.vmt");
 	}
 	
-	for(new i = 0; i < ACTION_COUNT; i++)
+	for(int i = 0; i < ACTION_COUNT; i++)
 	{
 		if(!StrEqual(g_sActionSound[i], "", false))
 		{
@@ -386,7 +322,7 @@ Control_OnMapStart()
 		}
 	}
 	
-	for(new i = 0; i < TASK_COUNT; i++)
+	for(int i = 0; i < TASK_COUNT; i++)
 	{
 		if(!StrEqual(g_sTaskSound[i], "", false))
 		{
@@ -395,44 +331,44 @@ Control_OnMapStart()
 	}
 }
 
-public Control_PlayerDisconnect(Handle:event, const String:name[], bool:dontBroadcast)
+public Action Control_PlayerDisconnect(Event event, const char[] name, bool dontBroadcast)
 {
-	new client = GetClientOfUserId(GetEventInt(event, "userid"));
+	int client = GetClientOfUserId(GetEventInt(event, "userid"));
 	if(g_bHasController && g_bController[client] == true)
 	{
 		Control_Controller(client, false, 0, true);
 	}
 }
 
-public Action:Command_Control(client, args)
+public Action Command_Control(int client, int args)
 {
 	if (GetClientTeam(client) != 3)
 	{
-		CPrintToChat(client, "%s %t", ChatBanner, "Must Be CT");
+		PrintToChat(client, "%s %t", ChatBanner, "Must Be CT");
 		return Plugin_Handled;
 	}
 	
 	if(g_bHasController && Control_GetController() != 0)
 	{
-		CPrintToChat(client, "%s %t", ChatBanner, "Control Already Taken");
+		PrintToChat(client, "%s %t", ChatBanner, "Control Already Taken");
 	}
 	else
 	{
 		Control_Controller(client, true, -1, true);
-		CPrintToChat(client, "%s %t", ChatBanner, "Control Taken");
+		PrintToChat(client, "%s %t", ChatBanner, "Control Taken");
 	}
 	
 	return Plugin_Handled;
 }
 
-public Control_GetController()
+public int Control_GetController()
 {
 	if(!g_bHasController)
 	{
 		return 0;
 	}
 	
-	for(new i = 1; i <= MaxClients ; i++)
+	for(int i = 1; i <= MaxClients ; i++)
 	{
 		if(g_bController[i] == true)
 		{
@@ -450,7 +386,7 @@ public Control_GetController()
 	return 0;
 }
 
-public Control_Controller(client, bool:controller, reason, bool:ann)
+public void Control_Controller(int client, bool controller, int reason, bool ann)
 {
 	if(controller)
 	{
@@ -460,7 +396,7 @@ public Control_Controller(client, bool:controller, reason, bool:ann)
 			g_bHasController = true;
 			g_iState = 0;
 			Control_Menu(client);
-			CPrintToChatAll("%s %t", ChatBanner, "The New Controller");
+			PrintToChatAll("%s %t", ChatBanner,  "The New Controller");
 		}
 	}
 	else
@@ -473,32 +409,32 @@ public Control_Controller(client, bool:controller, reason, bool:ann)
 			{
 				if(reason == -1)
 				{
-					CPrintToChatAll("%s %t", ChatBanner, "No Longer The Controller", client);
+					PrintToChatAll("%s %t", ChatBanner,  "No Longer The Controller", client);
 				}
 				else if(reason == 0)
 				{
-					CPrintToChatAll("%s %t", ChatBanner, "No Longer The Controller Reason", client, "Disconncted");
+					PrintToChatAll("%s %t", ChatBanner,  "No Longer The Controller Reason", client, "Disconncted");
 				}
 				else if(reason == 1)
 				{
-					CPrintToChatAll("%s %t", ChatBanner, "No Longer The Controller Reason", client, "Died");
+					PrintToChatAll("%s %t", ChatBanner,  "No Longer The Controller Reason", client, "Died");
 				}
 				else if(reason == 2)
 				{
-					CPrintToChatAll("%s %t", ChatBanner, "No Longer The Controller Reason", client, "Stopped controlling");
+					PrintToChatAll("%s %t", ChatBanner,  "No Longer The Controller Reason", client, "Stopped controlling");
 				}
 			}
 			else
 			{
-				CPrintToChatAll("%s %t", ChatBanner, "No Controller");
+				PrintToChatAll("%s %t", ChatBanner,  "No Controller");
 			}
 		}
 	}
 }
 
-public Control_PlayerDeath(Handle:event, const String:name[], bool:dontBroadcast)
+public Action Control_PlayerDeath(Event event, const char[] name, bool dontBroadcast)
 {
-	new client = GetClientOfUserId(GetEventInt(event, "userid"));
+	int client = GetClientOfUserId(GetEventInt(event, "userid"));
 	if(g_bHasController && g_bController[client] == true)
 	{
 		Control_Controller(client, false, 1, true);

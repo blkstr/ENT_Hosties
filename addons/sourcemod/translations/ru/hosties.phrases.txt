@@ -8,17 +8,13 @@
 	{
 		"ru"		"Рулетка"
 	}
-	"Chicken Fight"
-	{
-		"ru"		"Петушиный Бой"
-	}
 	"Gun Toss"
 	{
 		"ru"		"Метание"
 	}
-	"LR GT Start"
+	"Chicken Fight"
 	{
-		"ru"		"{1} выбрал Метание с {2}."
+		"ru"		"Петушиный Бой"
 	}
 	"Hot Potato"
 	{
@@ -56,10 +52,6 @@
 	{
 		"ru"		"Гонка"
 	}
-	"LR Grace TimeBlock"
-	{
-		"ru"		"Вы не можете запустить LR, пока не закончится время для подключения."
-	}
 	"Already Dropped Deagle"
 	{
 		"ru"		"Ты уже бросил свой пистолет!"
@@ -70,7 +62,7 @@
 	}
 	"Powered By Hosties"
 	{
-		"ru"		"Сервер использует SM_Hosties 2!"
+		"ru"		"This server is being powered by ENT_Hosties V3. Enjoy!"
 	}
 	"Please Follow Rules"
 	{
@@ -223,6 +215,10 @@
 	"LR S4S Start"
 	{
 		"ru"		"{1} выбрал Рулетку с {2}."
+	}
+	"LR GT Start"
+	{
+		"ru"		"{1} выбрал Метание с {2}."
 	}
 	"LR CF Start"
 	{
@@ -563,21 +559,5 @@
 	"Race Could Start Soon"
 	{
 		"ru"		"{1} выбрал Гонку. Ищите Старт и Финиш!"
-	}
-	"Respawned Target"
-	{
-		"ru"		"возродил {1}"
-	}
-	"Player Alive"
-	{
-		"ru"		"Игрок уже жив."
-	}
-	"Respawn Player"
-	{
-		"ru"		"Возродить игрока"
-	}	
-	"Respawn Data Unavailable"
-	{
-		"ru"		"У игрока {1} не было данных о респауне, и он был отправлен обратно в камеру."
 	}
 }

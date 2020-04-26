@@ -22,20 +22,21 @@
 #include <cstrike>
 #include <hosties>
 #include <multicolors>
+#include <smlib>
 
 
-new Handle:gH_Cvar_StartWeaponsOn = INVALID_HANDLE;
-new Handle:gH_Cvar_T_Weapons = INVALID_HANDLE;
-new Handle:gH_Cvar_CT_Weapons = INVALID_HANDLE;
-new bool:gShadow_StartWeaponsOn;
-new String:gShadow_T_Weapons[256];
-new String:gShadow_CT_Weapons[256];
-new String:gs_T_WeaponList[8][32];
-new String:gs_CT_WeaponList[8][32];
-new g_iSizeOfTList;
-new g_iSizeOfCTList;
+Handle gH_Cvar_StartWeaponsOn = INVALID_HANDLE;
+Handle gH_Cvar_T_Weapons = INVALID_HANDLE;
+Handle gH_Cvar_CT_Weapons = INVALID_HANDLE;
+bool gShadow_StartWeaponsOn;
+char gShadow_T_Weapons[256];
+char gShadow_CT_Weapons[256];
+char gs_T_WeaponList[8][32];
+char gs_CT_WeaponList[8][32];
+int g_iSizeOfTList;
+int g_iSizeOfCTList;
 
-StartWeapons_OnPluginStart()
+void StartWeapons_OnPluginStart()
 {
 	gH_Cvar_StartWeaponsOn = CreateConVar("sm_hosties_startweapons_on", "1", "Enable or disable configurable payloads for each time on player spawn", 0, true, 0.0, true, 1.0);
 	gShadow_StartWeaponsOn = true;
@@ -60,7 +61,7 @@ StartWeapons_OnPluginStart()
 	HookConVarChange(gH_Cvar_CT_Weapons, StartWeapons_CvarChanged);
 }
 
-StartWeapons_OnConfigsExecuted()
+void StartWeapons_OnConfigsExecuted()
 {
 	GetConVarString(gH_Cvar_CT_Weapons, gShadow_CT_Weapons, sizeof(gShadow_CT_Weapons));
 	GetConVarString(gH_Cvar_T_Weapons, gShadow_T_Weapons, sizeof(gShadow_T_Weapons));
@@ -68,29 +69,31 @@ StartWeapons_OnConfigsExecuted()
 	UpdateStartWeapons();
 }
 
-public StartWeapons_Spawn(Handle:event, const String:name[], bool:dontBroadcast)
+public Action StartWeapons_Spawn(Event event, const char[] name, bool dontBroadcast)
 {
-	new client = GetClientOfUserId(GetEventInt(event, "userid"));
+	int client = GetClientOfUserId(GetEventInt(event, "userid"));
 	
 	if (gShadow_StartWeaponsOn)
 	{
 		StripAllWeapons(client);
-		
-		new team = GetClientTeam(client);
+		int team = GetClientTeam(client);
 		switch (team)
 		{
 			case CS_TEAM_T:
 			{
-				for (new Tidx = 0; Tidx < g_iSizeOfTList; Tidx++)
+				for (int Tidx = 0; Tidx < g_iSizeOfTList; Tidx++)
 				{
-					GivePlayerItem(client, gs_T_WeaponList[Tidx]);
+					if (!Client_HasWeapon(client, gs_T_WeaponList[Tidx]))
+					{
+						GivePlayerItem(client, gs_T_WeaponList[Tidx]);
+					}
 				}
 			}
 			case CS_TEAM_CT:
 			{
-				for (new CTidx = 0; CTidx < g_iSizeOfCTList; CTidx++)
+				for (int CTidx = 0; CTidx < g_iSizeOfCTList; CTidx++)
 				{
-					decl String:sWeapon[64];
+					char sWeapon[64];
 					
 					if(GetEngineVersion() == Engine_CSGO && StrEqual(gs_CT_WeaponList[CTidx], "weapon_usp", false))
 					{
@@ -101,7 +104,10 @@ public StartWeapons_Spawn(Handle:event, const String:name[], bool:dontBroadcast)
 						Format(sWeapon, sizeof(sWeapon), gs_CT_WeaponList[CTidx]);
 					}
 
-					GivePlayerItem(client, sWeapon);
+					if (!Client_HasWeapon(client, sWeapon))
+					{
+						GivePlayerItem(client, sWeapon);
+					}
 				}
 			}
 		}
@@ -113,11 +119,11 @@ public StartWeapons_Spawn(Handle:event, const String:name[], bool:dontBroadcast)
 	}
 }
 
-public StartWeapons_CvarChanged(Handle:cvar, const String:oldValue[], const String:newValue[])
+public void StartWeapons_CvarChanged(Handle cvar, const char[] oldValue, const char[] newValue)
 {
 	if (cvar == gH_Cvar_StartWeaponsOn)
 	{
-		gShadow_StartWeaponsOn = bool:StringToInt(newValue);
+		gShadow_StartWeaponsOn = view_as<bool>(StringToInt(newValue));
 	}
 	else if (cvar == gH_Cvar_T_Weapons)
 	{

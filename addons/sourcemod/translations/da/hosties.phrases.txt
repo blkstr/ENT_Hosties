@@ -8,6 +8,10 @@
 	{
 		"da"		"Skud For Skud"
 	}
+	"Gun Toss"
+	{
+		"da"		"Pistolkast"
+	}
 	"Chicken Fight"
 	{
 		"da"		"Kyllingekamp"
@@ -15,14 +19,6 @@
 	"Hot Potato"
 	{
 		"da"		"Varm kartoffel"
-	}
-	"Gun Toss"
-	{
-		"da"		"Pistolkast"
-	}
-	"LR GT Start"
-	{
-		"da"		"{1} valgte at lave pistolkast med {2}."
 	}
 	"Dodgeball"
 	{
@@ -66,7 +62,7 @@
 	}
 	"Powered By Hosties"
 	{
-		"da"		"Denne server er drevet af SM_Hosties v2, god fornøjelse!"
+		"da"		"This server is being powered by ENT_Hosties V3. Enjoy!"
 	}
 	"Please Follow Rules"
 	{
@@ -219,6 +215,10 @@
 	"LR S4S Start"
 	{
 		"da"		"{1} Valgte at lave skud for skud med {2}."
+	}
+	"LR GT Start"
+	{
+		"da"		"{1} valgte at lave pistolkast med {2}."
 	}
 	"LR CF Start"
 	{

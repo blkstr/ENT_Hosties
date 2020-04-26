@@ -8,17 +8,13 @@
 	{
 		"chi"		"爆头"
 	}
-	"Chicken Fight"
-	{
-		"chi"		"斗鸡"
-	}
 	"Gun Toss"
 	{
 		"chi"		"丢枪"
 	}
-	"LR GT Start"
+	"Chicken Fight"
 	{
-		"chi"		"{1} 选择与 {2} 进行丢枪比赛"
+		"chi"		"斗鸡"
 	}
 	"Hot Potato"
 	{
@@ -66,7 +62,7 @@
 	}
 	"Powered By Hosties"
 	{
-		"chi"		"本服务器由 SM_Hosties v2 插件支持, 祝大家玩的开心!"
+		"chi"		"This server is being powered by ENT_Hosties V3. Enjoy!"
 	}
 	"Please Follow Rules"
 	{
@@ -219,6 +215,10 @@
 	"LR S4S Start"
 	{
 		"chi"		"{1} 选择与 {2} 进行爆头比赛"
+	}
+	"LR GT Start"
+	{
+		"chi"		"{1} 选择与 {2} 进行丢枪比赛"
 	}
 	"LR CF Start"
 	{

@@ -8,6 +8,10 @@
 	{
 		"sv"		"Skott För Skott"
 	}
+	"Gun Toss"
+	{
+		"sv"		"Kasta Deagle"
+	}
 	"Chicken Fight"
 	{
 		"sv"		"Tuppfäktning"
@@ -19,14 +23,6 @@
 	"Dodgeball"
 	{
 		"sv"		"Spökboll"
-	}
-	"Gun Toss"
-	{
-		"sv"		"Kasta Deagle"
-	}
-	"LR GT Start"
-	{
-		"sv"		"{1} valde att ha Kasta Deagle med {2}."
 	}
 	"No Scope Battle"
 	{
@@ -66,7 +62,7 @@
 	}
 	"Powered By Hosties"
 	{
-		"sv"		"Denna servern kränger falukorv tack vare SM_Hosties v2, njut!"
+		"sv"		"This server is being powered by ENT_Hosties V3. Enjoy!"
 	}
 	"Please Follow Rules"
 	{
@@ -219,6 +215,10 @@
 	"LR S4S Start"
 	{
 		"sv"		"{1} valde att ha Skott För Skott med {2}."
+	}
+	"LR GT Start"
+	{
+		"sv"		"{1} valde att ha Kasta Deagle med {2}."
 	}
 	"LR CF Start"
 	{

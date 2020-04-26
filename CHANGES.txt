@@ -1,3 +1,30 @@
+---2020.04.26
+Added feature to restore guns after LR
+Added Cvar - sm_hosties_lr_restoreweapon_t (Restore T weapons after LR)
+Added Cvar - sm_hosties_lr_restoreweapon_ct (Restore CT weapons after LR)
+Added new include to save and restore weapons
+Fixed TeamBlock glitches
+Fixed GraceTime finally
+Fixed NoBlock bug
+Changed GunToss winner deagle ammo set to 250
+
+---2020.04.25
+Added GunToss back (Fixed and works perfectly)
+Changed whole project to new syntax
+Fixed NoScope duplication
+Fixed 3rd party LR support
+Fixed GunToss weapon invisibility
+Fixed Rebel kill bug
+Fixed Dodgeball ghost bug
+Fixed 3rd party HP reset
+Fixed GunToss pickup for smaller distance
+Fixed GunToss random pickups
+Fixed GunToss weapon color disappears
+Fixed GunToss DataPack errors
+Fixed GunToss Ammo
+Fixed Translation
+Removed Cvar - sm_hosties_lr_gt_mode (needed to the perfect fix)
+
 ---2020.04.24
 Added new Cvar (sm_hosties_chat_banner)
 Added ColorSupport from multicolors
