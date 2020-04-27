@@ -2137,7 +2137,8 @@ public Action OnTakeDamage(int victim, int &attacker, int &inflictor, float &dam
 					}
 				}
 				else if (((attacker == LR_Player_Guard && victim != LR_Player_Prisoner) || \
-					(attacker == LR_Player_Prisoner && victim != LR_Player_Guard)) && Type != LR_Rebel)
+					(attacker == LR_Player_Prisoner && victim != LR_Player_Guard)) && Type != LR_Rebel &&
+					(GetClientTeam(attacker) != GetClientTeam(victim)))
 				{
 					damage = 0.0;
 					RightKnifeAntiCheat(attacker, idx);
@@ -4033,6 +4034,13 @@ void InitializeGame(int iPartnersIndex)
 	int LR_Player_Prisoner = GetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, view_as<int>(Block_Prisoner));
 	int LR_Player_Guard = GetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, view_as<int>(Block_Guard));
 	
+	// Beacon players
+	if (gShadow_LR_Beacons && selection != LR_Rebel && selection != LR_RussianRoulette)
+	{
+		AddBeacon(LR_Player_Prisoner);
+		AddBeacon(LR_Player_Guard);
+	}
+	
 	// log the event for stats engines
 	if (selection < LastRequest)
 	{
@@ -5192,13 +5200,6 @@ void InitializeGame(int iPartnersIndex)
 			CloseHandle(gH_BuildLR[LR_Player_Prisoner]);		
 		}
 		gH_BuildLR[LR_Player_Prisoner] = null;
-
-		// Beacon players
-		if (gShadow_LR_Beacons && selection != LR_Rebel && selection != LR_RussianRoulette)
-		{
-			AddBeacon(LR_Player_Prisoner);
-			AddBeacon(LR_Player_Guard);
-		}
 		
 		if(g_Game == Game_CSGO)
 		{
