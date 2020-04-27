@@ -52,6 +52,10 @@
 	{
 		"en"		"Race"
 	}
+	"LR Grace TimeBlock"
+	{
+		"en"		"You can't start LR while players can join to the game.."
+	}
 	"Already Dropped Deagle"
 	{
 		"en"		"You have already dropped your deagle!"
