@@ -4053,6 +4053,18 @@ void InitializeGame(int iPartnersIndex)
 		LogToGame("\"%L\" started a LR game (\"%s\") with \"%L\"", LR_Player_Prisoner, LR_Name, LR_Player_Guard);
 	}
 	
+	if (IsValidClient(LR_Player_Prisoner))
+	{
+		SetEntPropFloat(LR_Player_Prisoner, Prop_Data, "m_flLaggedMovementValue", 1.0);
+		SetEntityGravity(LR_Player_Prisoner, 1.0);
+	}
+	
+	if (IsValidClient(LR_Player_Guard))
+	{
+		SetEntPropFloat(LR_Player_Guard, Prop_Data, "m_flLaggedMovementValue", 1.0);
+		SetEntityGravity(LR_Player_Guard, 1.0);
+	}
+	
 	switch (selection)
 	{
 		case LR_KnifeFight:
