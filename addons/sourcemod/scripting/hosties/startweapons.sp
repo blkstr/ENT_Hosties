@@ -76,6 +76,8 @@ public Action StartWeapons_Spawn(Event event, const char[] name, bool dontBroadc
 	if (gShadow_StartWeaponsOn)
 	{
 		StripAllWeapons(client);
+		RemoveDangerZone(client);
+		
 		int team = GetClientTeam(client);
 		switch (team)
 		{

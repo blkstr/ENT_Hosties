@@ -5653,6 +5653,11 @@ public Action Timer_Countdown(Handle timer)
 				}
 				case LR_NoScope:
 				{
+					StripAllWeapons(LR_Player_Prisoner);
+					StripAllWeapons(LR_Player_Guard);
+					RemoveDangerZone(LR_Player_Prisoner);
+					RemoveDangerZone(LR_Player_Guard);
+					
 					// grab weapon choice
 					NoScopeWeapon NS_Selection;
 					NS_Selection = GetArrayCell(gH_DArray_LR_Partners, idx, view_as<int>(Block_Global2));					
