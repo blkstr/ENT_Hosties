@@ -1,10 +1,13 @@
 /*
- * SourceMod Entity Projects
- * by: Entity
+ * SourceMod Hosties Project
+ * by: SourceMod Hosties Dev Team
  *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, version 3.0, as published by the
- * Free Software Foundation.
+ * This file is part of the SM Hosties project.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) 
+ * any later version.
  * 
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -14,6 +17,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+ 
 #if defined _HostiesRestore_Included_
 	#endinput
 #endif
@@ -86,13 +90,28 @@ stock void RestoreWeapons(int aimed)
 		{
 			if (!StrEqual(C_sWeapon[aimed][g], "weapon_flashbang"))
 			{
-				GivePlayerItem(aimed, C_sWeapon[aimed][g]);
+				int wep = GivePlayerItem(aimed, C_sWeapon[aimed][g]);
+				if (Weapon_IsValid(wep))
+				{
+					EquipPlayerWeapon(aimed, wep);
+				}
+			}
+			else if (StrEqual(C_sWeapon[aimed][g], "weapon_fists"))
+			{
+				int weapon;
+				while((weapon = GetPlayerWeaponSlot(g, CS_SLOT_KNIFE)) != -1)
+				{
+					RemovePlayerItem(g, weapon);
+					AcceptEntityInput(weapon, "Kill");
+				}
+			
+				int iMelee = GivePlayerItem(g, "weapon_fists");
+				EquipPlayerWeapon(g, iMelee);
 			}
 			else
 			{
 				for (int x = 1; x <= C_FlashCounter[aimed]; x++)
 				{
-
 					GivePlayerItem(aimed, C_sWeapon[aimed][g]);
 				}
 			}

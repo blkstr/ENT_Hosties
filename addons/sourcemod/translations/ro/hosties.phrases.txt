@@ -608,4 +608,20 @@
     {
        	"ro"        	"{1} a ales sa aiba un Gun Toss cu {2}."
    	}
+	"GT No Throw"
+	{
+		"ro"		"{1} a castigat Gun Toss-ul, deoarece {2} nu a aruncat arma."
+	}
+	"JF No Jump"
+	{
+		"ro"		"{1} a castigat concursul de sarituri, deoarece {2} nu a sarit."
+	}
+	"JF Jump Warning"
+	{
+		"ro"		"Adversarul tau a sarit. Ai 10 secunde pentru a face acelasi lucru."
+	}
+	"GT Throw Warning"
+	{
+		"ro"		"Adversarul tau a aruncat arma. Ai 10 secunde pentru a face acelasi lucru."
+	}
 }

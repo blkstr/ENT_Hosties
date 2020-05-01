@@ -560,4 +560,20 @@
 	{
 		"pt"		"{1} escolheu ter uma Corrida. Olhe atentamente para o ponto de INICIO e TERMINO!"
 	}
+	"GT No Throw"
+	{
+		"pt"		"{1} ganhou o guntoss porque {2} nao atirou a arma."
+	}
+	"JF No Jump"
+	{
+		"pt"		"{1} ganhou o duelo de saltos, porque {2} nao saltou."
+	}
+	"JF Jump Warning"
+	{
+		"pt"		"O teu oponente já saltou. Tens 10 segundos para o fazer."
+	}
+	"GT Throw Warning"
+	{
+		"pt"		"O teu oponente atirou a arma. Tens 10 segundos para o fazer."
+	}
 }

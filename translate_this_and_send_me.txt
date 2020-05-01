@@ -616,4 +616,20 @@
 	{
 		"en"		"You can't start LR during Warmup."
 	}
+	"GT No Throw"
+	{
+		"en"		"{1} won the Gun Toss, because {2} didn't throw the weapon"
+	}
+	"JF No Jump"
+	{
+		"en"		"{1} won the Jump Contest, because {2} didn't jump"
+	}
+	"JF Jump Warning"
+	{
+		"en"		"Your opponent jumped. You have 10 seconds to do it."
+	}
+	"GT Throw Warning"
+	{
+		"en"		"Your opponent threw the weapon. You have 10 seconds to do it."
+	}
 }

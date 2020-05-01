@@ -564,4 +564,20 @@
 	{
 		"fr"		"Vous ne pouvez pas lancer une dernière volonté pendant l'échauffement."
 	}
+	"GT No Throw"
+	{
+		"fr"		"{1} gagne le lancé de deagle car {2} n'a pas lancé son deagle."
+	}
+	"JF No Jump"
+	{
+		"fr"		"{1} gagne le concours de saut car {2} n'a pas sauté."
+	}
+	"JF Jump Warning"
+	{
+		"fr"		"Ton adversaire a sauté, tu as 10 secondes pour sauté."
+	}
+	"GT Throw Warning"
+	{
+		"fr"		"Ton adversaire a jeté son arme, tu as 10 secondes pour jeter la tienne."
+	}
 }

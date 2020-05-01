@@ -4,9 +4,10 @@
  *
  * This file is part of the SM Hosties project.
  *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, version 3.0, as published by the
- * Free Software Foundation.
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) 
+ * any later version.
  * 
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -108,18 +109,25 @@ void DisplayRespawnMenu(int client)
 	SetMenuTitle(menu, title);
 	SetMenuExitBackButton(menu, true);
 	
-	int targets_added = AddTargetsToMenu2(menu, client, COMMAND_FILTER_DEAD|COMMAND_TARGET_IMMUNE|COMMAND_FILTER_NO_BOTS);
-	if (targets_added == 0)
+	if (IsValidClient(client))
 	{
-		CReplyToCommand(client, "%s %t", ChatBanner, "Target is not in game");
-		if (gH_TopMenu != INVALID_HANDLE)
+		int targets_added = AddTargetsToMenu2(menu, client, COMMAND_FILTER_DEAD|COMMAND_TARGET_IMMUNE|COMMAND_FILTER_NO_BOTS);
+		if (targets_added == 0)
 		{
-			DisplayTopMenu(gH_TopMenu, client, TopMenuPosition_LastCategory);
+			CReplyToCommand(client, "%s %t", ChatBanner, "Target is not in game");
+			if (gH_TopMenu != INVALID_HANDLE)
+			{
+				DisplayTopMenu(gH_TopMenu, client, TopMenuPosition_LastCategory);
+			}
+		}
+		else
+		{
+			DisplayMenu(menu, client, MENU_TIME_FOREVER);
 		}
 	}
 	else
 	{
-		DisplayMenu(menu, client, MENU_TIME_FOREVER);
+		CReplyToCommand(client, "[Hosties] you have to be in game to use that command!");
 	}
 }
 

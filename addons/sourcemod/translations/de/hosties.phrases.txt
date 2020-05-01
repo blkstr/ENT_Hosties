@@ -616,4 +616,20 @@
 	{
 		"de"		"Du kannst keinen LR ausführen während der Aufwärmzeit."
 	}
+	"GT No Throw"
+	{
+		"de"		"{1} hat Waffenweitwurf gewonnen, da {2} seine Waffe nicht geworfen hat"
+	}
+	"JF No Jump"
+	{
+		"de"		"{1} hat den Sprungwettbewerb gewonnen, da {2} nicht gesprungen ist"
+	}
+	"JF Jump Warning"
+	{
+		"de"		"Deine Gegner ist gesprungen. Du hast 10 Sekunden Zeit es zu tun."
+	}
+	"GT Throw Warning"
+	{
+		"de"		"Dein Gegner hat seine Waffe geworfen. Du hast 10 Sekunden Zeit es zu tun."
+	}
 }

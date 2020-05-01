@@ -4,9 +4,10 @@
  *
  * This file is part of the SM Hosties project.
  *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, version 3.0, as published by the
- * Free Software Foundation.
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) 
+ * any later version.
  * 
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -87,7 +88,11 @@ public Action StartWeapons_Spawn(Event event, const char[] name, bool dontBroadc
 				{
 					if (!Client_HasWeapon(client, gs_T_WeaponList[Tidx]))
 					{
-						GivePlayerItem(client, gs_T_WeaponList[Tidx]);
+						int wep = GivePlayerItem(client, gs_T_WeaponList[Tidx]);
+						if (Weapon_IsValid(wep))
+						{
+							EquipPlayerWeapon(client, wep);
+						}
 					}
 				}
 			}
@@ -108,16 +113,15 @@ public Action StartWeapons_Spawn(Event event, const char[] name, bool dontBroadc
 
 					if (!Client_HasWeapon(client, sWeapon))
 					{
-						GivePlayerItem(client, sWeapon);
+						int wep = GivePlayerItem(client, sWeapon);
+						if (Weapon_IsValid(wep))
+						{
+							EquipPlayerWeapon(client, wep);
+						}
 					}
 				}
 			}
 		}
-	}
-	
-	if (gShadow_LR_Debug_Enabled == true)
-	{
-		CPrintToChatAll("\x01[\x07Entity-Debug\x01] \x06Starting weapons config executed on \x10%N", client);
 	}
 }
 

@@ -1,3 +1,22 @@
+---2020.05.01
+Added mp_solid_teammates 2 support
+Added knife if restore not found
+Added any weapon support to sm_hosties_t_start (fists too)
+Added any weapon support to sm_hosties_ct_start (fists too)
+Added fix block collision to knife fight
+Added fix block collision to chicken fight
+Added fix block collision to dodgeball
+Added Gun Toss no drop timer
+Added new debug logging (thanks to shanapu)
+Added Farthest Jump no jump timer
+Added 4 new translation
+Added pt_p translations
+Fixed Dodgeball block issues
+Fixed Restore error spam
+Fixed Respawn not dead players
+Fixed errors for respawn menu (Not in game)
+Removed the unfinished control module
+
 ---2020.04.26
 Added feature to restore guns after LR
 Added Cvar - sm_hosties_lr_restoreweapon_t (Restore T weapons after LR)

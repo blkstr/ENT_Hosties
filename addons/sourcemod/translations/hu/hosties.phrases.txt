@@ -584,7 +584,7 @@
 	}
 	"Race Could Start Soon"
 	{
-		"hu"		"{1} verszenyt választott. Figyeld a kezdő és végpontot!"
+		"hu"		"{1} versenyt választott. Figyeld a kezdő- és végpontot!"
 	}
 	"Respawned Target"
 	{
@@ -605,5 +605,21 @@
 	"Blocked Warmup"
 	{
 		"hu"		"Nem indíthatsz LR-t a bemelegítés alatt."
+	}
+	"GT No Throw"
+	{
+		"hu"		"{1} megnyerte a Gun Toss-t, mert {2} nem dobta el a fegyverét."
+	}
+	"JF No Jump"
+	{
+		"hu"		"{1} megnyerte az ugró versenyt, mert {2} nem ugrott."
+	}
+	"JF Jump Warning"
+	{
+		"hu"		"Az ellenfeled ugrott. Van 10 másodperced, hogy ezt te is megtedd."
+	}
+	"GT Throw Warning"
+	{
+		"hu"		"Az ellenfeled eldobta a fegyverét. Van 10 másodperced, hogy ezt te is megtedd."
 	}
 }
