@@ -38,7 +38,7 @@
 #pragma 	semicolon 					1
 
 // Constants
-#define 	PLUGIN_VERSION				"3.1.13b"
+#define 	PLUGIN_VERSION				"3.1.14b"
 #define 	MAX_DISPLAYNAME_SIZE		64
 #define 	MAX_DATAENTRY_SIZE			5
 #define 	SERVERTAG					"ENT_Hosties, LR, LastRequest"

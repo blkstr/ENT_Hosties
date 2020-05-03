@@ -86,33 +86,35 @@ stock void RestoreWeapons(int aimed)
 {
 	if (IsValidClient(aimed))
 	{
+		int weapon;
+		while((weapon = GetPlayerWeaponSlot(aimed, CS_SLOT_KNIFE)) != -1)
+		{
+			if (Weapon_IsValid(weapon))
+			{
+				RemovePlayerItem(aimed, weapon);
+				AcceptEntityInput(weapon, "Kill");
+			}
+		}
+	
 		for (int g = 0; g <= C_WeaponCount[aimed]; g++)
 		{
-			if (!StrEqual(C_sWeapon[aimed][g], "weapon_flashbang"))
-			{
-				int wep = GivePlayerItem(aimed, C_sWeapon[aimed][g]);
-				if (Weapon_IsValid(wep))
-				{
-					EquipPlayerWeapon(aimed, wep);
-				}
-			}
-			else if (StrEqual(C_sWeapon[aimed][g], "weapon_fists"))
-			{
-				int weapon;
-				while((weapon = GetPlayerWeaponSlot(g, CS_SLOT_KNIFE)) != -1)
-				{
-					RemovePlayerItem(g, weapon);
-					AcceptEntityInput(weapon, "Kill");
-				}
-			
-				int iMelee = GivePlayerItem(g, "weapon_fists");
-				EquipPlayerWeapon(g, iMelee);
-			}
-			else
+			if (StrEqual(C_sWeapon[aimed][g], "weapon_flashbang"))
 			{
 				for (int x = 1; x <= C_FlashCounter[aimed]; x++)
 				{
 					GivePlayerItem(aimed, C_sWeapon[aimed][g]);
+				}
+			}
+			else
+			{
+				int wep = GivePlayerItem(aimed, C_sWeapon[aimed][g]);
+				if (Weapon_IsValid(wep))
+				{
+					int Check = Client_GetWeaponPlayerAmmo(aimed, C_sWeapon[aimed][g]);
+					if (Check == 0)
+					{
+						EquipPlayerWeapon(aimed, wep);
+					}
 				}
 			}
 		}

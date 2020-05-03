@@ -1,3 +1,8 @@
+---2020.05.03
+Added fist and knife support at the same time
+Fixed Multi-knife restore
+Fixed Russian translation
+
 ---2020.05.01
 Added mp_solid_teammates 2 support
 Added knife if restore not found

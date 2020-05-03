@@ -1552,8 +1552,15 @@ void CleanupLastRequest(int loser, int arrayIndex)
 		}
 		else
 		{
-			int malee = GivePlayerItem(LR_Player_Prisoner, "weapon_knife");
-			EquipPlayerWeapon(LR_Player_Prisoner, malee);
+			int weapon;
+			while((weapon = GetPlayerWeaponSlot(LR_Player_Prisoner, CS_SLOT_KNIFE)) != -1)
+			{
+				RemovePlayerItem(LR_Player_Prisoner, weapon);
+				AcceptEntityInput(weapon, "Kill");
+			}
+		
+			int iMelee = GivePlayerItem(LR_Player_Prisoner, "weapon_knife");
+			EquipPlayerWeapon(LR_Player_Prisoner, iMelee);
 		}
 
 		SetEntityHealth(LR_Player_Prisoner, 100);
@@ -1593,8 +1600,15 @@ void CleanupLastRequest(int loser, int arrayIndex)
 		}
 		else
 		{
-			int malee = GivePlayerItem(LR_Player_Guard, "weapon_knife");
-			EquipPlayerWeapon(LR_Player_Guard, malee);
+			int weapon;
+			while((weapon = GetPlayerWeaponSlot(LR_Player_Guard, CS_SLOT_KNIFE)) != -1)
+			{
+				RemovePlayerItem(LR_Player_Guard, weapon);
+				AcceptEntityInput(weapon, "Kill");
+			}
+		
+			int iMelee = GivePlayerItem(LR_Player_Guard, "weapon_knife");
+			EquipPlayerWeapon(LR_Player_Guard, iMelee);
 		}
 		
 		SetEntityHealth(LR_Player_Guard, 100);
