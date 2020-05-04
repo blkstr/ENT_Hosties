@@ -1,6 +1,7 @@
 ---2020.05.03
 Added fist and knife support at the same time
 Fixed Multi-knife restore
+Fixed log spammers
 Fixed Russian translation
 
 ---2020.05.01

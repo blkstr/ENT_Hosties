@@ -2033,7 +2033,10 @@ public Action OnTakeDamage(int victim, int &attacker, int &inflictor, float &dam
 				LastRequest Type = GetArrayCell(gH_DArray_LR_Partners, idx, view_as<int>(Block_LRType));
 				
 				char UsedWeapon[64];
-				GetEdictClassname(weapon, UsedWeapon, sizeof(UsedWeapon));
+				if (Weapon_IsValid(weapon))
+				{
+					GetEdictClassname(weapon, UsedWeapon, sizeof(UsedWeapon));
+				}
 				ReplaceString(UsedWeapon, sizeof(UsedWeapon), "weapon_", "", false); 
 				
 				// if a roulette player is hurting the other contestant
