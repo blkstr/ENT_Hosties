@@ -5194,6 +5194,9 @@ void InitializeGame(int iPartnersIndex)
 		}
 	}
 	
+	StripZeus[LR_Player_Prisoner] = CreateTimer(0.3, Timer_StripZeus, LR_Player_Prisoner, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
+	StripZeus[LR_Player_Guard] = CreateTimer(0.3, Timer_StripZeus, LR_Player_Guard, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
+	
 	if(IsLastRequestAutoStart(selection))
 	{
 		// Fire global
@@ -5228,8 +5231,6 @@ void InitializeGame(int iPartnersIndex)
 					SetEntProp(LR_Player_Prisoner, Prop_Send, "m_bWearingSuit", 0);
 					SetEntProp(LR_Player_Prisoner, Prop_Send, "m_ArmorValue", 0, 0);
 				}
-
-				StripZeus[LR_Player_Prisoner] = CreateTimer(0.3, Timer_StripZeus, LR_Player_Prisoner, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 			}
 			
 			if (IsClientInGame(LR_Player_Guard) && IsPlayerAlive(LR_Player_Guard))
@@ -5246,8 +5247,6 @@ void InitializeGame(int iPartnersIndex)
 					SetEntProp(LR_Player_Guard, Prop_Send, "m_bWearingSuit", 0);
 					SetEntProp(LR_Player_Guard, Prop_Send, "m_ArmorValue", 0, 0);
 				}
-					
-				StripZeus[LR_Player_Guard] = CreateTimer(0.3, Timer_StripZeus, LR_Player_Guard, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 			}
 		}
 	}
