@@ -54,7 +54,7 @@
 	}
 	"LR Grace TimeBlock"
 	{
-		"en"		"You can't start LR while players can join to the game.."
+		"en"		"You can't start LR while players can join to the game."
 	}
 	"Already Dropped Deagle"
 	{

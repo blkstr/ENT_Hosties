@@ -2,7 +2,7 @@
 {
 	"Knife Fight"
 	{
-		"pt"		"Knife Fight"
+		"pt"		"Luta de Faca"
 	}
 	"Shot4Shot"
 	{
@@ -26,15 +26,15 @@
 	}
 	"No Scope Battle"
 	{
-		"pt"		"No Scope Battle"
+		"pt"		"No Scope"
 	}
 	"Rock Paper Scissors"
 	{
-		"pt"		"Rock Paper Scissors"
+		"pt"		"Pedra Papel Tesoura"
 	}
 	"Russian Roulette"
 	{
-		"pt"		"Russian Roulette"
+		"pt"		"Roleta Russa"
 	}
 	"Jumping Contest"
 	{
@@ -50,7 +50,11 @@
 	}
 	"Race"
 	{
-		"pt"		"Race"
+		"pt"		"Corrida"
+	}
+	"LR Grace TimeBlock"
+	{
+		"pt"		"Nao podes comeĂ§ar o LR enquanto os jogadores nao entrarem no servidor."
 	}
 	"Already Dropped Deagle"
 	{
@@ -62,11 +66,11 @@
 	}
 	"Powered By Hosties"
 	{
-		"pt"		"This server is being powered by ENT_Hosties V3. Enjoy!"
+		"pt"		"Este servidor usa o ENT_Hosties V3. Aproveita!"
 	}
 	"Please Follow Rules"
 	{
-		"pt"		"Por favor, siga as regras listadas em 'rules'."
+		"pt"		"Por favor, siga as regras listadas em !rules."
 	}
 	"Knife Fight Gun Attack Slay"
 	{
@@ -114,7 +118,7 @@
 	}
 	"LR Available"
 	{
-		"pt"		"Prisioneiros podem agora digitar !lr para ter um �ltimo pedido."
+		"pt"		"Prisioneiros podem agora digitar !lr para ter um último pedido."
 	}
 	"LR Player Disconnect"
 	{
@@ -570,7 +574,7 @@
 	}
 	"JF Jump Warning"
 	{
-		"pt"		"O teu oponente j� saltou. Tens 10 segundos para o fazer."
+		"pt"		"O teu oponente já saltou. Tens 10 segundos para o fazer."
 	}
 	"GT Throw Warning"
 	{
