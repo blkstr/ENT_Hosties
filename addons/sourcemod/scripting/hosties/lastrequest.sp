@@ -2096,6 +2096,7 @@ public Action OnTakeDamage(int victim, int &attacker, int &inflictor, float &dam
 					((attacker == LR_Player_Guard || attacker == LR_Player_Prisoner) && \
 					(victim == LR_Player_Guard || victim == LR_Player_Prisoner)))
 				{
+					GetEdictClassname(weapon, UsedWeapon, sizeof(UsedWeapon));
 					if (!StrEqual(UsedWeapon, "flashbang"))
 					{
 						if (gShadow_LR_Debug_Enabled == true) LogToFileEx(gShadow_Hosties_LogFile, "%L has been killed for using %s in Dodgeball", attacker, UsedWeapon);
