@@ -53,7 +53,7 @@ public Action Command_Respawn(int client, int args)
 			client,
 			target_list,
 			MAXPLAYERS,
-			COMMAND_FILTER_DEAD|COMMAND_FILTER_NO_IMMUNITY|COMMAND_FILTER_NO_BOTS,
+			COMMAND_FILTER_CONNECTED|COMMAND_FILTER_DEAD|COMMAND_FILTER_NO_IMMUNITY|COMMAND_FILTER_NO_BOTS,
 			target_name,
 			sizeof(target_name),
 			tn_is_ml)) <= 0)
@@ -111,7 +111,7 @@ void DisplayRespawnMenu(int client)
 	
 	if (IsValidClient(client))
 	{
-		int targets_added = AddTargetsToMenu2(menu, client, COMMAND_FILTER_DEAD|COMMAND_FILTER_NO_IMMUNITY|COMMAND_FILTER_NO_BOTS);
+		int targets_added = AddTargetsToMenu2(menu, client, COMMAND_FILTER_CONNECTED|COMMAND_FILTER_DEAD|COMMAND_FILTER_NO_IMMUNITY|COMMAND_FILTER_NO_BOTS);
 		if (targets_added == 0)
 		{
 			CReplyToCommand(client, "%s %t", ChatBanner, "Target is not in game");

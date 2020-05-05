@@ -38,10 +38,10 @@
 #pragma 	semicolon 					1
 
 // Constants
-#define 	PLUGIN_VERSION				"3.1.15b"
+#define 	PLUGIN_VERSION				"3.1.16b"
 #define 	MAX_DISPLAYNAME_SIZE		64
 #define 	MAX_DATAENTRY_SIZE			5
-#define 	SERVERTAG					"ENT_Hosties, LR, LastRequest"
+#define 	SERVERTAG					"ENT_Hosties,LR,LastRequest,ENT,Hosties"
 
 // Note: you cannot safely turn these modules on and off yet. Use cvars to disable functionality.
 
@@ -143,7 +143,7 @@ public Plugin myinfo =
 {
 	name        = "ENT_Hosties(V3)",
 	author      = "databomb & Entity",
-	description = "SM_Hosties boosted version",
+	description = "SM_Hosties Remake",
 	version     = "Entity",
 };
 
@@ -302,16 +302,20 @@ public void OnConfigsExecuted()
 	if (GetConVarInt(gH_Cvar_Add_ServerTag) == 1)
 	{
 		Handle hTags = FindConVar("sv_tags");
-		char sTags[128];
+		char sTags[512], sTagsFormat[128];
 		GetConVarString(hTags, sTags, sizeof(sTags));
-		if (StrContains(sTags, SERVERTAG, false) == -1)
+		
+		char gShadow_TagList[16][32];
+		int TagCount = ExplodeString(SERVERTAG, ",", gShadow_TagList, sizeof(gShadow_TagList), sizeof(gShadow_TagList[]));
+		for (int Tidx = 0; Tidx < TagCount; Tidx++)
 		{
-			char sTagsFormat[128];
-			Format(sTagsFormat, sizeof(sTagsFormat), ", %s", SERVERTAG);
-			
-			StrCat(sTags, sizeof(sTags), sTagsFormat);
-			SetConVarString(hTags, sTags);
+			if (StrContains(sTags, gShadow_TagList[Tidx], false) == -1)
+			{
+				Format(sTagsFormat, sizeof(sTagsFormat), ",%s", gShadow_TagList[Tidx]);
+			}
 		}
+		StrCat(sTags, sizeof(sTags), sTagsFormat);
+		SetConVarString(hTags, sTags);
 		CloseHandle(hTags);
 	}
 	
