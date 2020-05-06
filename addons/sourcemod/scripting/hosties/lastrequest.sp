@@ -280,7 +280,8 @@ enum PistolWeapon
 	Pistol_FiveSeven,
 	Pistol_Dualies,
 	Pistol_USP,
-	Pistol_Tec9
+	Pistol_Tec9,
+	Pistol_Revolver
 };
 
 enum KnifeType
@@ -2097,6 +2098,8 @@ public Action OnTakeDamage(int victim, int &attacker, int &inflictor, float &dam
 					(victim == LR_Player_Guard || victim == LR_Player_Prisoner)))
 				{
 					GetEdictClassname(weapon, UsedWeapon, sizeof(UsedWeapon));
+					ReplaceString(UsedWeapon, sizeof(UsedWeapon), "weapon_", "", false); 
+					
 					if (!StrEqual(UsedWeapon, "flashbang"))
 					{
 						if (gShadow_LR_Debug_Enabled == true) LogToFileEx(gShadow_Hosties_LogFile, "%L has been killed for using %s in Dodgeball", attacker, UsedWeapon);
@@ -2111,10 +2114,17 @@ public Action OnTakeDamage(int victim, int &attacker, int &inflictor, float &dam
 					((attacker == LR_Player_Guard && victim == LR_Player_Prisoner) || \
 					(attacker == LR_Player_Prisoner && victim == LR_Player_Guard)))
 				{
+					GetEdictClassname(weapon, UsedWeapon, sizeof(UsedWeapon));
+					ReplaceString(UsedWeapon, sizeof(UsedWeapon), "weapon_", "", false); 
+					
 					if (!StrEqual(Picked_Pistol[attacker], "") && !StrEqual(UsedWeapon, ""))
 					{
 						if ((StrEqual(Picked_Pistol[attacker], "hkp2000") || (StrEqual(Picked_Pistol[attacker], "usp_silencer"))) && \
 							(StrEqual(UsedWeapon, "usp_silencer") || StrEqual(UsedWeapon, "hkp2000")))
+						{
+							return Plugin_Continue;
+						}
+						else if ((StrEqual(Picked_Pistol[attacker], "revolver")) && (StrEqual(UsedWeapon, "deagle") || StrEqual(UsedWeapon, "revolver")))
 						{
 							return Plugin_Continue;
 						}
@@ -3390,6 +3400,9 @@ public int LR_Selection_Handler(Handle menu, MenuAction action, int client, int 
 									Format(sDataField, sizeof(sDataField), "%d", Pistol_Tec9);
 									Format(sSubTypeName, sizeof(sSubTypeName), "%T", "Pistol_Tec9", client);
 									AddMenuItem(SubWeaponMenu, sDataField, sSubTypeName);
+									Format(sDataField, sizeof(sDataField), "%d", Pistol_Revolver);
+									Format(sSubTypeName, sizeof(sSubTypeName), "%T", "Pistol_Revolver", client);
+									AddMenuItem(SubWeaponMenu, sDataField, sSubTypeName);
 								}
 								
 								SetMenuExitBackButton(SubWeaponMenu, true);
@@ -4244,6 +4257,13 @@ void InitializeGame(int iPartnersIndex)
 					Picked_Pistol[LR_Player_Prisoner] = "weapon_tec9";
 					Picked_Pistol[LR_Player_Guard] = "weapon_tec9";
 				}
+				case Pistol_Revolver:
+				{
+					Pistol_Prisoner = GivePlayerItem(LR_Player_Prisoner, "weapon_revolver");
+					Pistol_Guard = GivePlayerItem(LR_Player_Guard, "weapon_revolver");
+					Picked_Pistol[LR_Player_Prisoner] = "weapon_revolver";
+					Picked_Pistol[LR_Player_Guard] = "weapon_revolver";
+				}
 				default:
 				{
 					LogError("hit default S4S");
@@ -4884,6 +4904,16 @@ void InitializeGame(int iPartnersIndex)
 					Prisoner_Weapon = GetEntPropEnt(LR_Player_Prisoner, Prop_Data, "m_hActiveWeapon");
 					Guard_Weapon = GetEntPropEnt(LR_Player_Guard, Prop_Data, "m_hActiveWeapon");
 				}
+				case Pistol_Revolver:
+				{
+					Pistol_Prisoner = GivePlayerItem(LR_Player_Prisoner, "weapon_revolver");
+					Pistol_Guard = GivePlayerItem(LR_Player_Guard, "weapon_revolver");
+					Picked_Pistol[LR_Player_Prisoner] = "weapon_revolver";
+					Picked_Pistol[LR_Player_Guard] = "weapon_revolver";
+					
+					Prisoner_Weapon = GetEntPropEnt(LR_Player_Prisoner, Prop_Data, "m_hActiveWeapon");
+					Guard_Weapon = GetEntPropEnt(LR_Player_Guard, Prop_Data, "m_hActiveWeapon");
+				}
 				default:
 				{
 					LogError("hit default S4S");
@@ -5104,11 +5134,8 @@ void InitializeGame(int iPartnersIndex)
 			JumpChoice = ReadPackCell(gH_BuildLR[LR_Player_Prisoner]);
 			SetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, JumpChoice, view_as<int>(Block_Global2));
 
-			if (!gShadow_NoBlock)
-			{
-				UnblockEntity(LR_Player_Prisoner, g_Offset_CollisionGroup);
-				UnblockEntity(LR_Player_Guard, g_Offset_CollisionGroup);
-			}
+			UnblockEntity(LR_Player_Prisoner, g_Offset_CollisionGroup);
+			UnblockEntity(LR_Player_Guard, g_Offset_CollisionGroup);
 
 			switch (JumpChoice)
 			{
