@@ -17,15 +17,16 @@
  * @param format		Query string, printf syntax supported
  * @param priority		Priority queue to use
  * @param ...			Variable number of format parameters.
+ * @noreturn
  */
-stock void SQL_TQueryF(Database database, SQLTCallback callback, any data, DBPriority priority=DBPrio_Normal, const char[] format, any ...) {
+stock SQL_TQueryF(Handle:database, SQLTCallback:callback, any:data, DBPriority:priority=DBPrio_Normal, const String:format[], any:...) {
 
-	if (!database) {
+	if (database == INVALID_HANDLE) {
 		ThrowError("[SMLIB] Error: Invalid database handle.");
 		return;
 	}
 
-	char query[16384];
+	decl String:query[16384];
 	VFormat(query, sizeof(query), format, 6);
 
 	SQL_TQuery(database, callback, query, data, priority);
@@ -42,9 +43,9 @@ stock void SQL_TQueryF(Database database, SQLTCallback callback, any data, DBPri
  *						type conversion requested from the database,
  *						or no current result set.
  */
-stock int SQL_FetchIntByName(DBResultSet query, const char[] fieldName, DBResult &result=DBVal_Error) {
+stock SQL_FetchIntByName(Handle:query, String:fieldName[], &DBResult:result=DBVal_Error) {
 
-	int fieldNum;
+	new fieldNum;
 	SQL_FieldNameToNum(query, fieldName, fieldNum);
 
 	return SQL_FetchInt(query, fieldNum, result);
@@ -61,9 +62,9 @@ stock int SQL_FetchIntByName(DBResultSet query, const char[] fieldName, DBResult
  *						type conversion requested from the database,
  *						or no current result set.
  */
-stock bool SQL_FetchBoolByName(DBResultSet query, const char[] fieldName, DBResult &result=DBVal_Error) {
+stock bool:SQL_FetchBoolByName(Handle:query, String:fieldName[], &DBResult:result=DBVal_Error) {
 
-	return SQL_FetchIntByName(query, fieldName, result) != 0;
+	return bool:SQL_FetchIntByName(query, fieldName, result);
 }
 
 /**
@@ -77,9 +78,9 @@ stock bool SQL_FetchBoolByName(DBResultSet query, const char[] fieldName, DBResu
  *						type conversion requested from the database,
  *						or no current result set.
  */
-stock float SQL_FetchFloatByName(DBResultSet query, const char[] fieldName, DBResult &result=DBVal_Error) {
+stock Float:SQL_FetchFloatByName(Handle:query, String:fieldName[], &DBResult:result=DBVal_Error) {
 
-	int fieldNum;
+	new fieldNum;
 	SQL_FieldNameToNum(query, fieldName, fieldNum);
 
 	return SQL_FetchFloat(query, fieldNum, result);
@@ -98,9 +99,9 @@ stock float SQL_FetchFloatByName(DBResultSet query, const char[] fieldName, DBRe
  *						type conversion requested from the database,
  *						or no current result set.
  */
-stock int SQL_FetchStringByName(DBResultSet query, const char[] fieldName, char[] buffer, int maxlength, DBResult &result=DBVal_Error) {
+stock SQL_FetchStringByName(Handle:query, String:fieldName[], String:buffer[], maxlength, &DBResult:result=DBVal_Error) {
 
-	int fieldNum;
+	new fieldNum;
 	SQL_FieldNameToNum(query, fieldName, fieldNum);
 
 	return SQL_FetchString(query, fieldNum, buffer, maxlength, result);

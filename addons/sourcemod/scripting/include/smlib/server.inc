@@ -17,11 +17,11 @@
  * @param public		Set to true to retrieve the server's public/external IP, false otherwise.
  * @return				Long IP or 0 if the IP couldn't be retrieved.
  */
-stock int Server_GetIP(bool public_=true)
+stock Server_GetIP(bool:public_=true)
 {
-	int ip = 0;
+	new ip = 0;
 
-	static ConVar cvHostip = null;
+	static Handle:cvHostip = INVALID_HANDLE;
 
 	if (cvHostip == INVALID_HANDLE) {
 		cvHostip = FindConVar("hostip");
@@ -29,7 +29,7 @@ stock int Server_GetIP(bool public_=true)
 	}
 
 	if (cvHostip != INVALID_HANDLE) {
-		ip = cvHostip.IntValue;
+		ip = GetConVarInt(cvHostip);
 	}
 
 	if (ip != 0 && IsIPLocal(ip) == public_) {
@@ -39,7 +39,7 @@ stock int Server_GetIP(bool public_=true)
 #if defined _steamtools_included
 	if (ip == 0) {
 		if (CanTestFeatures() && GetFeatureStatus(FeatureType_Native, "Steam_GetPublicIP") == FeatureStatus_Available) {
-			int octets[4];
+			decl octets[4];
 			Steam_GetPublicIP(octets);
 
 			ip =
@@ -72,9 +72,9 @@ stock int Server_GetIP(bool public_=true)
  * @param public		Set to true to retrieve the server's public/external IP, false otherwise.
  * @return				True on success, false otherwise.
  */
-stock bool Server_GetIPString(char[] buffer, int size, bool public_=true)
+stock bool:Server_GetIPString(String:buffer[], size, bool:public_=true)
 {
-	int ip;
+	new ip;
 
 	if ((ip = Server_GetIP(public_)) == 0) {
 		buffer[0] = '\0';
@@ -92,9 +92,9 @@ stock bool Server_GetIPString(char[] buffer, int size, bool public_=true)
  * @noparam
  * @return			The server's port, 0 if there is no port.
  */
-stock int Server_GetPort()
+stock Server_GetPort()
 {
-	static ConVar cvHostport = null;
+	static Handle:cvHostport = INVALID_HANDLE;
 
 	if (cvHostport == INVALID_HANDLE) {
 		cvHostport = FindConVar("hostport");
@@ -104,7 +104,7 @@ stock int Server_GetPort()
 		return 0;
 	}
 
-	int port = cvHostport.IntValue;
+	new port = GetConVarInt(cvHostport);
 
 	return port;
 }
@@ -116,9 +116,9 @@ stock int Server_GetPort()
  * @param size			String buffer size
  * @return				True on success, false otherwise.
  */
-stock bool Server_GetHostName(char[] buffer, int size)
+stock bool:Server_GetHostName(String:buffer[], size)
 {
-	static ConVar cvHostname = null;
+	static Handle:cvHostname = INVALID_HANDLE;
 
 	if (cvHostname == INVALID_HANDLE) {
 		cvHostname = FindConVar("hostname");
@@ -129,7 +129,7 @@ stock bool Server_GetHostName(char[] buffer, int size)
 		return false;
 	}
 
-	cvHostname.GetString(buffer, size);
+	GetConVarString(cvHostname, buffer, size);
 
 	return true;
 }

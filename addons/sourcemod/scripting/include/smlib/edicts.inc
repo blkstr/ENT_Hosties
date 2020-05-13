@@ -13,10 +13,10 @@
  * @param name			Name of the entity you want so search.
  * @return				Edict Index or INVALID_ENT_REFERENCE if no entity was found.
  */
-stock int Edict_FindByName(const char[] name)
+stock Edict_FindByName(const String:name[])
 {
-	int maxEntities = GetMaxEntities();
-	for (int edict=0; edict < maxEntities; edict++) {
+	new maxEntities = GetMaxEntities();
+	for (new edict=0; edict < maxEntities; edict++) {
 
 		if (!IsValidEdict(edict)) {
 			continue;
@@ -39,10 +39,10 @@ stock int Edict_FindByName(const char[] name)
  * @param hammerId		Hammer editor ID
  * @return				Edict Index or INVALID_ENT_REFERENCE if no entity was found.
  */
-stock int Edict_FindByHammerId(int hammerId)
+stock Edict_FindByHammerId(hammerId)
 {
-	int maxEntities = GetMaxEntities();
-	for (int edict=0; edict < maxEntities; edict++) {
+	new maxEntities = GetMaxEntities();
+	for (new edict=0; edict < maxEntities; edict++) {
 
 		if (!IsValidEdict(edict)) {
 			continue;
@@ -64,13 +64,13 @@ stock int Edict_FindByHammerId(int hammerId)
  * @param ignoreEntity		Ignore this entity
  * @return					Edict Index or INVALID_ENT_REFERENCE if no entity was found.
  */
-stock int Edict_GetClosest(float vecOrigin_center[3], bool clientsOnly=false, int ignoreEntity=-1)
+stock Edict_GetClosest(Float:vecOrigin_center[3], bool:clientsOnly=false, ignoreEntity=-1)
 {
-	float vecOrigin_edict[3];
-	float smallestDistance = 0.0;
-	int closestEdict = INVALID_ENT_REFERENCE;
+	decl Float:vecOrigin_edict[3];
+	new Float:smallestDistance = 0.0;
+	new closestEdict = INVALID_ENT_REFERENCE;
 
-	int maxEntities;
+	new maxEntities;
 
 	if (clientsOnly) {
 		maxEntities = MaxClients;
@@ -79,7 +79,7 @@ stock int Edict_GetClosest(float vecOrigin_center[3], bool clientsOnly=false, in
 		maxEntities = GetMaxEntities();
 	}
 
-	for (int edict=1; edict <= maxEntities; edict++) {
+	for (new edict=1; edict <= maxEntities; edict++) {
 
 		if (!IsValidEdict(edict)) {
 			continue;
@@ -95,7 +95,7 @@ stock int Edict_GetClosest(float vecOrigin_center[3], bool clientsOnly=false, in
 
 		Entity_GetAbsOrigin(edict, vecOrigin_edict);
 
-		float edict_distance = GetVectorDistance(vecOrigin_center, vecOrigin_edict, true);
+		new Float:edict_distance = GetVectorDistance(vecOrigin_center, vecOrigin_edict, true);
 
 		if (edict_distance < smallestDistance || smallestDistance == 0.0) {
 			smallestDistance = edict_distance;
@@ -113,11 +113,11 @@ stock int Edict_GetClosest(float vecOrigin_center[3], bool clientsOnly=false, in
  * @param clientsOnly		True if you only want to search for clients
  * @return					The closest edict or INVALID_ENT_REFERENCE
  */
-stock int Edict_GetClosestToEdict(int edict, bool clientsOnly=false)
+stock Edict_GetClosestToEdict(edict, bool:clientsOnly=false)
 {
-	float vecOrigin[3];
+	decl Float:vecOrigin[3];
 
-	if (!HasEntProp(edict, Prop_Send, "m_vecOrigin")) {
+	if (GetEntSendPropOffs(edict, "m_vecOrigin") == -1) {
 		return INVALID_ENT_REFERENCE;
 	}
 
