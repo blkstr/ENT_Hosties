@@ -38,7 +38,7 @@
 #pragma 	semicolon 					1
 
 // Constants
-#define 	PLUGIN_VERSION				"3.1.19b"
+#define 	PLUGIN_VERSION				"3.1.20b"
 #define 	MAX_DISPLAYNAME_SIZE		64
 #define 	MAX_DATAENTRY_SIZE			5
 #define 	SERVERTAG					"ENT_Hosties,LR,LastRequest,ENT,Hosties"
@@ -47,6 +47,8 @@
 
 // Add ability to disable collisions for players
 #define	MODULE_NOBLOCK						1
+// Add ability to disable collisions for players
+#define	MODULE_ANTIHEAL						1
 // Add the last request system
 #define	MODULE_LASTREQUEST					1
 // Add a game description override
@@ -100,6 +102,9 @@ bool gShadow_Freekill_Notify;
 int gA_FreekillsOfCT[MAXPLAYERS+1];
 #endif
 
+#if (MODULE_ANTIHEAL == 1)
+#include "hosties/antiheal.sp"
+#endif
 #if (MODULE_NOBLOCK == 1)
 #include "hosties/noblock.sp"
 #endif
@@ -173,6 +178,9 @@ public void OnPluginStart()
 	
 	#if (MODULE_STARTWEAPONS == 1)
 	StartWeapons_OnPluginStart();
+	#endif
+	#if (MODULE_ANTIHEAL == 1)
+	Antiheal_OnPluginStart();
 	#endif
 	#if (MODULE_NOBLOCK == 1)
 	NoBlock_OnPluginStart();

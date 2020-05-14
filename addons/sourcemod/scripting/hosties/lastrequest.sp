@@ -89,7 +89,6 @@ int blueColor[] = {50, 75, 255, 255};
 int greyColor[] = {128, 128, 128, 255};
 int yellowColor[] = {255, 255, 0, 255};
 
-int g_Offset_Health = -1;
 int g_Offset_Armor = -1;
 int g_Offset_Clip1 = -1;
 int g_Offset_Ammo = -1;
