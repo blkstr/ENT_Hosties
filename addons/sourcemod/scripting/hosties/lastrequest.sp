@@ -2439,6 +2439,7 @@ public Action OnWeaponDrop(int client, int weapon)
 							if (IsValidEntity(GTdeagle1))
 							{
 								SetEntData(GTdeagle1, g_Offset_Clip1, 250);
+								GivePlayerItem(LR_Player_Prisoner, "weapon_knife");
 							}
 							
 							if (weapon == GTdeagle1)
@@ -2464,6 +2465,7 @@ public Action OnWeaponDrop(int client, int weapon)
 							if (IsValidEntity(GTdeagle2))
 							{
 								SetEntData(GTdeagle2, g_Offset_Clip1, 250);
+								GivePlayerItem(LR_Player_Guard, "weapon_knife");
 							}
 
 							if (weapon == GTdeagle2)
@@ -6759,13 +6761,16 @@ public Action LastRequest_PlayerSpawn(Event event, const char[] name, bool dontB
 	int client = GetClientOfUserId(GetEventInt(event, "userid"));
 	SetCorrectPlayerColor(client);
 	
-	ConVar Cvar_TeamBlock = FindConVar("mp_solid_teammates");
-	int TeamBlock = GetConVarInt(Cvar_TeamBlock);
-	
-	if (TeamBlock == 1 || TeamBlock == 2)
-		BlockEntity(client, g_Offset_CollisionGroup);
-	else
-		UnblockEntity(client, g_Offset_CollisionGroup);
+	if (g_Game == Game_CSGO)
+	{
+		ConVar Cvar_TeamBlock = FindConVar("mp_solid_teammates");
+		int TeamBlock = GetConVarInt(Cvar_TeamBlock);
+		
+		if (TeamBlock == 1 || TeamBlock == 2)
+			BlockEntity(client, g_Offset_CollisionGroup);
+		else
+			UnblockEntity(client, g_Offset_CollisionGroup);
+	}
 }
 
 void SetCorrectPlayerColor(int client)
