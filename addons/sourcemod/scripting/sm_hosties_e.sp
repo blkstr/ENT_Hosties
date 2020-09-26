@@ -38,7 +38,7 @@
 #pragma 	semicolon 					1
 
 // Constants
-#define 	PLUGIN_VERSION				"3.1.21b"
+#define 	PLUGIN_VERSION				"3.3b"
 #define 	MAX_DISPLAYNAME_SIZE		64
 #define 	MAX_DATAENTRY_SIZE			5
 #define 	SERVERTAG					"ENT_Hosties,LR,LastRequest,ENT,Hosties"
@@ -171,6 +171,13 @@ public void OnPluginStart()
 	char Temp[256];
 	GetConVarString(gH_Cvar_ChatTag, Temp, sizeof(Temp));
 	Format(ChatBanner, sizeof(ChatBanner), "%s {lime}", Temp);
+	
+	//Double team fix
+	if (StrEqual(ChatBanner, "{red}"))
+		ReplaceString(ChatBanner, sizeof(ChatBanner), "{red}", "\x02");	
+		
+	if (StrEqual(ChatBanner, "{blue}"))
+		ReplaceString(ChatBanner, sizeof(ChatBanner), "{blue}", "\x0C");	
 	
 	CreateConVar("sm_hosties_version", PLUGIN_VERSION, "SM_Hosties plugin version (unchangeable)", 0|FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY|FCVAR_DONTRECORD);
 	
@@ -408,6 +415,13 @@ public void OnAdminMenuReady(Handle h_TopMenu)
 public void OnCvarChange_ChatTag(ConVar cvar, char[] oldvalue, char[] newvalue)
 {
 	Format(ChatBanner, sizeof(ChatBanner), "%s {lime}", newvalue);
+	
+	//Double team fix
+	if (StrEqual(ChatBanner, "{red}"))
+		ReplaceString(ChatBanner, sizeof(ChatBanner), "{red}", "\x02");	
+		
+	if (StrEqual(ChatBanner, "{blue}"))
+		ReplaceString(ChatBanner, sizeof(ChatBanner), "{blue}", "\x0C");	
 }
 
 public Action Command_HostiesAdmin(int client, int args)
