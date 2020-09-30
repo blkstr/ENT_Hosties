@@ -74,7 +74,7 @@ public Action StartWeapons_Spawn(Event event, const char[] name, bool dontBroadc
 {
 	int client = GetClientOfUserId(GetEventInt(event, "userid"));
 	
-	if (gShadow_StartWeaponsOn)
+	if (gShadow_StartWeaponsOn && IsValidClient(client))
 	{
 		StripAllWeapons(client);
 		RemoveDangerZone(client);
