@@ -24,22 +24,16 @@
 #include <hosties>
 #include <steamworks>
 
-Handle gH_Cvar_GameDescriptionOn = null;
-bool gShadow_GameDescriptionOn;
-Handle gH_Cvar_GameDescriptionTag = null;
-char gShadow_GameDescriptionTag[64];
-bool g_bSTAvailable = false; // SteamTools
+ConVar 	gH_Cvar_GameDescriptionOn,
+		gH_Cvar_GameDescriptionTag;
+char 	gShadow_GameDescriptionTag[64];
+bool 	g_bSTAvailable = false; // SteamTools
 
 void GameDescription_OnPluginStart()
 {
-	gH_Cvar_GameDescriptionOn = CreateConVar("sm_hosties_override_gamedesc", "1", "Enable or disable an override of the game description (standard Counter-Strike: Source, override to Hosties/jailbreak): 0 - disable, 1 - enable", 0, true, 0.0, true, 1.0);
-	gShadow_GameDescriptionOn = true;
-	
-	gH_Cvar_GameDescriptionTag = CreateConVar("sm_hosties_gamedesc_tag", "ENT Hosties/Jailbreak v3", "Sets the game description tag.", 0);
-	Format(gShadow_GameDescriptionTag, sizeof(gShadow_GameDescriptionTag), "ENT Hosties/Jailbreak v3");
-	
-	HookConVarChange(gH_Cvar_GameDescriptionOn, GameDescription_CvarChanged);
-	HookConVarChange(gH_Cvar_GameDescriptionTag, GameDescription_CvarChanged);
+	gH_Cvar_GameDescriptionOn 	= AutoExecConfig_CreateConVar("sm_hosties_override_gamedesc", "1", "Enable or disable an override of the game description (standard Counter-Strike: Source, override to Hosties/jailbreak): 0 - disable, 1 - enable", 0, true, 0.0, true, 1.0);
+	gH_Cvar_GameDescriptionTag 	= AutoExecConfig_CreateConVar("sm_hosties_gamedesc_tag", "ENT Hosties/Jailbreak v3", "Sets the game description tag.", 0);
+	gH_Cvar_GameDescriptionTag.GetString(gShadow_GameDescriptionTag, sizeof(gShadow_GameDescriptionTag));
 	
 	// check for SteamTools
 	if (GetFeatureStatus(FeatureType_Native, "SteamWorks_SetGameDescription") == FeatureStatus_Available)
@@ -48,29 +42,11 @@ void GameDescription_OnPluginStart()
 	}
 }
 
-public void GameDescription_CvarChanged(Handle cvar, const char[] oldValue, const char[] newValue)
-{
-	if (cvar == gH_Cvar_GameDescriptionOn)
-	{
-		gShadow_GameDescriptionOn = view_as<bool>(StringToInt(newValue));
-	}
-	else if (cvar == gH_Cvar_GameDescriptionTag)
-	{
-		Format(gShadow_GameDescriptionTag, sizeof(gShadow_GameDescriptionTag), newValue);
-		
-		if (gShadow_GameDescriptionOn && g_bSTAvailable)
-		{
-			SteamWorks_SetGameDescription(gShadow_GameDescriptionTag);
-		}
-	}
-}
-
 void GameDesc_OnConfigsExecuted()
 {
-	gShadow_GameDescriptionOn = GetConVarBool(gH_Cvar_GameDescriptionOn);
-	GetConVarString(gH_Cvar_GameDescriptionTag, gShadow_GameDescriptionTag, sizeof(gShadow_GameDescriptionTag));
+	gH_Cvar_GameDescriptionTag.GetString(gShadow_GameDescriptionTag, sizeof(gShadow_GameDescriptionTag));
 	
-	if (gShadow_GameDescriptionOn && g_bSTAvailable)
+	if (gH_Cvar_GameDescriptionOn.BoolValue && g_bSTAvailable)
 	{
 		SteamWorks_SetGameDescription(gShadow_GameDescriptionTag);
 	}

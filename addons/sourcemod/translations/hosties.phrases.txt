@@ -52,6 +52,31 @@
 	{
 		"en"		"Race"
 	}
+	"Shield Fight"
+	{
+		"en"		"Shield Fight"
+	}
+	"Fist Fight"
+	{
+		"en"		"Fist Fight"
+	}
+	"Juggernout Battle"
+	{
+		"en"		"Juggernout Battle"
+	}
+	"Only Headshot"
+	{
+		"en"		"Only Headshot"
+	}
+	"Grenade Fight"
+	{
+		"en"		"Grenade Fight"
+	}
+	"LR Countdown"
+	{
+		"#format"	"{1:d}"
+		"en"		"LR begins in {1}..."
+	}
 	"LR Grace TimeBlock"
 	{
 		"en"		"You can't start LR while players can join to the game."
@@ -233,75 +258,15 @@
 		"#format"	"{1:N}"
 		"en"		"{1} declined your LR request or took to long to answer it."
 	}
-	"LR KF Start"
-	{
-		"#format"	"{1:N},{2:N}"
-		"en"		"{1} chose to have Knife Fight with {2}."
-	}
-	"LR S4S Start"
-	{
-		"#format"	"{1:N},{2:N}"
-		"en"		"{1} chose to have Shot4Shot with {2}."
-	}
-	"LR GT Start"
-	{
-		"#format"	"{1:N},{2:N}"
-		"en"		"{1} chose to have Gun Toss with {2}."
-	}
-	"LR CF Start"
-	{
-		"#format"	"{1:N},{2:N}"
-		"en"		"{1} chose to have Chicken Fight with {2}."
-	}
-	"LR HP Start"
-	{
-		"#format"	"{1:N},{2:N}"
-		"en"		"{1} chose to have Hot Potato with {2}."
-	}
-	"LR DB Start"
-	{
-		"#format"	"{1:N},{2:N}"
-		"en"		"{1} chose to have Dodgeball with {2}."
-	}
-	"LR NS Start"
-	{
-		"#format"	"{1:N},{2:N}"
-		"en"		"{1} chose to have a No Scope Battle with {2}."
-	}
-	"LR RPS Start"
-	{
-		"#format"	"{1:N},{2:N}"
-		"en"		"{1} chose to play Rock Paper Scissors with {2}."
-	}
-	"LR Mag4Mag Start"
-	{
-		"#format"	"{1:N},{2:N}"
-		"en"		"{1} chose to have Mag4Mag with {2}."
-	}
-	"LR RR Start"
-	{
-		"#format"	"{1:N},{2:N}"
-		"en"		"{1} chose to play Russian Roulette with {2}."
-	}
 	"LR Has Chosen to Rebel!"
 	{
 		"#format"	"{1:N}"
 		"en"		"{1} has chosen to rebel!"
 	}
-	"Start Jump Contest"
+	"Start Selected Game"
 	{
-		"#format"	"{1:N},{2:N}"
-		"en"		"{1} selected a Most Jumps Contest with {2}."
-	}
-	"Start Brink of Death"
-	{
-		"#format"	"{1:N},{2:N}"
-		"en"		"{1} selected a To The Brink of Death Contest with {2}."
-	}
-	"Start Farthest Jump"
-	{
-		"#format"	"{1:N},{2:N}"
-		"en"		"{1} selected to have a Farthest Jumping competition with {2}."
+		"#format"	"{1:N},{2:s},{3:N}"
+		"en"		"{1} selected {2} with {3}."
 	}
 	"No Rebels ATM"
 	{
@@ -422,6 +387,11 @@
 	{
 		"#format"	"{1:N}"
 		"en"		"{1} won the Race!"
+	}
+	"LR Won"
+	{
+		"#format"	"{1:N},{2:s}"
+		"en"		"{1} won the {2}!"
 	}
 	"Won Jump Contest"
 	{
@@ -659,6 +629,19 @@
 		"#format"	"{1:N}"
 		"en"		"{1} picked the Race LR. Watch for starting & ending points!"
 	}
+	"Race Aborted"
+	{
+		"#format"	"{1:N}"
+		"en"		"{1} aborted the Race. New LR can be started after 10 seconds!"
+	}
+	"Race CoolDown"
+	{
+		"en"		"You aborted the Race! You can start a new LR after a 10-seconds cooldown."
+	}
+	"Race CoolDown Done"
+	{
+		"en"		"You can start a new LR from now."
+	}
 	"Respawned Target"
 	{
 		"#format"	"{1:s}"
@@ -698,5 +681,9 @@
 	"GT Throw Warning"
 	{
 		"en"		"Your opponent threw the weapon. You have 10 seconds to do it."
+	}
+	"LR Block EventDay"
+	{
+		"en"		"LastRequest is currently blocked due to an EventDay."
 	}
 }

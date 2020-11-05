@@ -24,15 +24,11 @@
 #include <hosties>
 
 int g_Offset_CollisionGroup = -1;
-Handle gH_Cvar_NoBlock = null;
-bool gShadow_NoBlock;
+ConVar gH_Cvar_NoBlock;
 
 void NoBlock_OnPluginStart()
 {
-	gH_Cvar_NoBlock = CreateConVar("sm_hosties_noblock_enable", "1", "Enable or disable integrated removing of player vs player collisions (noblock): 0 - disable, 1 - enable", 0, true, 0.0, true, 1.0);
-	gShadow_NoBlock = true;
-	
-	HookConVarChange(gH_Cvar_NoBlock, NoBlock_CvarChanged);
+	gH_Cvar_NoBlock = AutoExecConfig_CreateConVar("sm_hosties_noblock_enable", "1", "Enable or disable integrated removing of player vs player collisions (noblock): 0 - disable, 1 - enable", 0, true, 0.0, true, 1.0);
 	
 	g_Offset_CollisionGroup = FindSendPropInfo("CBaseEntity", "m_CollisionGroup");
 	if (g_Offset_CollisionGroup == -1)
@@ -43,24 +39,11 @@ void NoBlock_OnPluginStart()
 	HookEvent("player_spawn", NoBlock_PlayerSpawn);
 }
 
-void NoBlock_OnConfigsExecuted()
-{
-	gShadow_NoBlock = GetConVarBool(gH_Cvar_NoBlock);
-}
-
-public void NoBlock_CvarChanged(Handle cvar, const char[] oldValue, const char[] newValue)
-{
-	if (cvar == gH_Cvar_NoBlock)
-	{
-		gShadow_NoBlock = view_as<bool>(StringToInt(newValue));
-	}
-}
-
 public Action NoBlock_PlayerSpawn(Event event, const char[] name, bool dontBroadcast)
 {
 	int client = GetClientOfUserId(GetEventInt(event, "userid"));
 	
-	if (gShadow_NoBlock)
+	if (gH_Cvar_NoBlock.BoolValue)
 	{
 		UnblockEntity(client, g_Offset_CollisionGroup);
 	}

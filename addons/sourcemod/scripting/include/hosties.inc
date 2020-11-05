@@ -4,10 +4,9 @@
  *
  * This file is part of the SM Hosties project.
  *
- * This program is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) 
- * any later version.
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, version 3.0, as published by the
+ * Free Software Foundation.
  * 
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -65,20 +64,6 @@ stock void ShowOverlayToAll(const char[] overlaypath)
 		if (IsClientInGame(x) && !IsFakeClient(x))
 		{
 			ShowOverlayToClient(x, overlaypath);
-		}
-	}
-}
-
-stock void StripAllWeapons(int client)
-{
-	int iWeaponIndex = INVALID_WEAPON;
-	for (int i = CS_SLOT_PRIMARY; i < CS_SLOT_GRENADE+1; i++)
-	{
-		iWeaponIndex = INVALID_WEAPON;
-		while ((iWeaponIndex = GetPlayerWeaponSlot(client, i)) != INVALID_WEAPON)
-		{
-			RemovePlayerItem(client, iWeaponIndex);
-			AcceptEntityInput(iWeaponIndex, "Kill");
 		}
 	}
 }

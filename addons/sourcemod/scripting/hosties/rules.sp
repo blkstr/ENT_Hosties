@@ -24,34 +24,24 @@
 #include <hosties>
 #include <multicolors>
 
-Handle gH_Cvar_RulesOn = INVALID_HANDLE;
-bool gShadow_RulesOn;
-Handle gH_Cvar_Announce_Rules = INVALID_HANDLE;
-bool gShadow_Announce_Rules;
-Handle gH_Cvar_Rules_Mode = INVALID_HANDLE;
-int gShadow_Rules_Mode = 1;
-Handle gH_Cvar_Rules_Website = INVALID_HANDLE;
+ConVar 	gH_Cvar_RulesOn,
+		gH_Cvar_Announce_Rules,
+		gH_Cvar_Rules_Mode,
+		gH_Cvar_Rules_Website;
+
 char gShadow_Rules_Website[192];
 Handle gH_DArray_Rules = INVALID_HANDLE;
 
 void Rules_OnPluginStart()
 {
-	gH_Cvar_RulesOn = CreateConVar("sm_hosties_rules_enable", "1", "Enable or disable rules showing up at !rules command (if you need to disable the command registration on plugin startup, add a file in your sourcemod/configs/ named hosties_rulesdisable.ini with any content): 0 - disable, 1 - enable", 0, true, 0.0, true, 1.0);
-	gShadow_RulesOn = true;
+	gH_Cvar_RulesOn = AutoExecConfig_CreateConVar("sm_hosties_rules_enable", "1", "Enable or disable rules showing up at !rules command (if you need to disable the command registration on plugin startup, add a file in your sourcemod/configs/ named hosties_rulesdisable.ini with any content): 0 - disable, 1 - enable", 0, true, 0.0, true, 1.0);
 	
-	gH_Cvar_Announce_Rules = CreateConVar("sm_hosties_announce_rules", "1", "Enable or disable rule announcements in the beginning of every round ('please follow the rules listed in !rules'): 0 - disable, 1 - enable", 0, true, 0.0, true, 1.0);
-	gShadow_Announce_Rules = true;
+	gH_Cvar_Announce_Rules = AutoExecConfig_CreateConVar("sm_hosties_announce_rules", "1", "Enable or disable rule announcements in the beginning of every round ('please follow the rules listed in !rules'): 0 - disable, 1 - enable", 0, true, 0.0, true, 1.0);
 	
-	gH_Cvar_Rules_Mode = CreateConVar("sm_hosties_rules_mode", "1", "1 - Panel Mode, 2 - Website", 0, true, 1.0, true, 2.0);
-	gShadow_Rules_Mode = 2;
+	gH_Cvar_Rules_Mode = AutoExecConfig_CreateConVar("sm_hosties_rules_mode", "1", "1 - Panel Mode, 2 - Website", 0, true, 1.0, true, 2.0);
 	
-	gH_Cvar_Rules_Website = CreateConVar("sm_hosties_rules_website", "http://www.youtube.com/watch?v=oHg5SJYRHA0", "The website for the rules page.", 0);
-	Format(gShadow_Rules_Website, sizeof(gShadow_Rules_Website), "http://www.youtube.com/watch?v=oHg5SJYRHA0");
-	
-	HookConVarChange(gH_Cvar_RulesOn, Rules_CvarChanged);
-	HookConVarChange(gH_Cvar_Announce_Rules, Rules_CvarChanged);
-	HookConVarChange(gH_Cvar_Rules_Mode, Rules_CvarChanged);
-	HookConVarChange(gH_Cvar_Rules_Website, Rules_CvarChanged);
+	gH_Cvar_Rules_Website = AutoExecConfig_CreateConVar("sm_hosties_rules_website", "http://www.youtube.com/watch?v=oHg5SJYRHA0", "The website for the rules page.", 0);
+	gH_Cvar_Rules_Website.GetString(gShadow_Rules_Website, sizeof(gShadow_Rules_Website));
 	
 	HookEvent("round_start", Rules_RoundStart);
 	
@@ -63,24 +53,20 @@ void Rules_OnPluginStart()
 	{
 		RegConsoleCmd("sm_rules", Command_Rules);
 	}
-	
 	gH_DArray_Rules = CreateArray(255);
 }
 
 public Action Rules_RoundStart(Event event, const char[] name, bool dontBroadcast)
 {
-	if (gShadow_Announce_Rules)
+	if (gH_Cvar_Announce_Rules.BoolValue)
 	{
-		CPrintToChatAll("%s %t", ChatBanner, "Please Follow Rules");
+		LOOP_CLIENTS(TargetForLang, CLIENTFILTER_NOBOTS|CLIENTFILTER_INGAMEAUTH) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Please Follow Rules");
 	}
 }
 
 void Rules_OnConfigsExecuted()
 {
-	gShadow_RulesOn = GetConVarBool(gH_Cvar_RulesOn);
-	gShadow_Announce_Rules = GetConVarBool(gH_Cvar_Announce_Rules);
-	gShadow_Rules_Mode = GetConVarInt(gH_Cvar_Rules_Mode);
-	GetConVarString(gH_Cvar_Rules_Website, gShadow_Rules_Website, sizeof(gShadow_Rules_Website));
+	gH_Cvar_Rules_Website.GetString(gShadow_Rules_Website, sizeof(gShadow_Rules_Website));
 	
 	ParseTheRulesFile();
 }
@@ -104,31 +90,11 @@ void ParseTheRulesFile()
 	}
 }
 
-public void Rules_CvarChanged(Handle cvar, const char[] oldValue, const char[] newValue)
-{
-	if (cvar == gH_Cvar_RulesOn)
-	{
-		gShadow_RulesOn = view_as<bool>(StringToInt(newValue));
-	}
-	else if (cvar == gH_Cvar_Announce_Rules)
-	{
-		gShadow_Announce_Rules = view_as<bool>(StringToInt(newValue));
-	}
-	else if (cvar == gH_Cvar_Rules_Mode)
-	{
-		gShadow_Rules_Mode = StringToInt(newValue);
-	}
-	else if (cvar == gH_Cvar_Rules_Website)
-	{
-		Format(gShadow_Rules_Website, sizeof(gShadow_Rules_Website), newValue);
-	}
-}
-
 public Action Command_Rules(int client, int args)
 {
-	if (gShadow_RulesOn)
+	if (gH_Cvar_RulesOn.BoolValue)
 	{
-		switch (gShadow_Rules_Mode)
+		switch (gH_Cvar_Rules_Mode.IntValue)
 		{
 			case 1:
 			{

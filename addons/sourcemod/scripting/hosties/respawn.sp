@@ -37,7 +37,7 @@ public Action Command_Respawn(int client, int args)
 {
 	if (args < 1)
 	{
-		CReplyToCommand(client, "%s Usage: sm_hrespawn <#userid|name>", ChatBanner);
+		CReplyToCommand(client, "%s Usage: sm_hrespawn <#userid|name>", gShadow_Hosties_ChatBanner);
 		return Plugin_Handled;
 	}
 
@@ -67,7 +67,7 @@ public Action Command_Respawn(int client, int args)
 		PerformRespawn(client, target_list[i]);
 	}
 	
-	CShowActivity(client, "%s %t", ChatBanner, "Respawned Target", target_name);
+	CShowActivity(client, "%s %t", gShadow_Hosties_ChatBanner, "Respawned Target", target_name);
 	
 	return Plugin_Handled;
 }
@@ -91,7 +91,7 @@ void PerformRespawn(int client, int target)
 	if (g_DeathLocation[target][0] == 0.0 && g_DeathLocation[target][1] == 0.0 && g_DeathLocation[target][2] == 0.0)
 	{
 		// no death location was available
-		CReplyToCommand(client, "%s %t", ChatBanner, "Respawn Data Unavailable", target);
+		CReplyToCommand(client, "%s %t", gShadow_Hosties_ChatBanner, "Respawn Data Unavailable", target);
 	}
 	else
 	{
@@ -109,12 +109,12 @@ void DisplayRespawnMenu(int client)
 	SetMenuTitle(menu, title);
 	SetMenuExitBackButton(menu, true);
 	
-	if (IsValidClient(client))
+	if (EMP_IsValidClient(client))
 	{
 		int targets_added = AddTargetsToMenu2(menu, client, COMMAND_FILTER_DEAD|COMMAND_FILTER_NO_BOTS);
 		if (targets_added == 0)
 		{
-			CReplyToCommand(client, "%s %t", ChatBanner, "Target is not in game");
+			CReplyToCommand(client, "%s %t", gShadow_Hosties_ChatBanner, "Target is not in game");
 			if (gH_TopMenu != INVALID_HANDLE)
 			{
 				DisplayTopMenu(gH_TopMenu, client, TopMenuPosition_LastCategory);
@@ -152,7 +152,7 @@ public int MenuHandler_Respawn(Menu menu, MenuAction action, int param1, int par
 {
 	if (action == MenuAction_End)
 	{
-		CloseHandle(menu);
+		EMP_FreeHandle(menu);
 	}
 	else if (action == MenuAction_Cancel)
 	{
@@ -171,22 +171,22 @@ public int MenuHandler_Respawn(Menu menu, MenuAction action, int param1, int par
 
 		if ((target = GetClientOfUserId(userid)) == 0)
 		{
-			CPrintToChat(param1, "%s %t", ChatBanner, "Player no longer available");
+			CPrintToChat(param1, "%s %t", gShadow_Hosties_ChatBanner, "Player no longer available");
 		}
 		else if (!CanUserTarget(param1, target))
 		{
-			CPrintToChat(param1, "%s %t", ChatBanner, "Unable to target");
+			CPrintToChat(param1, "%s %t", gShadow_Hosties_ChatBanner, "Unable to target");
 		}
 		else if (IsPlayerAlive(target))
 		{
-			CReplyToCommand(param1, "%s %t", ChatBanner, "Player Alive");
+			CReplyToCommand(param1, "%s %t", gShadow_Hosties_ChatBanner, "Player Alive");
 		}
 		else
 		{
 			char name[32];
 			GetClientName(target, name, sizeof(name));
 			PerformRespawn(param1, target);
-			CShowActivity(param1, "%s %t", ChatBanner, "Respawned Target", name);
+			CShowActivity(param1, "%s %t", gShadow_Hosties_ChatBanner, "Respawned Target", name);
 		}
 		
 		DisplayRespawnMenu(param1);

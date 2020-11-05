@@ -25,31 +25,31 @@
 
 #define FILE_SEPARATOR_LENGTH 3
 
-Handle gH_Cvar_T_Material = INVALID_HANDLE;
-Handle gH_Cvar_T_Texture = INVALID_HANDLE;
-Handle gH_Cvar_CT_Material = INVALID_HANDLE;
-Handle gH_Cvar_CT_Texture = INVALID_HANDLE;
+Handle 	gH_Cvar_T_Material = INVALID_HANDLE,
+		gH_Cvar_T_Texture = INVALID_HANDLE,
+		gH_Cvar_CT_Material = INVALID_HANDLE,
+		gH_Cvar_CT_Texture = INVALID_HANDLE;
 
-char gShadow_T_Material[PLATFORM_MAX_PATH];
-char gShadow_T_Texture[PLATFORM_MAX_PATH];
-char gShadow_CT_Material[PLATFORM_MAX_PATH];
-char gShadow_CT_Texture[PLATFORM_MAX_PATH];
+char 	gShadow_T_Material[PLATFORM_MAX_PATH],
+		gShadow_T_Texture[PLATFORM_MAX_PATH],
+		gShadow_CT_Material[PLATFORM_MAX_PATH],
+		gShadow_CT_Texture[PLATFORM_MAX_PATH];
 
 void TeamOverlays_OnPluginStart()
 {
 	HookEvent("round_start", TeamOverlays_RoundStart);
 	HookEvent("round_end", TeamOverlays_RoundEnd);
 	
-	gH_Cvar_T_Material = CreateConVar("sm_hosties_roundend_overlay_t_vmt", "overlays/sm_hosties/prisoners_win.vmt", "Terrorist overlay material file", 0);
+	gH_Cvar_T_Material = AutoExecConfig_CreateConVar("sm_hosties_roundend_overlay_t_vmt", "overlays/sm_hosties/prisoners_win.vmt", "Terrorist overlay material file", 0);
 	Format(gShadow_T_Material, PLATFORM_MAX_PATH, "overlays/sm_hosties/prisoners_win.vmt");
 	
-	gH_Cvar_T_Texture = CreateConVar("sm_hosties_roundend_overlay_t", "overlays/sm_hosties/prisoners_win.vtf", "Terrorist overlay texture file", 0);
+	gH_Cvar_T_Texture = AutoExecConfig_CreateConVar("sm_hosties_roundend_overlay_t", "overlays/sm_hosties/prisoners_win.vtf", "Terrorist overlay texture file", 0);
 	Format(gShadow_T_Texture, PLATFORM_MAX_PATH, "overlays/sm_hosties/prisoners_win.vtf");
 	
-	gH_Cvar_CT_Material = CreateConVar("sm_hosties_roundend_overlay_ct_vmt", "overlays/sm_hosties/prisonguards_win.vmt", "Counter-Terrorist overlay material file", 0);
+	gH_Cvar_CT_Material = AutoExecConfig_CreateConVar("sm_hosties_roundend_overlay_ct_vmt", "overlays/sm_hosties/prisonguards_win.vmt", "Counter-Terrorist overlay material file", 0);
 	Format(gShadow_CT_Material, PLATFORM_MAX_PATH, "overlays/sm_hosties/prisonguards_win.vmt");
 	
-	gH_Cvar_CT_Texture = CreateConVar("sm_hosties_roundend_overlay_ct", "overlays/sm_hosties/prisonguards_win.vtf", "Counter-Terrorist overlay texture file", 0);
+	gH_Cvar_CT_Texture = AutoExecConfig_CreateConVar("sm_hosties_roundend_overlay_ct", "overlays/sm_hosties/prisonguards_win.vtf", "Counter-Terrorist overlay texture file", 0);
 	Format(gShadow_CT_Texture, PLATFORM_MAX_PATH, "overlays/sm_hosties/prisonguards_win.vtf");
 	
 	HookConVarChange(gH_Cvar_T_Material, TeamOverlay_CvarChanged);

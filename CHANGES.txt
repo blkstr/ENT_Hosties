@@ -1,25 +1,7 @@
----2020.09.26
-* Fixed Chat-Processor bug
-* Waiting for feedbacks about bugs
-
----2020.05.14
-* Added Revolver to Shot4Shot
-* Added Revolver to Mag4Mag
-* Added Turkish Translation ByDexterTR
-* Added LR Healing AntiCheat with 2 modes
-* Fixed Portugal Translation
-* Fixed Brazilian Translation
-* Fixed Edict Error
-* Fixed Respawn Menu
-* Fixed StripZeus for 3rd party LR's
-* Fixed sv_tags in Hosties
-* Fixed Dodgeball Collision
-* Fixed AntiCheat
-
 ---2020.05.03
 Added fist and knife support at the same time
 Fixed Multi-knife restore
-Fixed log spammers
+Fixed Error log spammers
 Fixed Russian translation
 
 ---2020.05.01

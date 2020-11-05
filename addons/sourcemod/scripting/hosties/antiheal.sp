@@ -24,12 +24,9 @@
 #include <hosties>
 #include <lastrequest>
 
-int g_Offset_Health = -1;
+int 	g_Offset_Health 	= -1;
 
-ConVar gH_Cvar_AntiHeal_Enabled;
-ConVar gH_Cvar_AntiHeal_Punishment;
-int gShadow_Client_Health[MAXPLAYERS+1];
-int gShadow_Clinet_Partner[MAXPLAYERS+1];
+ConVar 	gH_Cvar_AntiHeal_Enabled;
 
 void Antiheal_OnPluginStart()
 {
@@ -39,58 +36,62 @@ void Antiheal_OnPluginStart()
 		SetFailState("Unable to find offset for health.");
 	}
 
-	gH_Cvar_AntiHeal_Enabled = CreateConVar("sm_hosties_antiheal_enabled", "1", "Enable or disable heal anticheat in lr:", 0, true, 0.0, true, 1.0);
-	gH_Cvar_AntiHeal_Punishment = CreateConVar("sm_hosties_antiheal_mode", "0", "Punishment mode (0 - Block heal, 1 - Slay and abort)", 0, true, 0.0, true, 1.0);
+	gH_Cvar_AntiHeal_Enabled		= 	AutoExecConfig_CreateConVar("sm_hosties_antiheal_enabled", "1", "Enable or disable heal anticheat in lr:", 0, true, 0.0, true, 1.0);
 }
 
 public void OnStartLR(int PrisonerIndex, int GuardIndex)
 {
 	if (gH_Cvar_AntiHeal_Enabled.BoolValue)
 	{
-		if (IsValidClient(PrisonerIndex))
+		if (EMP_IsValidClient(PrisonerIndex, false, false))
 		{
-			gShadow_Client_Health[PrisonerIndex] = 100;
-			gShadow_Clinet_Partner[PrisonerIndex] = GuardIndex;
-			CreateTimer(0.1, Timer_AntiHeal, PrisonerIndex, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
+			SetEntProp(PrisonerIndex, Prop_Data, "m_iMaxHealth", 100);
+			SDKHook(PrisonerIndex, SDKHook_OnTakeDamage, HealBlock);
 		}
 		
-		if (IsValidClient(GuardIndex))
+		if (EMP_IsValidClient(GuardIndex, false, false))
 		{
-			gShadow_Client_Health[GuardIndex] = 100;
-			gShadow_Clinet_Partner[GuardIndex] = PrisonerIndex;
-			CreateTimer(0.1, Timer_AntiHeal, GuardIndex, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
+			SetEntProp(PrisonerIndex, Prop_Data, "m_iMaxHealth", 100);
+			SDKHook(GuardIndex, SDKHook_OnTakeDamage, HealBlock);
 		}
 	}
 }
 
-public Action Timer_AntiHeal(Handle timer, int client)
+public void OnStopLR(int PrisonerIndex, int GuardIndex)
 {
-	if (IsValidClient(client))
+	if (gH_Cvar_AntiHeal_Enabled.BoolValue)
 	{
-		if (!IsClientInLastRequest(client) && IsPlayerAlive(client))
-			return Plugin_Stop;
-		else if (!IsPlayerAlive(client))
-			return Plugin_Stop;
-		else if (!gH_Cvar_AntiHeal_Enabled.BoolValue)
-			return Plugin_Stop;
+		if (EMP_IsValidClient(PrisonerIndex, false, true))
+		{
+			SDKUnhook(PrisonerIndex, SDKHook_OnTakeDamage, HealBlock);
 			
-		if (gShadow_Client_Health[client] > GetEntData(client, g_Offset_Health))
-		{
-			gShadow_Client_Health[client] = GetEntData(client, g_Offset_Health);
-		}
-		else if (gShadow_Client_Health[client] < GetEntData(client, g_Offset_Health))
-		{
-			if (gH_Cvar_AntiHeal_Punishment.IntValue == 0)
-				SetEntData(client, g_Offset_Health, gShadow_Client_Health[client]);
-			else if (gH_Cvar_AntiHeal_Punishment.IntValue == 1)
+			if (IsPlayerAlive(PrisonerIndex))
 			{
-				KillAndReward(client, gShadow_Clinet_Partner[client]);
-				CPrintToChatAll("%s %t", ChatBanner, "LR Cheating Abort", client);
-				return Plugin_Stop;
+				SetEntProp(PrisonerIndex, Prop_Data, "m_iMaxHealth", 100);
+				SetEntData(PrisonerIndex, g_Offset_Health, 100, 4, true);
+			}
+		}
+		
+		if (EMP_IsValidClient(GuardIndex, false, true))
+		{
+			SDKUnhook(GuardIndex, SDKHook_OnTakeDamage, HealBlock);
+			
+			if (IsPlayerAlive(GuardIndex))
+			{
+				SetEntProp(GuardIndex, Prop_Data, "m_iMaxHealth", 100);
+				SetEntData(GuardIndex, g_Offset_Health, 100, 4, true);
 			}
 		}
 	}
+}
+
+public Action HealBlock(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3])
+{
+	if (EMP_IsValidClient(victim, false, false) && gH_Cvar_AntiHeal_Enabled.BoolValue && IsClientInLastRequest(victim))
+	{
+		int g_iNewHP = GetEntData(victim, g_Offset_Health);
+		SetEntProp(victim, Prop_Data, "m_iMaxHealth", g_iNewHP);
+	}
 	else
-		return Plugin_Stop;
-	return Plugin_Continue;
+		SDKUnhook(victim, SDKHook_OnTakeDamage, HealBlock);
 }

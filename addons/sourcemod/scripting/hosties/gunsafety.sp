@@ -24,18 +24,14 @@
 #include <hosties>
 #include <multicolors>
 
-Handle gH_Cvar_Strip_On_Slay = null;
-Handle gH_Cvar_Strip_On_Kick = null;
-Handle gH_Cvar_Strip_On_Ban = null;
-
-bool gShadow_Strip_On_Slay = false;
-bool gShadow_Strip_On_Kick = false;
-bool gShadow_Strip_On_Ban = false;
+ConVar 	gH_Cvar_Strip_On_Slay,
+		gH_Cvar_Strip_On_Kick,
+		gH_Cvar_Strip_On_Ban;
 
 // for ban.sp menu mimic
-int g_BanTarget[MAXPLAYERS+1];
-int g_BanTargetUserId[MAXPLAYERS+1];
-int g_BanTime[MAXPLAYERS+1];
+int 	g_BanTarget[MAXPLAYERS+1],
+		g_BanTargetUserId[MAXPLAYERS+1],
+		g_BanTime[MAXPLAYERS+1];
 
 void GunSafety_OnPluginStart()
 {
@@ -43,16 +39,9 @@ void GunSafety_OnPluginStart()
 	LoadTranslations("plugin.basecommands");
 	LoadTranslations("playercommands.phrases");
 
-	gH_Cvar_Strip_On_Slay = CreateConVar("sm_hosties_strip_onslay", "1", "Enable or disable the stripping of weapons from anyone who is slain.", 0, true, 0.0, true, 1.0);
-	gShadow_Strip_On_Slay = true;
-	gH_Cvar_Strip_On_Kick = CreateConVar("sm_hosties_strip_onkick", "1", "Enable or disable the stripping of weapons from anyone who is kicked.", 0, true, 0.0, true, 1.0);
-	gShadow_Strip_On_Kick = true;
-	gH_Cvar_Strip_On_Ban = CreateConVar("sm_hosties_strip_onban", "1", "Enable or disable the stripping of weapons from anyone who is banned.", 0, true, 0.0, true, 1.0);
-	gShadow_Strip_On_Ban = true;
-	
-	HookConVarChange(gH_Cvar_Strip_On_Slay, GunSafety_CvarChanged);
-	HookConVarChange(gH_Cvar_Strip_On_Kick, GunSafety_CvarChanged);
-	HookConVarChange(gH_Cvar_Strip_On_Ban, GunSafety_CvarChanged);
+	gH_Cvar_Strip_On_Slay 	= AutoExecConfig_CreateConVar("sm_hosties_strip_onslay", "1", "Enable or disable the stripping of weapons from anyone who is slain.", 0, true, 0.0, true, 1.0);
+	gH_Cvar_Strip_On_Kick 	= AutoExecConfig_CreateConVar("sm_hosties_strip_onkick", "1", "Enable or disable the stripping of weapons from anyone who is kicked.", 0, true, 0.0, true, 1.0);
+	gH_Cvar_Strip_On_Ban 	= AutoExecConfig_CreateConVar("sm_hosties_strip_onban", "1", "Enable or disable the stripping of weapons from anyone who is banned.", 0, true, 0.0, true, 1.0);
 	
 	AddCommandListener(Strip_Player_Weapons_Intercept, "sm_slay");
 	AddCommandListener(Strip_Player_Weapons_Intercept, "sm_kick");
@@ -67,15 +56,15 @@ public Action Strip_Player_Weapons_Intercept(int client, const char[] command, i
 		return Plugin_Continue;
 	}
 	
+	AdminFlag flag;
 	// check for proper admin permissions and cvars
 	if (StrEqual(command, "sm_slay", false))
 	{
-		if (!gShadow_Strip_On_Slay)
+		if (!gH_Cvar_Strip_On_Slay.BoolValue)
 		{
 			return Plugin_Continue;
 		}
 	
-		AdminFlag flag;
 		if (!GetCommandOverride(command, Override_Command, view_as<int>(flag)))
 		{
 			flag = Admin_Slay;
@@ -88,12 +77,11 @@ public Action Strip_Player_Weapons_Intercept(int client, const char[] command, i
 	}
 	else if (StrEqual(command, "sm_kick", false))
 	{
-		if (!gShadow_Strip_On_Kick)
+		if (!gH_Cvar_Strip_On_Kick.BoolValue)
 		{
 			return Plugin_Continue;
 		}
 		
-		AdminFlag flag;
 		if (!GetCommandOverride(command, Override_Command, view_as<int>(flag)))
 		{
 			flag = Admin_Kick;
@@ -106,12 +94,11 @@ public Action Strip_Player_Weapons_Intercept(int client, const char[] command, i
 	}
 	else if (StrEqual(command, "sm_ban", false))
 	{
-		if (!gShadow_Strip_On_Ban)
+		if (!gH_Cvar_Strip_On_Ban.BoolValue)
 		{
 			return Plugin_Continue;
 		}
 		
-		AdminFlag flag;
 		if (!GetCommandOverride(command, Override_Command, view_as<int>(flag)))
 		{
 			flag = Admin_Ban;
@@ -147,26 +134,10 @@ public Action Strip_Player_Weapons_Intercept(int client, const char[] command, i
 
 	for (int i = 0; i < target_count; i++)
 	{
-		StripAllWeapons(target_list[i]);
+		Client_RemoveAllWeapons(target_list[i]);
 	}
 	
 	return Plugin_Continue;
-}
-
-public void GunSafety_CvarChanged(Handle cvar, const char[] oldValue, const char[] newValue)
-{
-	if (cvar == gH_Cvar_Strip_On_Slay)
-	{
-		gShadow_Strip_On_Slay = view_as<bool>(StringToInt(newValue));
-	}
-	else if (cvar == gH_Cvar_Strip_On_Kick)
-	{
-		gShadow_Strip_On_Kick = view_as<bool>(StringToInt(newValue));
-	}
-	else if (cvar == gH_Cvar_Strip_On_Ban)
-	{
-		gShadow_Strip_On_Ban = view_as<bool>(StringToInt(newValue));
-	}
 }
 
 void GunSafety_Menus(Handle h_TopMenu, TopMenuObject obj_Hosties)
@@ -180,7 +151,7 @@ void GunSafety_Menus(Handle h_TopMenu, TopMenuObject obj_Hosties)
 void PerformSlay(int client, int target)
 {
 	LogAction(client, target, "\"%L\" slayed \"%L\"", client, target);
-	StripAllWeapons(target);
+	Client_RemoveAllWeapons(target);
 	ForcePlayerSuicide(target);
 }
 
@@ -219,7 +190,7 @@ public int MenuHandler_Slay(Handle menu, MenuAction action, int param1, int para
 {
 	if (action == MenuAction_End)
 	{
-		CloseHandle(menu);
+		EMP_FreeHandle(menu);
 	}
 	else if (action == MenuAction_Cancel)
 	{
@@ -238,22 +209,22 @@ public int MenuHandler_Slay(Handle menu, MenuAction action, int param1, int para
 
 		if ((target = GetClientOfUserId(userid)) == 0)
 		{
-			CPrintToChat(param1, "%s %t", ChatBanner, "Player no longer available");
+			CPrintToChat(param1, "%s %t", gShadow_Hosties_ChatBanner, "Player no longer available");
 		}
 		else if (!CanUserTarget(param1, target))
 		{
-			CPrintToChat(param1, "%s %t", ChatBanner, "Unable to target");
+			CPrintToChat(param1, "%s %t", gShadow_Hosties_ChatBanner, "Unable to target");
 		}
 		else if (!IsPlayerAlive(target))
 		{
-			CReplyToCommand(param1, "%s %t", ChatBanner, "Player has since died");
+			CReplyToCommand(param1, "%s %t", gShadow_Hosties_ChatBanner, "Player has since died");
 		}
 		else
 		{
 			char name[32];
 			GetClientName(target, name, sizeof(name));
 			PerformSlay(param1, target);
-			CShowActivity2(param1, ChatBanner, "%t", "Slayed target", "_s", name);
+			CShowActivity2(param1, gShadow_Hosties_ChatBanner, "%t", "Slayed target", "_s", name);
 		}
 		
 		DisplaySlayMenu(param1);
@@ -265,7 +236,7 @@ void PerformKick(int client, int target, const char[] reason)
 {
 	LogAction(client, target, "\"%L\" kicked \"%L\" (reason \"%s\")", client, target, reason);
 
-	StripAllWeapons(target);
+	Client_RemoveAllWeapons(target);
 	
 	if (reason[0] == '\0')
 	{
@@ -312,7 +283,7 @@ public int MenuHandler_Kick(Handle menu, MenuAction action, int param1, int para
 {
 	if (action == MenuAction_End)
 	{
-		CloseHandle(menu);
+		EMP_FreeHandle(menu);
 	}
 	else if (action == MenuAction_Cancel)
 	{
@@ -331,17 +302,17 @@ public int MenuHandler_Kick(Handle menu, MenuAction action, int param1, int para
 
 		if ((target = GetClientOfUserId(userid)) == 0)
 		{
-			CPrintToChat(param1, "%s %t", ChatBanner, "Player no longer available");
+			CPrintToChat(param1, "%s %t", gShadow_Hosties_ChatBanner, "Player no longer available");
 		}
 		else if (!CanUserTarget(param1, target))
 		{
-			CPrintToChat(param1, "%s %t", ChatBanner, "Unable to target");
+			CPrintToChat(param1, "%s %t", gShadow_Hosties_ChatBanner, "Unable to target");
 		}
 		else
 		{
 			char name[MAX_NAME_LENGTH];
 			GetClientName(target, name, sizeof(name));
-			CShowActivity2(param1, ChatBanner, "%t", "Kicked target", "_s", name);
+			CShowActivity2(param1, gShadow_Hosties_ChatBanner, "%t", "Kicked target", "_s", name);
 			PerformKick(param1, target, "");
 		}
 		
@@ -362,11 +333,11 @@ void PrepareBan(int client, int target, int time, const char[] reason)
 	{
 		if (client == 0)
 		{
-			CPrintToServer("%s %t", ChatBanner, "Player no longer available");
+			CPrintToServer("%s %t", gShadow_Hosties_ChatBanner, "Player no longer available");
 		}
 		else
 		{
-			CPrintToChat(client, "%s %t", ChatBanner, "Player no longer available");
+			CPrintToChat(client, "%s %t", gShadow_Hosties_ChatBanner, "Player no longer available");
 		}
 
 		return;
@@ -394,7 +365,7 @@ void PrepareBan(int client, int target, int time, const char[] reason)
 	}
 
 	LogAction(client, target, "\"%L\" banned \"%L\" (minutes \"%d\") (reason \"%s\")", client, target, time, reason);
-	StripAllWeapons(target);
+	Client_RemoveAllWeapons(target);
 
 	if (reason[0] == '\0')
 	{
@@ -506,7 +477,7 @@ public int MenuHandler_BanReasonList(Handle menu, MenuAction action, int param1,
 {
 	if (action == MenuAction_End)
 	{
-		CloseHandle(menu);
+		EMP_FreeHandle(menu);
 	}
 	else if (action == MenuAction_Cancel)
 	{
@@ -529,7 +500,7 @@ public int MenuHandler_BanPlayerList(Handle menu, MenuAction action, int param1,
 {
 	if (action == MenuAction_End)
 	{
-		CloseHandle(menu);
+		EMP_FreeHandle(menu);
 	}
 	else if (action == MenuAction_Cancel)
 	{
@@ -548,11 +519,11 @@ public int MenuHandler_BanPlayerList(Handle menu, MenuAction action, int param1,
 
 		if ((target = GetClientOfUserId(userid)) == 0)
 		{
-			CPrintToChat(param1, "%s %t", ChatBanner, "Player no longer available");
+			CPrintToChat(param1, "%s %t", gShadow_Hosties_ChatBanner, "Player no longer available");
 		}
 		else if (!CanUserTarget(param1, target))
 		{
-			CPrintToChat(param1, "%s %t", ChatBanner, "Unable to target");
+			CPrintToChat(param1, "%s %t", gShadow_Hosties_ChatBanner, "Unable to target");
 		}
 		else
 		{
@@ -567,7 +538,7 @@ public int MenuHandler_BanTimeList(Handle menu, MenuAction action, int param1, i
 {
 	if (action == MenuAction_End)
 	{
-		CloseHandle(menu);
+		EMP_FreeHandle(menu);
 	}
 	else if (action == MenuAction_Cancel)
 	{

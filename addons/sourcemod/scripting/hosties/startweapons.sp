@@ -26,31 +26,34 @@
 #include <smlib>
 
 
-Handle gH_Cvar_StartWeaponsOn = INVALID_HANDLE;
-Handle gH_Cvar_T_Weapons = INVALID_HANDLE;
-Handle gH_Cvar_CT_Weapons = INVALID_HANDLE;
-bool gShadow_StartWeaponsOn;
-char gShadow_T_Weapons[256];
-char gShadow_CT_Weapons[256];
-char gs_T_WeaponList[8][32];
-char gs_CT_WeaponList[8][32];
-int g_iSizeOfTList;
-int g_iSizeOfCTList;
+Handle 	gH_Cvar_StartWeaponsOn = INVALID_HANDLE,
+		gH_Cvar_T_Weapons = INVALID_HANDLE,
+		gH_Cvar_CT_Weapons = INVALID_HANDLE;
+		
+bool 	gShadow_StartWeaponsOn;
+
+char 	gShadow_T_Weapons[256],
+		gShadow_CT_Weapons[256],
+		gs_T_WeaponList[8][32],
+		gs_CT_WeaponList[8][32];
+		
+int 	g_iSizeOfTList,
+		g_iSizeOfCTList;
 
 void StartWeapons_OnPluginStart()
 {
-	gH_Cvar_StartWeaponsOn = CreateConVar("sm_hosties_startweapons_on", "1", "Enable or disable configurable payloads for each time on player spawn", 0, true, 0.0, true, 1.0);
+	gH_Cvar_StartWeaponsOn = AutoExecConfig_CreateConVar("sm_hosties_startweapons_on", "1", "Enable or disable configurable payloads for each time on player spawn", 0, true, 0.0, true, 1.0);
 	gShadow_StartWeaponsOn = true;
-	gH_Cvar_T_Weapons = CreateConVar("sm_hosties_t_start", "weapon_knife", "Comma delimitted list of items to give to Ts at spawn", 0);
+	gH_Cvar_T_Weapons = AutoExecConfig_CreateConVar("sm_hosties_t_start", "weapon_knife", "Comma delimitted list of items to give to Ts at spawn", 0);
 	Format(gShadow_T_Weapons, sizeof(gShadow_T_Weapons), "weapon_knife");
 	if (g_Game == Game_CSS)
 	{
-		gH_Cvar_CT_Weapons = CreateConVar("sm_hosties_ct_start", "weapon_knife,weapon_m4a1,weapon_usp", "Comma delimitted list of items to give to CTs at spawn", 0);
+		gH_Cvar_CT_Weapons = AutoExecConfig_CreateConVar("sm_hosties_ct_start", "weapon_knife,weapon_m4a1,weapon_usp", "Comma delimitted list of items to give to CTs at spawn", 0);
 		Format(gShadow_CT_Weapons, sizeof(gShadow_CT_Weapons), "weapon_knife,weapon_m4a1,weapon_usp");
 	}
 	else if (g_Game == Game_CSGO)
 	{
-		gH_Cvar_CT_Weapons = CreateConVar("sm_hosties_ct_start", "weapon_knife,weapon_m4a1,weapon_hkp2000", "Comma delimitted list of items to give to CTs at spawn", 0);
+		gH_Cvar_CT_Weapons = AutoExecConfig_CreateConVar("sm_hosties_ct_start", "weapon_knife,weapon_m4a1,weapon_hkp2000", "Comma delimitted list of items to give to CTs at spawn", 0);
 		Format(gShadow_CT_Weapons, sizeof(gShadow_CT_Weapons), "weapon_knife,weapon_m4a1,weapon_hkp2000");
 	}
 	UpdateStartWeapons();	
@@ -74,11 +77,10 @@ public Action StartWeapons_Spawn(Event event, const char[] name, bool dontBroadc
 {
 	int client = GetClientOfUserId(GetEventInt(event, "userid"));
 	
-	if (gShadow_StartWeaponsOn && IsValidClient(client))
+	if (gShadow_StartWeaponsOn && EMP_IsValidClient(client))
 	{
-		StripAllWeapons(client);
-		RemoveDangerZone(client);
-		
+		Client_RemoveAllWeapons(client);
+
 		int team = GetClientTeam(client);
 		switch (team)
 		{
@@ -87,13 +89,7 @@ public Action StartWeapons_Spawn(Event event, const char[] name, bool dontBroadc
 				for (int Tidx = 0; Tidx < g_iSizeOfTList; Tidx++)
 				{
 					if (!Client_HasWeapon(client, gs_T_WeaponList[Tidx]))
-					{
-						int wep = GivePlayerItem(client, gs_T_WeaponList[Tidx]);
-						if (Weapon_IsValid(wep))
-						{
-							EquipPlayerWeapon(client, wep);
-						}
-					}
+						EMP_GiveWeapon(client, gs_T_WeaponList[Tidx]);
 				}
 			}
 			case CS_TEAM_CT:
@@ -102,7 +98,7 @@ public Action StartWeapons_Spawn(Event event, const char[] name, bool dontBroadc
 				{
 					char sWeapon[64];
 					
-					if(GetEngineVersion() == Engine_CSGO && StrEqual(gs_CT_WeaponList[CTidx], "weapon_usp", false))
+					if(g_Game == Game_CSGO && StrEqual(gs_CT_WeaponList[CTidx], "weapon_usp", false))
 					{
 						Format(sWeapon, sizeof(sWeapon), "weapon_hkp2000");
 					}
@@ -112,15 +108,25 @@ public Action StartWeapons_Spawn(Event event, const char[] name, bool dontBroadc
 					}
 
 					if (!Client_HasWeapon(client, sWeapon))
-					{
-						int wep = GivePlayerItem(client, sWeapon);
-						if (Weapon_IsValid(wep))
-						{
-							EquipPlayerWeapon(client, wep);
-						}
-					}
+						EMP_GiveWeapon(client, sWeapon);
 				}
 			}
+		}
+		
+		if (gH_Cvar_LR_Fists_Instead_Knife.BoolValue)
+		{
+			int weapon;
+			while((weapon = GetPlayerWeaponSlot(client, CS_SLOT_KNIFE)) != -1)
+			{
+				RemovePlayerItem(client, weapon);
+				AcceptEntityInput(weapon, "Kill");
+			}
+			
+			EMP_EquipWeapon(client, "weapon_fists");
+		}
+		else if (GetPlayerWeaponSlot(client, CS_SLOT_KNIFE) == -1)
+		{
+			EMP_EquipWeapon(client, "weapon_knife");
 		}
 	}
 }

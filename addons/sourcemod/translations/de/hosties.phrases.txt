@@ -596,6 +596,19 @@
 	{
 		"de"		"{1} hat den Wettrennen LR ausgewählt. Schaut nach Start- und Endpunkt!"
 	}
+	"Race Aborted"
+	{
+		"#format"	"{1:N}"
+		"de"		"{1} hat das Wettrennen abgebrochen. Du kannst in 10 Sekunden einen neuen LR starten!"
+	}
+	"Race CoolDown"
+	{
+		"de"		"Du hast das Wettrennen abgebrochen! Du kannst nach 10 Sekunden einen neuen LR starten."
+	}
+	"Race CoolDown Done"
+	{
+		"de"		"Du kannst nun einen neuen LR starten."
+	}
 	"Respawned Target"
 	{
 		"de"		"Wiederbelebt {1}"

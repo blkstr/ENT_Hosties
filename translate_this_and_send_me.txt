@@ -212,61 +212,13 @@
 	{
 		"en"		"{1} declined your LR request or took to long to answer it."
 	}
-	"LR KF Start"
-	{
-		"en"		"{1} chose to have Knife Fight with {2}."
-	}
-	"LR S4S Start"
-	{
-		"en"		"{1} chose to have Shot4Shot with {2}."
-	}
-	"LR GT Start"
-	{
-		"en"		"{1} chose to have Gun Toss with {2}."
-	}
-	"LR CF Start"
-	{
-		"en"		"{1} chose to have Chicken Fight with {2}."
-	}
-	"LR HP Start"
-	{
-		"en"		"{1} chose to have Hot Potato with {2}."
-	}
-	"LR DB Start"
-	{
-		"en"		"{1} chose to have Dodgeball with {2}."
-	}
-	"LR NS Start"
-	{
-		"en"		"{1} chose to have a No Scope Battle with {2}."
-	}
-	"LR RPS Start"
-	{
-		"en"		"{1} chose to play Rock Paper Scissors with {2}."
-	}
-	"LR Mag4Mag Start"
-	{
-		"en"		"{1} chose to have Mag4Mag with {2}."
-	}
-	"LR RR Start"
-	{
-		"en"		"{1} chose to play Russian Roulette with {2}."
-	}
 	"LR Has Chosen to Rebel!"
 	{
 		"en"		"{1} has chosen to rebel!"
 	}
-	"Start Jump Contest"
+	"Start Selected Game"
 	{
-		"en"		"{1} selected a Most Jumps Contest with {2}."
-	}
-	"Start Brink of Death"
-	{
-		"en"		"{1} selected a To The Brink of Death Contest with {2}."
-	}
-	"Start Farthest Jump"
-	{
-		"en"		"{1} selected to have a Farthest Jumping competition with {2}."
+		"en"		"{1} selected {2} with {3}."
 	}
 	"No Rebels ATM"
 	{
@@ -375,6 +327,10 @@
 	"Race Won"
 	{
 		"en"		"{1} won the Race!"
+	}
+	"LR Won"
+	{
+		"en"		"{1} won the {2}!"
 	}
 	"Won Jump Contest"
 	{
@@ -631,5 +587,9 @@
 	"GT Throw Warning"
 	{
 		"en"		"Your opponent threw the weapon. You have 10 seconds to do it."
+	}
+	"LR Block EventDay"
+	{
+		"en"		"LastRequest is currently blocked due to an EventDay."
 	}
 }
