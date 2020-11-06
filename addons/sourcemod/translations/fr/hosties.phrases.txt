@@ -1,4 +1,4 @@
-﻿"Phrases"
+"Phrases"
 {
 	"Knife Fight"
 	{
@@ -26,7 +26,7 @@
 	}
 	"No Scope Battle"
 	{
-		"fr"		"Combat d'Unscop"
+		"fr"		"Combat No Scope"
 	}
 	"Rock Paper Scissors"
 	{
@@ -62,7 +62,7 @@
 	}
 	"Juggernout Battle"
 	{
-		"fr"		"Guerre de mastodonte"
+		"fr"		"Combat de mastodonte"
 	}
 	"Only Headshot"
 	{
@@ -70,16 +70,16 @@
 	}
 	"Grenade Fight"
 	{
-		"fr"		"HE Battle"
+		"fr"		"Combat de Grenades"
 	}
-		"LR Countdown"
+	"LR Countdown"
 	{
 		"#format"	"{1:i}"
 		"fr"		"Début de la DV dans {1}..."
 	}
 	"LR Grace TimeBlock"
 	{
-		"fr"		"Tu ne peux pas lancé de DV tant que des joueurs peuvent rejoindre la partie."
+		"fr"		"Tu ne peux pas lancer de DV tant que des joueurs peuvent rejoindre la partie."
 	}
 	"Already Dropped Deagle"
 	{
@@ -91,11 +91,11 @@
 	}
 	"Powered By Hosties"
 	{
-		"fr"		"This server is being powered by ENT_Hosties V3. Enjoy!"
+		"fr"		"Ce serveur utilise ENT_Hosties V3. Amusez-vous bien !"
 	}
 	"Please Follow Rules"
 	{
-		"fr"		"Veuillez lire les Règles en tapant regles dans le chat."
+		"fr"		"Veuillez lire les Règles en tapant !regles dans le chat."
 	}
 	"Knife Fight Gun Attack Slay"
 	{
@@ -129,7 +129,7 @@
 	"New Rebel"
 	{
 		"#format"	"{1:N}"
-		"fr"		"{1} est maintenant un Rebel."
+		"fr"		"{1} est maintenant un Rebelle."
 	}
 	"Freeattack"
 	{
@@ -144,7 +144,7 @@
 	"Non LR Kill LR Abort"
 	{
 		"#format"	"{1:N},{2:N}"
-		"fr"		"Le Joueur [Hors DV] {1} a tué le Joueur [EN DV] {2} - DV abandonné."
+		"fr"		"Le Joueur [Hors DV] {1} a tué le Joueur [EN DV] {2} - DV abandonnée."
 	}
 	"Rebel Kill"
 	{
@@ -153,11 +153,11 @@
 	}
 	"LR Available"
 	{
-		"fr"		"Le dernier Terroristes peut maintenant avoir sa Dernière Volonté grâce à la commande !lr."
+		"fr"		"Le dernier Terroriste peut maintenant avoir sa Dernière Volonté grâce à la commande !dv."
 	}
 	"LR Player Disconnect"
 	{
-		"fr"		"Le Joueur [EN DV] {1} s'est déconnecté - DV abandonné."
+		"fr"		"Le Joueur [EN DV] {1} s'est déconnecté - DV abandonnée."
 	}
 	"Chicken Fight Win And Slay"
 	{
@@ -169,7 +169,7 @@
 	}
 	"Chicken Fight Kill Loser"
 	{
-		"fr"		"Tue {1}!"
+		"fr"		"Tue {1} !"
 	}
 	"S4S Shot Taken"
 	{
@@ -201,11 +201,11 @@
 	}
 	"Another LR In Progress"
 	{
-		"fr"		"Il y a déjà une Dernière Volonté en Cours."
+		"fr"		"Il y a déjà une Dernière Volonté en cours."
 	}
 	"LR Disabled"
 	{
-		"fr"		"Désolé, les Dernière Volonté ont été momentanément désactivé sur le Serveur."
+		"fr"		"Désolé, les Dernière Volonté ont été momentanément désactivées sur le Serveur."
 	}
 	"Choose A Player"
 	{
@@ -249,7 +249,7 @@
 	}
 	"LR Has Chosen to Rebel!"
 	{
-		"fr"		"{1} a choisis de se Rebeller !"
+		"fr"		"{1} a choisi de se Rebeller !"
 	}
 	"Start Selected Game"
 	{
@@ -257,15 +257,15 @@
 	}
 	"No Rebels ATM"
 	{
-		"fr"		"Il n'y a pas de Terroristes Rebelle pour le moment."
+		"fr"		"Il n'y a pas de Terroriste Rebelle pour le moment."
 	}
 	"Rebelling Terrorists"
 	{
-		"fr"		"Terroristes Rebelle actuelle :"
+		"fr"		"Terroristes Rebelles actuels :"
 	}
 	"CheckPlayers CMD Disabled"
 	{
-		"fr"		"La commande !checkplayer est momentanément désactivé."
+		"fr"		"La commande !checkplayer est momentanément désactivée."
 	}
 	"Server Rules"
 	{
@@ -293,7 +293,7 @@
 	}
 	"NS Weapon Chooser Menu"
 	{
-		"fr"		"Choisissez une arme à utiliser lors du Combat d'Unscop:"
+		"fr"		"Choisissez une arme à utiliser lors du Combat No Scope:"
 	}
 	"CT Attack T Gun"
 	{
@@ -313,15 +313,15 @@
 	}
 	"LR RPS No Answer"
 	{
-		"fr"		"{1} N'a rien choisis, ou n'a pas choisis à temps."
+		"fr"		"{1} n'a rien choisi, ou n'a pas choisi à temps."
 	}
 	"LR RPS Done"
 	{
-		"fr"		"{1} a choisis {2}, {3} a choisis {4} - {5} a gagné"
+		"fr"		"{1} a choisi {2}, {3} a choisi {4} - {5} a gagné"
 	}
 	"LR RPS Tie"
 	{
-		"fr"		"{1} a choisis {2}, {3} a choisis {4} - Matche Nul"
+		"fr"		"{1} a choisi {2}, {3} a choisi {4} - Match Nul"
 	}
 	"LR Not With Bot"
 	{
@@ -329,31 +329,31 @@
 	}
 	"LR Not Available"
 	{
-		"fr"		"Vous ne pouvez plus avoir de DV dès maintenant."
+		"fr"		"Vous ne pouvez pas avoir de DV pour le moment."
 	}
 	"LR Delay Announcement"
 	{
-		"fr"		"Les Terroristes ne peuvent avoir de DV avant que {1} seconde(s) se soit écoulé !"
+		"fr"		"Les Terroristes ne peuvent avoir de DV avant que {1} seconde(s) se soit écoulée(s) !"
 	}
 	"Freekill Slay"
 	{
-		"fr"		"{1} a été tué pour avoir tué beaucoups de Terroristes Innocents."
+		"fr"		"{1} a été tué pour avoir tué beaucoup de Terroristes Innocents."
 	}
 	"Freekill Kick"
 	{
-		"fr"		"{1} a été Kick pour avoir tué beaucoups de Terroristes Innocents."
+		"fr"		"{1} a été Exclu pour avoir tué beaucoup de Terroristes Innocents."
 	}
 	"Freekill Kick Reason"
 	{
-		"fr"		"Kick pour avoir tue beaucoups de Terroristes Innocents"
+		"fr"		"Exclu pour avoir tue beaucoups de Terroristes Innocents"
 	}
 	"Freekill Ban"
 	{
-		"fr"		"{1} a été Bannis pour avoir tue beaucoups de Terroristes Innocents."
+		"fr"		"{1} a été Banni pour avoir tué beaucoup de Terroristes Innocents."
 	}
 	"Freekill Ban Reason"
 	{
-		"fr"		"Bannis pour avoir tue beaucoups de Terroristes Innocents"
+		"fr"		"Banni pour avoir tue beaucoups de Terroristes Innocents"
 	}
 	"Freekill Record Increased"
 	{
@@ -369,15 +369,15 @@
 	}
 	"Russian Roulette - Hit"
 	{
-		"fr"		"Roulette Russe : Balle Tiré {1}!"
+		"fr"		"Roulette Russe : La balle touche {1} !"
 	}
 	"Russian Roulette - Miss"
 	{
-		"fr"		"Roulette Russe : Manqué. Retentez votre Chance ..."
+		"fr"		"Roulette Russe : Tir manqué. Au tour l'adversaire..."
 	}
 	"Randomly Chose First Player"
 	{
-		"fr"		" {1} a été aléatoirement choisis pour tirer le premier."
+		"fr"		" {1} a été aléatoirement choisi pour tirer le premier."
 	}
 	"LR Interference Slay"
 	{
@@ -385,7 +385,7 @@
 	}
 	"LR Interference Abort"
 	{
-		"fr"		"{1} a attaqué {2} avec {3}. Dernière Volonté abandonné."
+		"fr"		"{1} a attaqué {2} avec {3}. Dernière Volonté abandonnée."
 	}
 	"LR Interference Slay - No Victim"
 	{
@@ -393,11 +393,11 @@
 	}
 	"LR Interference Abort - No Victim"
 	{
-		"fr"		"{1} a attaqué avec {2}. DV abandonné."
+		"fr"		"{1} a attaqué avec {2}. DV abandonnée."
 	}
 	"LR Cheating Abort"
 	{
-		"fr"		"{1} Tricherie ! DV abandonné."
+		"fr"		"{1} a triché ! DV abandonnée."
 	}
 	"LR Cheating Slay"
 	{
@@ -405,11 +405,11 @@
 	}
 	"Noscope Knife Attack Slay"
 	{
-		"fr"		"{1} a été tué pour avoir attaqué {2} avec un Cut durant un Combat d'Unscop."
+		"fr"		"{1} a été tué pour avoir attaqué {2} avec un Couteau durant un Combat No Scope."
 	}
 	"Noscope Knife Attack Abort"
 	{
-		"fr"		"{1} a attaqué {2} avec un Cut - Combat d'Unscop abandonné."
+		"fr"		"{1} a attaqué {2} avec un Couteau - Combat No Scope abandonné."
 	}
 	"S4S Rebel Slayed"
 	{
@@ -417,7 +417,7 @@
 	}
 	"S4S Rebel Aborted"
 	{
-		"fr"		"{1} s'est rebellé durant une DV - Roulette abandonné."
+		"fr"		"{1} s'est rebellé durant une DV - Roulette abandonnée."
 	}
 	"M4M Mag Used"
 	{
@@ -429,7 +429,7 @@
 	}
 	"LR Aborted"
 	{
-		"fr"		"Toutes les Dernière Volonté actives ont été abandonné !"
+		"fr"		"Toutes les Dernières Volontés actives ont été abandonnées !"
 	}
 	"Knife Fight Selection Menu"
 	{
@@ -437,19 +437,19 @@
 	}
 	"Knife_Vintage"
 	{
-		"fr"		"Cut Vintage"
+		"fr"		"Normal"
 	}
 	"Knife_Drunk"
 	{
-		"fr"		"Combat Ivre"
+		"fr"		"Ivre"
 	}
 	"Knife_LowGrav"
 	{
-		"fr"		"Chaussure Glissante"
+		"fr"		"Faible gravité"
 	}
 	"Knife_HiSpeed"
 	{
-		"fr"		"Augmentation de Vitesse"
+		"fr"		"Vitesse augmentée"
 	}
 	"Knife_Drugs"
 	{
@@ -509,7 +509,7 @@
 	}
 	"Choose an End Point"
 	{
-		"fr"		"Choisissez une position d'arrivé"
+		"fr"		"Choisissez une position d'Arrivée"
 	}
 	"Use Current Position"
 	{
@@ -517,11 +517,11 @@
 	}
 	"Race Points too Close"
 	{
-		"fr"		"Votre position d'arrivé a été fermé pour la position de Départ."
+		"fr"		"Votre position d'Arrivée est trop proche de la position de Départ."
 	}
 	"Too Near Obstruction"
 	{
-		"fr"		"Quelque chose bloque le passage. Enlevez-le et ré-essayé."
+		"fr"		"Quelque chose bloque le passage. Réessayez avec un endroit plus vaste."
 	}
 	"Jump Contest Menu"
 	{
@@ -533,7 +533,7 @@
 	}
 	"Jump_Farthest"
 	{
-		"fr"		"Plus Longs Saut"
+		"fr"		"Saut en Longueur"
 	}
 	"Jump_BrinkOfDeath"
 	{
@@ -549,7 +549,7 @@
 	}
 	"Race Could Start Soon"
 	{
-		"fr"		"{1} a choisis de faire une Course. Veuillez placer le Point de départ et d'arrivé!"
+		"fr"		"{1} a choisi de faire une Course. Veuillez placer le Point de départ et d'arrivée!"
 	}
 	"Blocked Warmup"
 	{
@@ -565,7 +565,7 @@
 	}
 	"JF Jump Warning"
 	{
-		"fr"		"Ton adversaire a sauté, tu as 10 secondes pour sauté."
+		"fr"		"Ton adversaire a sauté, tu as 10 secondes pour sauter."
 	}
 	"GT Throw Warning"
 	{
@@ -573,6 +573,6 @@
 	}
 	"LR Block EventDay"
 	{
-		"fr"		"Les DV sont bloquées dû à un EventDay."
+		"fr"		"Les DV sont bloquées dû à un Evènement."
 	}
 }
