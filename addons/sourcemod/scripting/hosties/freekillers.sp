@@ -109,7 +109,7 @@ void Freekillers_OnConfigsExecuted()
 {
 	// check for -1 for backward compatibility
 	GetConVarString(gH_Cvar_Freekill_Sound, gShadow_Freekill_Sound, sizeof(gShadow_Freekill_Sound));
-	if ((strlen(gShadow_Freekill_Sound) > 0) && !StrEqual(gShadow_Freekill_Sound, "-1"))
+	if ((strlen(gShadow_Freekill_Sound) > 0) && strcmp(gShadow_Freekill_Sound, "-1") != 0)
 	{
 		MediaType soundfile = type_Sound;
 		CacheTheFile(gShadow_Freekill_Sound, soundfile);
@@ -241,7 +241,7 @@ void TakeActionOnFreekiller(int attacker)
 		}
 		
 		// check for -1 for backward compatibility
-		if ((strlen(gShadow_Freekill_Sound) > 0) && !StrEqual(gShadow_Freekill_Sound, "-1"))
+		if ((strlen(gShadow_Freekill_Sound) > 0) && strcmp(gShadow_Freekill_Sound, "-1") != 0)
 		{
 			EmitSoundToAllAny(gShadow_Freekill_Sound);
 		}

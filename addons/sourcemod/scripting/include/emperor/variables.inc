@@ -41,6 +41,16 @@ stock int EMP_GetRandomInt(int min = 0, int max = 2147483647)
 }
 
 /**
+* Converts Int to Bool
+*
+* @param handle				The handle to free
+*/
+stock bool EMP_IntToBool(int input)
+{
+	return !!input;
+}
+
+/**
 * Frees the handle correctly
 *
 * @param handle				The handle to free

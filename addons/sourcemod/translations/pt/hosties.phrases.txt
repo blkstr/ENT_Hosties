@@ -212,61 +212,9 @@
 	{
 		"pt"		"{1} recusou seu ultimo pedido ou levou muito tempo para responder."
 	}
-	"LR KF Start"
-	{
-		"pt"		"{1} escolheu para ter uma Briga de faca com {2}."
-	}
-	"LR S4S Start"
-	{
-		"pt"		"{1} escolheu ter Tiro por tiro com {2}."
-	}
-	"LR GT Start"
-	{
-		"pt"		"{1} escolheu ter Arremesso de Deagle com {2}."
-	}
-	"LR CF Start"
-	{
-		"pt"		"{1} escolheu ter uma Briga de Galo com {2}."
-	}
-	"LR HP Start"
-	{
-		"pt"		"{1} escolheu ter Batata Quente com {2}."
-	}
-	"LR DB Start"
-	{
-		"pt"		"{1} escolheu ter Queimada com {2}."
-	}
-	"LR NS Start"
-	{
-		"pt"		"{1} escolheu ter Sniper sem mira com {2}."
-	}
-	"LR RPS Start"
-	{
-		"pt"		"{1} escolheu jogar Pedra Papel Tesoura com {2}."
-	}
-	"LR Mag4Mag Start"
-	{
-		"pt"		"{1} escolheu ter Pente por pente com {2}."
-	}
-	"LR RR Start"
-	{
-		"pt"		"{1} escolheu ter Roleta Russa com {2}."
-	}
 	"LR Has Chosen to Rebel!"
 	{
 		"pt"		"{1} escolheu se rebelar!"
-	}
-	"Start Jump Contest"
-	{
-		"pt"		"{1} escolheu ter Disputa de pulos com {2}."
-	}
-	"Start Brink of Death"
-	{
-		"pt"		"{1} selecionou ter Brincadeira da morte com {2}."
-	}
-	"Start Farthest Jump"
-	{
-		"pt"		"{1} selecionou ter Pulo mais longe com {2}."
 	}
 	"No Rebels ATM"
 	{

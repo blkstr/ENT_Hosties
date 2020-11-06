@@ -212,61 +212,9 @@
 	{
 		"de"		"{1} declined your LR request or took to long to answer it."
 	}
-	"LR KF Start"
-	{
-		"de"		"{1} hat sich entschieden  Messer Kampf mit {2} zu spielen."
-	}
-	"LR S4S Start"
-	{
-		"de"		"{1} hat sich entschieden  Shot4Shot mit {2} zu spielen."
-	}
-	"LR GT Start"
-	{
-		"de"		"{1} hat sich entschieden  Waffenweitwurf mit {2} zu spielen."
-	}
-	"LR CF Start"
-	{
-		"de"		"{1} hat sich entschieden  Hühnchen Kampf mit {2} zu spielen."
-	}
-	"LR HP Start"
-	{
-		"de"		"{1} hat sich entschieden  heiße Kartoffel mit {2} zu spielen."
-	}
-	"LR DB Start"
-	{
-		"de"		"{1} hat sich entschieden  Völkerball mit {2} zu spielen."
-	}
-	"LR NS Start"
-	{
-		"de"		"{1} hat sich entschieden  a No Scope Kampf mit {2} zu spielen."
-	}
-	"LR RPS Start"
-	{
-		"de"		"{1} hat sich entschieden  Schere Stein Papier mit {2} zu spielen."
-	}
-	"LR Mag4Mag Start"
-	{
-		"de"		"{1} hat sich entschieden  Mag4Mag mit {2}."
-	}
-	"LR RR Start"
-	{
-		"de"		"{1} hat sich entschieden Russisches Roulette mit {2}."
-	}
 	"LR Has Chosen to Rebel!"
 	{
 		"de"		"{1} hat sich entschieden zu rebellieren!"
-	}
-	"Start Jump Contest"
-	{
-		"de"		"{1} hat einen meiste Sprünge Wettbewerb mit {2} ausgewählt."
-	}
-	"Start Brink of Death"
-	{
-		"de"		"{1} hat einen Am Rande des Todes Wettbewerb mit {2} ausgewählt."
-	}
-	"Start Farthest Jump"
-	{
-		"de"		"{1} hat Weitsprung Wettbewerb mit {2} ausgewählt."
 	}
 	"No Rebels ATM"
 	{

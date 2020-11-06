@@ -52,6 +52,35 @@
 	{
 		"fr"		"Course"
 	}
+	"Shield Fight"
+	{
+		"fr"		"Bataille de bouclier"
+	}
+	"Fist Fight"
+	{
+		"fr"		"Combat à mains nues"
+	}
+	"Juggernout Battle"
+	{
+		"fr"		"Guerre de mastodonte"
+	}
+	"Only Headshot"
+	{
+		"fr"		"Headshot Uniquement"
+	}
+	"Grenade Fight"
+	{
+		"fr"		"HE Battle"
+	}
+		"LR Countdown"
+	{
+		"#format"	"{1:i}"
+		"fr"		"Début de la DV dans {1}..."
+	}
+	"LR Grace TimeBlock"
+	{
+		"fr"		"Tu ne peux pas lancé de DV tant que des joueurs peuvent rejoindre la partie."
+	}
 	"Already Dropped Deagle"
 	{
 		"fr"		"Vous avez déjà jeté votre Deagle !"
@@ -74,47 +103,57 @@
 	}
 	"Knife Fight Gun Attack Abort"
 	{
+		"#format"	"{1:N},{2:N},{3:s}"
 		"fr"		"{1} a attaqué {2} avec {3} - Combat de Cut abandonné."
 	}
 	"Chicken Fight Gun Attack Slay"
 	{
+		"#format"	"{1:N},{2:N},{3:s}"
 		"fr"		"{1} a été tué pour avoir attaqué {2} avec {3} durant un Combat de Poule."
 	}
 	"Chicken Fight Gun Attack Abort"
 	{
+		"#format"	"{1:N},{2:N},{3:s}"
 		"fr"		"{1} a attaqué {2} avec {3} - Combat de Poule abandonné."
 	}
 	"Hot Potato Attack Slay"
 	{
+		"#format"	"{1:N},{2:N}"
 		"fr"		"{1} a été tué pour avoir attaqué {2} pendant le Duel de la Patate Chaude."
 	}
 	"Hot Potato Attack Abort"
 	{
+		"#format"	"{1:N},{2:N}"
 		"fr"		"{1} a attaqué {2} - Duel de la Patate Chaude abandonné."
 	}
 	"New Rebel"
 	{
+		"#format"	"{1:N}"
 		"fr"		"{1} est maintenant un Rebel."
 	}
 	"Freeattack"
 	{
+		"#format"	"{1:N},{2:N}"
 		"fr"		"{1} a attaqué {2}."
 	}
 	"Non LR Kill LR Slay"
 	{
+		"#format"	"{1:N},{2:N}"
 		"fr"		"Le Joueur [Hors DV] {1} a été tué pour avoir tué le Joueur [EN DV] {2}."
 	}
 	"Non LR Kill LR Abort"
 	{
+		"#format"	"{1:N},{2:N}"
 		"fr"		"Le Joueur [Hors DV] {1} a tué le Joueur [EN DV] {2} - DV abandonné."
 	}
 	"Rebel Kill"
 	{
+		"#format"	"{1:N},{2:N}"
 		"fr"		"{1} a tué le Rebelle {2}."
 	}
 	"LR Available"
 	{
-		"fr"		"Le dernier Terroristes peut maintenant avoir sa Dernière Volonté grâce à la commande !dv."
+		"fr"		"Le dernier Terroristes peut maintenant avoir sa Dernière Volonté grâce à la commande !lr."
 	}
 	"LR Player Disconnect"
 	{
@@ -208,61 +247,13 @@
 	{
 		"fr"		"{1} a refusé votre demande de DV ou a mis trop de temps à répondre."
 	}
-	"LR KF Start"
-	{
-		"fr"		"{1} a choisis de faire un Combat de Cut avec {2}."
-	}
-	"LR S4S Start"
-	{
-		"fr"		"{1} a choisis de faire une Roulette avec {2}."
-	}
-	"LR GT Start"
-	{
-		"fr"		"{1} a choisis de faire un Lancer de Deagle avec {2}."
-	}
-	"LR CF Start"
-	{
-		"fr"		"{1} a choisis de faire un Combat de Poule avec {2}."
-	}
-	"LR HP Start"
-	{
-		"fr"		"{1} a choisis de faire un Duel de Patate Chaude avec {2}."
-	}
-	"LR DB Start"
-	{
-		"fr"		"{1} a choisis de faire une Balle aux Prisonniers avec {2}."
-	}
-	"LR NS Start"
-	{
-		"fr"		"{1} a choisis de faire un Combat d'Unscop avec {2}."
-	}
-	"LR RPS Start"
-	{
-		"fr"		"{1} a choisis de Jouer à Pierre Feuille Ciseaux avec {2}."
-	}
-	"LR Mag4Mag Start"
-	{
-		"fr"		"{1} a choisis de faire la DV Magasine avec {2}."
-	}
-	"LR RR Start"
-	{
-		"fr"		"{1} a choisis de Jouer à la Roulette Russe avec {2}."
-	}
 	"LR Has Chosen to Rebel!"
 	{
 		"fr"		"{1} a choisis de se Rebeller !"
 	}
-	"Start Jump Contest"
+	"Start Selected Game"
 	{
-		"fr"		"{1} a choisis de faire un Concours de Sauts avec {2}."
-	}
-	"Start Brink of Death"
-	{
-		"fr"		"{1} a choisis de faire un Concours de Sauts à mort avec {2}."
-	}
-	"Start Farthest Jump"
-	{
-		"fr"		"{1} a choisis de faire un Concours de Sauts en Longueur avec {2}."
+		"fr"		"{1} a sélectionné {2} contre {3}."
 	}
 	"No Rebels ATM"
 	{
@@ -579,5 +570,9 @@
 	"GT Throw Warning"
 	{
 		"fr"		"Ton adversaire a jeté son arme, tu as 10 secondes pour jeter la tienne."
+	}
+	"LR Block EventDay"
+	{
+		"fr"		"Les DV sont bloquées dû à un EventDay."
 	}
 }

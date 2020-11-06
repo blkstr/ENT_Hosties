@@ -98,7 +98,7 @@ public Action StartWeapons_Spawn(Event event, const char[] name, bool dontBroadc
 				{
 					char sWeapon[64];
 					
-					if(g_Game == Game_CSGO && StrEqual(gs_CT_WeaponList[CTidx], "weapon_usp", false))
+					if(g_Game == Game_CSGO && strcmp(gs_CT_WeaponList[CTidx], "weapon_usp", false) == 0)
 					{
 						Format(sWeapon, sizeof(sWeapon), "weapon_hkp2000");
 					}

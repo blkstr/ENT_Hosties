@@ -208,61 +208,9 @@
 	{
 		"chi"		"{1} 拒绝了你的 LR 请求或太久没有答复"
 	}
-	"LR KF Start"
-	{
-		"chi"		"{1} 选择与 {2} 进行拼刀"
-	}
-	"LR S4S Start"
-	{
-		"chi"		"{1} 选择与 {2} 进行爆头比赛"
-	}
-	"LR GT Start"
-	{
-		"chi"		"{1} 选择与 {2} 进行丢枪比赛"
-	}
-	"LR CF Start"
-	{
-		"chi"		"{1} 选择与 {2} 进行斗鸡"
-	}
-	"LR HP Start"
-	{
-		"chi"		"{1} 选择与 {2} 进行烫手山芋游戏"
-	}
-	"LR DB Start"
-	{
-		"chi"		"{1} 选择与 {2} 进行躲避球游戏"
-	}
-	"LR NS Start"
-	{
-		"chi"		"{1} 选择与 {2} 进行无镜狙击"
-	}
-	"LR RPS Start"
-	{
-		"chi"		"{1} 选择与 {2} 进行剪刀石头布"
-	}
-	"LR Mag4Mag Start"
-	{
-		"chi"		"{1} 选择与 {2} 进行回合枪战"
-	}
-	"LR RR Start"
-	{
-		"chi"		"{1} 选择与 {2} 进行生死赌博"
-	}
 	"LR Has Chosen to Rebel!"
 	{
 		"chi"		"{1} 选择去造反!"
-	}
-	"Start Jump Contest"
-	{
-		"chi"		"{1} 选择与 {2} 进行最多跳比赛"
-	}
-	"Start Brink of Death"
-	{
-		"chi"		"{1} 选择与 {2} 进行濒死边缘比赛"
-	}
-	"Start Farthest Jump"
-	{
-		"chi"		"{1}选择与 {2} 进行跳远比赛"
 	}
 	"No Rebels ATM"
 	{

@@ -62,7 +62,6 @@
 	}
 	"Hot Potato PickUp"
 	{
-		"#format"	"{1:N}"
 		"tr"		"{1} sıcak patatesi aldı!"
 	}
 	"Powered By Hosties"
@@ -75,57 +74,46 @@
 	}
 	"Knife Fight Gun Attack Slay"
 	{
-		"#format"	"{1:N},{2:N},{3:s}"
 		"tr"		"{1}, Bıçak Dövüşü sırasında {3} ile {2} 'ye saldırdığı için öldürüldü."
 	}
 	"Knife Fight Gun Attack Abort"
 	{
-		"#format"	"{1:N},{2:N},{3:s}"
 		"tr"		"{1}, {3} ile {2} saldırdı - Bıçak Dövüşü iptal edildi."
 	}
 	"Chicken Fight Gun Attack Slay"
 	{
-		"#format"	"{1:N},{2:N},{3:s}"
 		"tr"		"{1}, Tavuk Dövüşü sırasında {3} ile {2} 'ye saldırdığı için öldürüldü."
 	}
 	"Chicken Fight Gun Attack Abort"
 	{
-		"#format"	"{1:N},{2:N},{3:s}"
 		"tr"		"{1}, {3} ile {2} saldırdı - Tavuk Dövüşü iptal edildi."
 	}
 	"Hot Potato Attack Slay"
 	{
-		"#format"	"{1:N},{2:N}"
 		"tr"		"{1}, Sıcak Patates yarışması sırasında {2} 'ye saldırdığı için öldürüldü."
 	}
 	"Hot Potato Attack Abort"
 	{
-		"#format"	"{1:N},{2:N}"
 		"tr"		"{1} saldırdı {2} - Sıcak Patates yarışması iptal edildi."
 	}
 	"New Rebel"
 	{
-		"#format"	"{1:N}"
 		"tr"		"{1} artık isyancı."
 	}
 	"Freeattack"
 	{
-		"#format"	"{1:N},{2:N}"
 		"tr"		"{1} saldırdı {2}."
 	}
 	"Non LR Kill LR Slay"
 	{
-		"#format"	"{1:N},{2:N}"
 		"tr"		"LR oyuncusu olmayan {1}, LR oyuncusunu {2} öldürdüğü için öldürüldü."
 	}
 	"Non LR Kill LR Abort"
 	{
-		"#format"	"{1:N},{2:N}"
 		"tr"		"LR oyuncusu olmayan {1} öldürülen LR oyuncusu {2} - LR iptal edildi."
 	}
 	"Rebel Kill"
 	{
-		"#format"	"{1:N},{2:N}"
 		"tr"		"{1} isyancı öldürdü {2}."
 	}
 	"LR Available"
@@ -134,27 +122,22 @@
 	}
 	"LR Player Disconnect"
 	{
-		"#format"	"{1:N}"
 		"tr"		"LR oyuncusu {1} bağlantısı kesildi - LR iptal edildi."
 	}
 	"Chicken Fight Win And Slay"
 	{
-		"#format"	"{1:N},{2:N}"
 		"tr"		"{1} Tavuk Dövüşünü kazandı - {2} katledildi."
 	}
 	"Chicken Fight Win"
 	{
-		"#format"	"{1:N}"
 		"tr"		"{1} Tavuk Dövüşünü kazandı."
 	}
 	"Chicken Fight Kill Loser"
 	{
-		"#format"	"{1:N}"
 		"tr"		"{1} öldü!"
 	}
 	"S4S Shot Taken"
 	{
-		"#format"	"{1:N}"
 		"tr"		"{1} fotoğrafını çekti."
 	}
 	"Distance Meter"
@@ -195,7 +178,6 @@
 	}
 	"Rebel Ask CT For LR"
 	{
-		"#format"	"{1:N},{2:s}"
 		"tr"		"İsyancı {1} sizinle {2} olmak istiyor. Kabul etmek?"
 	}
 	"Yes"
@@ -208,7 +190,6 @@
 	}
 	"Asking For Permission"
 	{
-		"#format"	"{1:N}"
 		"tr"		"İsyancı olduğunuz için {1} iznini istemek ..."
 	}
 	"Target Is Not Alive Or In Wrong Team"
@@ -217,7 +198,6 @@
 	}
 	"Declined LR Request"
 	{
-		"#format"	"{1:N}"
 		"tr"		"{1} LR isteğinizi reddetti."
 	}
 	"LR Partner Died"
@@ -230,77 +210,22 @@
 	}
 	"LR Request Decline Or Too Long"
 	{
-		"#format"	"{1:N}"
 		"tr"		"{1} LR isteğinizi reddetti veya karar vermedi."
-	}
-	"LR KF Start"
-	{
-		"#format"	"{1:N},{2:N}"
-		"tr"		"{1}, {2} ile Bıçak Dövüşü seçti."
-	}
-	"LR S4S Start"
-	{
-		"#format"	"{1:N},{2:N}"
-		"tr"		"{1}, {2} ile Shot4Shot kullanmayı seçti."
-	}
-	"LR GT Start"
-	{
-		"#format"	"{1:N},{2:N}"
-		"tr"		"{1}, {2} ile Silah Atma kullanmayı seçti."
-	}
-	"LR CF Start"
-	{
-		"#format"	"{1:N},{2:N}"
-		"tr"		"{1}, {2} ile Tavuk Dövüşü yapmayı seçti."
-	}
-	"LR HP Start"
-	{
-		"#format"	"{1:N},{2:N}"
-		"tr"		"{1}, {2} ile Sıcak Patates kullanmayı tercih etti."
-	}
-	"LR DB Start"
-	{
-		"#format"	"{1:N},{2:N}"
-		"tr"		"{1}, {2} ile Yakar Top kullanmayı seçti."
-	}
-	"LR NS Start"
-	{
-		"#format"	"{1:N},{2:N}"
-		"tr"		"{1}, {2} ile Zoomsuz Savaş'ı seçti."
-	}
-	"LR RPS Start"
-	{
-		"#format"	"{1:N},{2:N}"
-		"tr"		"{1}, {2} ile Taş Kağıt Makas oynamayı seçti."
-	}
-	"LR Mag4Mag Start"
-	{
-		"#format"	"{1:N},{2:N}"
-		"tr"		"{1}, {2} ile Mag4Mag kullanmayı seçti."
-	}
-	"LR RR Start"
-	{
-		"#format"	"{1:N},{2:N}"
-		"tr"		"{1}, {2} ile Rus Ruleti oynamayı seçti."
 	}
 	"LR Has Chosen to Rebel!"
 	{
-		"#format"	"{1:N}"
 		"tr"		"{1} isyan atmayı seçti!"
 	}
 	"Start Jump Contest"
 	{
-		"#format"	"{1:N},{2:N}"
 		"tr"		"{1}, {2} ile bir En Atlar Yarışması seçti."
 	}
 	"Start Brink of Death"
 	{
-		"#format"	"{1:N},{2:N}"
 		"tr"		"{1}, {2} ile bir Ölümün Eşiğine Yarışması seçti."
 	}
 	"Start Farthest Jump"
 	{
-		"#format"	"{1:N},{2:N}"
 		"tr"		"{1}, {2} ile En Uzak Atlama yarışmasını seçti."
 	}
 	"No Rebels ATM"
@@ -321,7 +246,6 @@
 	}
 	"HP Win"
 	{
-		"#format"	"{1:N},{2:N}"
 		"tr"		"{1} Sıcak Patates yarışmasını kazandı - {2} katledildi."
 	}
 	"HP Last One To Have The Potato"
@@ -330,7 +254,6 @@
 	}
 	"Ts Muted"
 	{
-		"#format"	"{1:d}"
 		"tr"		"Teröristler, turun ilk {1} saniyesini kapattı!"
 	}
 	"Ts Can Speak Again"
@@ -347,7 +270,6 @@
 	}
 	"CT Attack T Gun"
 	{
-		"#format"	"{1:N},{2:N}"
 		"tr"		"{1} silahı olan {2} 'ye saldırdı ..."
 	}
 	"Rock"
@@ -364,17 +286,14 @@
 	}
 	"LR RPS No Answer"
 	{
-		"#format"	"{1:N}"
 		"tr"		"{1} taş, kağıt veya makas seçmedi veya zamanında seçmedi."
 	}
 	"LR RPS Done"
 	{
-		"#format"	"{1:N},{2:s},{3:N},{4:s},{5:N}"
 		"tr"		"{1} seçin {2}, {3} seçin {4} - {5} kazandı"
 	}
 	"LR RPS Tie"
 	{
-		"#format"	"{1:N},{2:s},{3:N},{4:s}"
 		"tr"		"{1} şey {2}, {3} şey {4} - kravat"
 	}
 	"LR Not With Bot"
@@ -387,17 +306,14 @@
 	}
 	"LR Delay Announcement"
 	{
-		"#format"	"{1:d}"
 		"tr"		"Teröristler {1} saniye geçene kadar son istekte bulunamazlar!"
 	}
 	"Freekill Slay"
 	{
-		"#format"	"{1:N}"
 		"tr"		"{1} isyancı olmayan teröristleri öldürdüğü için öldürüldü."
 	}
 	"Freekill Kick"
 	{
-		"#format"	"{1:N}"
 		"tr"		"{1} isyancı olmayan teröristleri öldürdüğü için sunucudan atıldı."
 	}
 	"Freekill Kick Reason"
@@ -406,7 +322,6 @@
 	}
 	"Freekill Ban"
 	{
-		"#format"	"{1:N}"
 		"tr"		"{1} isyancı olmayan teröristleri öldürmek için yasaklandı."
 	}
 	"Freekill Ban Reason"
@@ -415,22 +330,18 @@
 	}
 	"Freekill Record Increased"
 	{
-		"#format"	"{1:d},{2:d}"
 		"tr"		"{1} {2} isyankar olmayan öldürmeniz var (harekete geçilmeden önce) ..."
 	}
 	"Race Won"
 	{
-		"#format"	"{1:N}"
 		"tr"		"{1} Yarışı kazandı!"
 	}
 	"Won Jump Contest"
 	{
-		"#format"	"{1:N}"
 		"tr"		"{1} Engel Atlama Yarışmasını kazandı!"
 	}
 	"Russian Roulette - Hit"
 	{
-		"#format"	"{1:N}"
 		"tr"		"Rus Ruleti: Mermi vuruldu {1}!"
 	}
 	"Russian Roulette - Miss"
@@ -439,62 +350,50 @@
 	}
 	"Randomly Chose First Player"
 	{
-		"#format"	"{1:N}"
 		"tr"		"Önce çekim yapmak için {1} rastgele seçildi."
 	}
 	"LR Interference Slay"
 	{
-		"#format"	"{1:N},{2:N},{3:s}"
 		"tr"		"{1}, LR sırasında {3} ile {2} 'ye saldırdığı için öldürüldü."
 	}
 	"LR Interference Abort"
 	{
-		"#format"	"{1:N},{2:N},{3:s}"
 		"tr"		"{1}, {3} ile {2} 'ye saldırdı. LR iptal edildi."
 	}
 	"LR Interference Slay - No Victim"
 	{
-		"#format"	"{1:N},{2:s}"
 		"tr"		"{1}, LR sırasında {2} 'ye saldırdığı için öldürüldü."
 	}
 	"LR Interference Abort - No Victim"
 	{
-		"#format"	"{1:N},{2:s}"
 		"tr"		"{1}, {2} ile saldırdı. LR iptal edildi."
 	}
 	"LR Cheating Abort"
 	{
-		"#format"	"{1:N}"
 		"tr"		"{1} kandırdı! LR iptal edildi."
 	}
 	"LR Cheating Slay"
 	{
-		"#format"	"{1:N}"
 		"tr"		"{1}, LR sırasında hile yapmak için öldürüldü."
 	}
 	"Noscope Knife Attack Slay"
 	{
-		"#format"	"{1:N},{2:N}"
 		"tr"		"Zoomsuz Savaş sırasında {1} bir bıçakla {2} saldırdığı için öldürüldü."
 	}
 	"Noscope Knife Attack Abort"
 	{
-		"#format"	"{1:N},{2:N}"
 		"tr"		"{1} bir bıçakla {2} saldırdı - Zoomsuz Savaş iptal edildi."
 	}
 	"S4S Rebel Slayed"
 	{
-		"#format"	"{1:N}"
 		"tr"		"{1} S4S sırasında isyan ettiği için katledildi."
 	}
 	"S4S Rebel Aborted"
 	{
-		"#format"	"{1:N}"
 		"tr"		"{1} LR - S4S sırasında isyan iptal edildi."
 	}
 	"M4M Mag Used"
 	{
-		"#format"	"{1:N}"
 		"tr"		"{1} dergilerini kullandı."
 	}
 	"LR No CTs Available"
@@ -651,17 +550,14 @@
 	}
 	"Farthest Jump Won"
 	{
-		"#format"	"{1:N},{2:N},{3:3.1f},{4:3.1f}"
 		"tr"		"{1}, {2} 'nin {4} ile karşılaştırıldığında {3} ile en uzak sıçramayı kazandı."
 	}
 	"Race Could Start Soon"
 	{
-		"#format"	"{1:N}"
 		"tr"		"{1} Yarış LR'yi seçti. Başlangıç ve bitiş noktalarını izleyin!"
 	}
 	"Respawned Target"
 	{
-		"#format"	"{1:s}"
 		"tr"		"Yeniden doğma {1}"
 	}	
 	"Player Alive"
@@ -674,7 +570,6 @@
 	}	
 	"Respawn Data Unavailable"
 	{
-		"#format"	"{1:N}"
 		"tr"		"Oyuncu {1} henüz yeniden doğma verisine sahip olmadı ve hücrelere geri gönderildi."
 	}
 	"Blocked Warmup"
@@ -683,12 +578,10 @@
 	}
 	"GT No Throw"
 	{
-		"#format"	"{1:N},{2:N}"
 		"tr"		"{1} Silah Atışını kazandı, çünkü {2} silahı atmadı"
 	}
 	"JF No Jump"
 	{
-		"#format"	"{1:N},{2:N}"
 		"tr"		"{1} Atlama Yarışmasını kazandı, çünkü {2} atlamadı"
 	}
 	"JF Jump Warning"

@@ -208,61 +208,9 @@
 	{
 		"da"		"{1} afslog dit LR forslag, eller var for lang tid om at svare."
 	}
-	"LR KF Start"
-	{
-		"da"		"{1} Valgte at lave kniv duel med {2}."
-	}
-	"LR S4S Start"
-	{
-		"da"		"{1} Valgte at lave skud for skud med {2}."
-	}
-	"LR GT Start"
-	{
-		"da"		"{1} valgte at lave pistolkast med {2}."
-	}
-	"LR CF Start"
-	{
-		"da"		"{1} valgte at lave kyllingekamp med {2}."
-	}
-	"LR HP Start"
-	{
-		"da"		"{1} Valgte at have varm kartoffel med {2}."
-	}
-	"LR DB Start"
-	{
-		"da"		"{1} valgte at have høvdingebold med {2}."
-	}
-	"LR NS Start"
-	{
-		"da"		"{1} valgte at have ingen sigte kamp med {2}."
-	}
-	"LR RPS Start"
-	{
-		"da"		"{1} Valgte at have sten saks papir med {2}."
-	}
-	"LR Mag4Mag Start"
-	{
-		"da"		"{1} valgte at have mag for mag med {2}."
-	}
-	"LR RR Start"
-	{
-		"da"		"{1} valgte at have russisk Roulette med {2}."
-	}
 	"LR Has Chosen to Rebel!"
 	{
 		"da"		"{1} Har valgt at lave oprør"
-	}
-	"Start Jump Contest"
-	{
-		"da"		"{1} Valgte en flest hop kamp med {2}."
-	}
-	"Start Brink of Death"
-	{
-		"da"		"{1} valgte at have på randen af ​​døden med{2}."
-	}
-	"Start Farthest Jump"
-	{
-		"da"		"{1} Valgte at have længste hop med {2}."
 	}
 	"No Rebels ATM"
 	{

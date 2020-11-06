@@ -41,7 +41,7 @@
 
 #pragma			semicolon 					1
 
-#define 		PLUGIN_VERSION				"4.0b"
+#define 		PLUGIN_VERSION				"4.1b"
 #define 		MAX_DISPLAYNAME_SIZE		64
 #define 		MAX_DATAENTRY_SIZE			5
 #define 		SERVERTAG					"ENT_Hosties,LR,LastRequest"

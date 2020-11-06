@@ -243,7 +243,7 @@ stock void EMP_SetPlayerModel(int client, char model_path[PLATFORM_MAX_PATH])
 {
 	if (EMP_IsValidClient(idx))
 	{
-		if(!StrEqual(model_path, ""))
+		if(strcmp(model_path, "") != 0)
 		{
 			if(!IsModelPrecached(model_path))
 				PrecacheModel(model_path);

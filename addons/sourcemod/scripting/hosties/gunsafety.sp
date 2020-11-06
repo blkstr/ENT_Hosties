@@ -58,7 +58,7 @@ public Action Strip_Player_Weapons_Intercept(int client, const char[] command, i
 	
 	AdminFlag flag;
 	// check for proper admin permissions and cvars
-	if (StrEqual(command, "sm_slay", false))
+	if (strcmp(command, "sm_slay", false) == 0)
 	{
 		if (!gH_Cvar_Strip_On_Slay.BoolValue)
 		{
@@ -75,7 +75,7 @@ public Action Strip_Player_Weapons_Intercept(int client, const char[] command, i
 			return Plugin_Continue;
 		}
 	}
-	else if (StrEqual(command, "sm_kick", false))
+	else if (strcmp(command, "sm_kick", false) == 0)
 	{
 		if (!gH_Cvar_Strip_On_Kick.BoolValue)
 		{
@@ -92,7 +92,7 @@ public Action Strip_Player_Weapons_Intercept(int client, const char[] command, i
 			return Plugin_Continue;
 		}
 	}
-	else if (StrEqual(command, "sm_ban", false))
+	else if (strcmp(command, "sm_ban", false) == 0)
 	{
 		if (!gH_Cvar_Strip_On_Ban.BoolValue)
 		{

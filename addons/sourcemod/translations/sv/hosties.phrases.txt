@@ -208,61 +208,9 @@
 	{
 		"sv"		"{1} avböjde din sista önskan eller tog för lång tid att svara på den."
 	}
-	"LR KF Start"
-	{
-		"sv"		"{1} valde att ha Knivduell med {2}."
-	}
-	"LR S4S Start"
-	{
-		"sv"		"{1} valde att ha Skott För Skott med {2}."
-	}
-	"LR GT Start"
-	{
-		"sv"		"{1} valde att ha Kasta Deagle med {2}."
-	}
-	"LR CF Start"
-	{
-		"sv"		"{1} valde att ha Tuppfäktning med {2}."
-	}
-	"LR HP Start"
-	{
-		"sv"		"{1} valde att ha Het Potatis-tävling med {2}."
-	}
-	"LR DB Start"
-	{
-		"sv"		"{1} valde att ha Spökboll med {2}."
-	}
-	"LR NS Start"
-	{
-		"sv"		"{1} valde att ha No Scope-duell med {2}."
-	}
-	"LR RPS Start"
-	{
-		"sv"		"{1} valde att ha Sten Sax Påse med {2}."
-	}
-	"LR Mag4Mag Start"
-	{
-		"sv"		"{1} valde att ha Magasin För Magasin med {2}."
-	}
-	"LR RR Start"
-	{
-		"sv"		"{1} valde att ha Rysk Roulette med {2}."
-	}
 	"LR Has Chosen to Rebel!"
 	{
 		"sv"		"{1} valde att bli en tungt beväpnad rebell!"
-	}
-	"Start Jump Contest"
-	{
-		"sv"		"{1} valde att ha en Hopptävling (om flest hopp) med {2}."
-	}
-	"Start Brink of Death"
-	{
-		"sv"		"{1} valde att ha en Självmordsbenägen Hopptävling med {2}."
-	}
-	"Start Farthest Jump"
-	{
-		"sv"		"{1} valde att ha en Hopptävling (om längd) med {2}."
 	}
 	"No Rebels ATM"
 	{

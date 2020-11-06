@@ -211,58 +211,9 @@
 	{
 		"ro"		"{1} a refuzat cererea ta de LR sau a durat prea mult pana a raspuns."
 	}
-	"LR KF Start"
-	{
-		"ro"		"{1} a ales sa aibe un Knife Fight cu {2}."
-	}
-	"LR S4S Start"
-	{
-		"ro"		"{1} a ales sa aibe un Shot4Shot cu {2}."
-	}
-	"LR CF Start"
-	{
-		"ro"		"{1} a ales sa aibe un Chicken Fight cu {2}."
-	}
-	"LR HP Start"
-	{
-		"ro"		"{1} a ales sa aibe un Hot Potato cu {2}."
-	}
-	"LR DB Start"
-	{
-		"ro"		"{1} a ales sa aibe un meci de Dodgeball cu {2}."
-		"ro"		""
-	}
-	"LR NS Start"
-	{
-		"ro"		"{1} a ales sa aibe o lupta No Scope cu {2}."
-	}
-	"LR RPS Start"
-	{
-		"ro"		"{1} a ales sa joace Piatra, Foarfeca, Hartie cu {2}."
-	}
-	"LR Mag4Mag Start"
-	{
-		"ro"		"{1} a ales sa aibe un Mag4Mag cu {2}."
-	}
-	"LR RR Start"
-	{
-		"ro"		"{1} a ales sa joace Ruleta Ruseasca cu {2}."
-	}
 	"LR Has Chosen to Rebel!"
 	{
 		"ro"		"{1} a ales sa devina rebel!"
-	}
-	"Start Jump Contest"
-	{
-		"ro"		"{1} a ales sa joace Ruleta Ruseasca cu {2}."
-	}
-	"Start Brink of Death"
-	{
-		"ro"		"{1} a ales sa aibe concursul The Brink of Death cu {2}"
-	}
-	"Start Farthest Jump"
-	{
-		"ro"		"{1} a ales sa tina concursul Farthest Jumping cu {2}"
 	}
 	"No Rebels ATM"
 	{
