@@ -1988,6 +1988,14 @@ public Action OnTakeDamage(int victim, int &attacker, int &inflictor, float &dam
 							return Plugin_Changed;
 						}
 					}
+					case LR_ChickenFight:
+					{
+						if ((attacker == LR_Player_Guard || attacker == LR_Player_Prisoner) && (victim == LR_Player_Guard || victim == LR_Player_Prisoner))
+						{
+							damage = 0.0;
+							return Plugin_Changed;
+						}
+					}
 					case LR_Dodgeball:
 					{
 						if (((attacker == LR_Player_Guard || attacker == LR_Player_Prisoner) && (victim == LR_Player_Guard || victim == LR_Player_Prisoner)))
@@ -2162,7 +2170,7 @@ public Action OnWeaponDecideUse(int client, int weapon)
 				}
 				case LR_ChickenFight:
 				{
-					if (client == LR_Player_Guard || client == LR_Player_Prisoner)
+					if ((client == LR_Player_Guard || client == LR_Player_Prisoner) && !Entity_ClassNameMatches(weapon, "weapon_knife"))
 					{
 						return Plugin_Handled;
 					}
