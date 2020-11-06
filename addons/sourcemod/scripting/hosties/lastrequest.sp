@@ -4044,6 +4044,10 @@ void InitializeGame(int iPartnersIndex)
 		}
 		case LR_ChickenFight:
 		{
+			// give knives
+			EMP_EquipKnife(LR_Player_Prisoner);
+			EMP_EquipKnife(LR_Player_Guard);
+		
 			if (g_ChickenFightTimer == INVALID_HANDLE)
 			{
 				g_ChickenFightTimer = CreateTimer(0.2, Timer_ChickenFight, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
