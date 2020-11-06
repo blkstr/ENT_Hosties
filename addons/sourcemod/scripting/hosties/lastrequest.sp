@@ -2924,7 +2924,7 @@ void DisplayLastRequestMenu(int client, int Ts, int CTs)
 {
 	gH_BuildLR[client] = CreateDataPack();
 	Handle menu = CreateMenu(LR_Selection_Handler);
-	SetMenuTitle(menu, "%T", "LR Choose", client);
+	SetMenuTitle(menu, "%t", "LR Choose", client);
 	
 	char sDataField[MAX_DATAENTRY_SIZE];
 	char sTitleField[MAX_DISPLAYNAME_SIZE];
@@ -2940,7 +2940,7 @@ void DisplayLastRequestMenu(int client, int Ts, int CTs)
 			if (entry != LR_Rebel || (entry == LR_Rebel && Ts <= gH_Cvar_LR_Rebel_MaxTs.IntValue && CTs >= gH_Cvar_LR_Rebel_MinCTs.IntValue))
 			{
 				FormatEx(sDataField, sizeof(sDataField), "%d", entry);
-				FormatEx(sTitleField, sizeof(sTitleField), "%T", g_sLastRequestPhrase[entry], client);
+				FormatEx(sTitleField, sizeof(sTitleField), "%t", g_sLastRequestPhrase[entry], client);
 				AddMenuItem(menu, sDataField, sTitleField);
 			}
 		}
@@ -2982,27 +2982,27 @@ public int LR_Selection_Handler(Handle menu, MenuAction action, int client, int 
 							case LR_KnifeFight:
 							{
 								Handle KnifeFightMenu = CreateMenu(SubLRType_MenuHandler);								
-								SetMenuTitle(KnifeFightMenu, "%T", "Knife Fight Selection Menu", client);
+								SetMenuTitle(KnifeFightMenu, "%t", "Knife Fight Selection Menu", client);
 								
 								char sSubTypeName[MAX_DISPLAYNAME_SIZE];
 								char sDataField[MAX_DATAENTRY_SIZE];
 								FormatEx(sDataField, sizeof(sDataField), "%d", Knife_Vintage);
-								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "Knife_Vintage", client);
+								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "Knife_Vintage", client);
 								AddMenuItem(KnifeFightMenu, sDataField, sSubTypeName);
 								FormatEx(sDataField, sizeof(sDataField), "%d", Knife_Drunk);
-								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "Knife_Drunk", client);
+								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "Knife_Drunk", client);
 								AddMenuItem(KnifeFightMenu, sDataField, sSubTypeName);
 								FormatEx(sDataField, sizeof(sDataField), "%d", Knife_Drugs);
-								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "Knife_Drugs", client);
+								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "Knife_Drugs", client);
 								AddMenuItem(KnifeFightMenu, sDataField, sSubTypeName);
 								FormatEx(sDataField, sizeof(sDataField), "%d", Knife_LowGrav);
-								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "Knife_LowGrav", client);
+								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "Knife_LowGrav", client);
 								AddMenuItem(KnifeFightMenu, sDataField, sSubTypeName);
 								FormatEx(sDataField, sizeof(sDataField), "%d", Knife_HiSpeed);
-								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "Knife_HiSpeed", client);
+								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "Knife_HiSpeed", client);
 								AddMenuItem(KnifeFightMenu, sDataField, sSubTypeName);
 								FormatEx(sDataField, sizeof(sDataField), "%d", Knife_ThirdPerson);
-								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "Knife_ThirdPerson", client);
+								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "Knife_ThirdPerson", client);
 								AddMenuItem(KnifeFightMenu, sDataField, sSubTypeName);
 								
 								SetMenuExitBackButton(KnifeFightMenu, true);
@@ -3011,49 +3011,49 @@ public int LR_Selection_Handler(Handle menu, MenuAction action, int client, int 
 							case LR_Shot4Shot, LR_Mag4Mag:
 							{
 								Handle SubWeaponMenu = CreateMenu(SubLRType_MenuHandler);
-								SetMenuTitle(SubWeaponMenu, "%T", "Pistol Selection Menu", client);
+								SetMenuTitle(SubWeaponMenu, "%t", "Pistol Selection Menu", client);
 								
 								char sSubTypeName[MAX_DISPLAYNAME_SIZE];
 								char sDataField[MAX_DATAENTRY_SIZE];
 								FormatEx(sDataField, sizeof(sDataField), "%d", Pistol_Deagle);
-								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "Pistol_Deagle", client);
+								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "Pistol_Deagle", client);
 								AddMenuItem(SubWeaponMenu, sDataField, sSubTypeName);
 								FormatEx(sDataField, sizeof(sDataField), "%d", Pistol_P228);
 								if (g_Game == Game_CSS)
 								{
-									FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "Pistol_P228", client);
+									FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "Pistol_P228", client);
 								}
 								else if (g_Game == Game_CSGO)
 								{
-									FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "Pistol_P250", client);
+									FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "Pistol_P250", client);
 								}
 								AddMenuItem(SubWeaponMenu, sDataField, sSubTypeName);								
 								FormatEx(sDataField, sizeof(sDataField), "%d", Pistol_Glock);
-								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "Pistol_Glock", client);
+								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "Pistol_Glock", client);
 								AddMenuItem(SubWeaponMenu, sDataField, sSubTypeName);		
 								FormatEx(sDataField, sizeof(sDataField), "%d", Pistol_FiveSeven);
-								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "Pistol_FiveSeven", client);
+								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "Pistol_FiveSeven", client);
 								AddMenuItem(SubWeaponMenu, sDataField, sSubTypeName);		
 								FormatEx(sDataField, sizeof(sDataField), "%d", Pistol_Dualies);
-								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "Pistol_Dualies", client);
+								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "Pistol_Dualies", client);
 								AddMenuItem(SubWeaponMenu, sDataField, sSubTypeName);		
 								FormatEx(sDataField, sizeof(sDataField), "%d", Pistol_USP);
 								if (g_Game == Game_CSS)
 								{
-									FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "Pistol_USP", client);
+									FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "Pistol_USP", client);
 								}
 								else if (g_Game == Game_CSGO)
 								{
-									FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "Pistol_P2000", client);
+									FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "Pistol_P2000", client);
 								}
 								AddMenuItem(SubWeaponMenu, sDataField, sSubTypeName);
 								if (g_Game == Game_CSGO)
 								{
 									FormatEx(sDataField, sizeof(sDataField), "%d", Pistol_Tec9);
-									FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "Pistol_Tec9", client);
+									FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "Pistol_Tec9", client);
 									AddMenuItem(SubWeaponMenu, sDataField, sSubTypeName);
 									FormatEx(sDataField, sizeof(sDataField), "%d", Pistol_Revolver);
-									FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "Pistol_Revolver", client);
+									FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "Pistol_Revolver", client);
 									AddMenuItem(SubWeaponMenu, sDataField, sSubTypeName);
 								}
 								
@@ -3065,35 +3065,35 @@ public int LR_Selection_Handler(Handle menu, MenuAction action, int client, int 
 								if (gH_Cvar_LR_NoScope_Weapon.IntValue == 2)
 								{
 									Handle NSweaponMenu = CreateMenu(SubLRType_MenuHandler);
-									SetMenuTitle(NSweaponMenu, "%T", "NS Weapon Chooser Menu", client);
+									SetMenuTitle(NSweaponMenu, "%t", "NS Weapon Chooser Menu", client);
 
 									char sSubTypeName[MAX_DISPLAYNAME_SIZE];
 									char sDataField[MAX_DATAENTRY_SIZE];
 									FormatEx(sDataField, sizeof(sDataField), "%d", NSW_AWP);
-									FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "NSW_AWP", client);	
+									FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "NSW_AWP", client);	
 									AddMenuItem(NSweaponMenu, sDataField, sSubTypeName);
 									FormatEx(sDataField, sizeof(sDataField), "%d", NSW_Scout);
 									if (g_Game == Game_CSS)
 									{
-										FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "NSW_Scout", client);
+										FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "NSW_Scout", client);
 									}
 									else if (g_Game == Game_CSGO)
 									{
-										FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "NSW_SSG08", client);
+										FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "NSW_SSG08", client);
 									}
 									AddMenuItem(NSweaponMenu, sDataField, sSubTypeName);
 									FormatEx(sDataField, sizeof(sDataField), "%d", NSW_SG550);
 									if (g_Game == Game_CSS)
 									{
-										FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "NSW_SG550", client);
+										FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "NSW_SG550", client);
 									}
 									else if (g_Game == Game_CSGO)
 									{
-										FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "NSW_SCAR20", client);
+										FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "NSW_SCAR20", client);
 									}
 									AddMenuItem(NSweaponMenu, sDataField, sSubTypeName);
 									FormatEx(sDataField, sizeof(sDataField), "%d", NSW_G3SG1);
-									FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "NSW_G3SG1", client);	
+									FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "NSW_G3SG1", client);	
 									AddMenuItem(NSweaponMenu, sDataField, sSubTypeName);
 			
 									SetMenuExitButton(NSweaponMenu, true);
@@ -3108,9 +3108,9 @@ public int LR_Selection_Handler(Handle menu, MenuAction action, int client, int 
 							{								
 								// create menu for T to choose start point
 								Handle racemenu1 = CreateMenu(RaceStartPointHandler);
-								SetMenuTitle(racemenu1, "%T", "Find a Starting Location", client);
+								SetMenuTitle(racemenu1, "%t", "Find a Starting Location", client);
 								char sMenuText[MAX_DISPLAYNAME_SIZE];
-								FormatEx(sMenuText, sizeof(sMenuText), "%T", "Use Current Position", client);
+								FormatEx(sMenuText, sizeof(sMenuText), "%t", "Use Current Position", client);
 								AddMenuItem(racemenu1, "startloc", sMenuText);
 								SetMenuExitButton(racemenu1, true);
 								DisplayMenu(racemenu1, client, MENU_TIME_FOREVER);						
@@ -3139,19 +3139,19 @@ public int LR_Selection_Handler(Handle menu, MenuAction action, int client, int 
 							case LR_JumpContest:
 							{
 								Handle SubJumpMenu = CreateMenu(SubLRType_MenuHandler);
-								SetMenuTitle(SubJumpMenu, "%T", "Jump Contest Menu", client);
+								SetMenuTitle(SubJumpMenu, "%t", "Jump Contest Menu", client);
 								
 								char sSubTypeName[MAX_DISPLAYNAME_SIZE];
 								char sDataField[MAX_DATAENTRY_SIZE];
 								
 								FormatEx(sDataField, sizeof(sDataField), "%d", Jump_TheMost);
-								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "Jump_TheMost", client);
+								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "Jump_TheMost", client);
 								AddMenuItem(SubJumpMenu, sDataField, sSubTypeName);
 								FormatEx(sDataField, sizeof(sDataField), "%d", Jump_Farthest);
-								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "Jump_Farthest", client);
+								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "Jump_Farthest", client);
 								AddMenuItem(SubJumpMenu, sDataField, sSubTypeName);								
 								FormatEx(sDataField, sizeof(sDataField), "%d", Jump_BrinkOfDeath);
-								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%T", "Jump_BrinkOfDeath", client);
+								FormatEx(sSubTypeName, sizeof(sSubTypeName), "%t", "Jump_BrinkOfDeath", client);
 								AddMenuItem(SubJumpMenu, sDataField, sSubTypeName);		
 								
 								SetMenuExitBackButton(SubJumpMenu, true);
@@ -3160,7 +3160,7 @@ public int LR_Selection_Handler(Handle menu, MenuAction action, int client, int 
 							case LR_OnlyHS:
 							{
 								Handle SubOHSMenu = CreateMenu(SubLRType_MenuHandler);
-								SetMenuTitle(SubOHSMenu, "%T", "Only Headshot", client);
+								SetMenuTitle(SubOHSMenu, "%t", "Only Headshot", client);
 								
 								char sSubTypeName[MAX_DISPLAYNAME_SIZE];
 								char sDataField[MAX_DATAENTRY_SIZE];
@@ -3230,7 +3230,7 @@ public int LR_Selection_Handler(Handle menu, MenuAction action, int client, int 
 void CreateMainPlayerHandler(int client)
 {
 	Handle playermenu = CreateMenu(MainPlayerHandler);
-	SetMenuTitle(playermenu, "%T", "Choose A Player", client);
+	SetMenuTitle(playermenu, "%t", "Choose A Player", client);
 
 	int iNumCTsAvailable = 0;
 	int iUserId = 0;
@@ -3468,9 +3468,9 @@ public Action Timer_RaceCD(Handle timer, int id)
 void CreateRaceEndPointMenu(int client)
 {
 	Handle EndPointMenu = CreateMenu(RaceEndPointHandler);
-	SetMenuTitle(EndPointMenu, "%T", "Choose an End Point", client);
+	SetMenuTitle(EndPointMenu, "%t", "Choose an End Point", client);
 	char sMenuText[MAX_DISPLAYNAME_SIZE];
-	FormatEx (sMenuText, sizeof(sMenuText), "%T", "Use Current Position", client);
+	FormatEx (sMenuText, sizeof(sMenuText), "%t", "Use Current Position", client);
 	AddMenuItem(EndPointMenu, "endpoint", sMenuText);
 	SetMenuExitButton(EndPointMenu, true);
 	DisplayMenu(EndPointMenu, client, MENU_TIME_FOREVER);
@@ -3553,18 +3553,18 @@ public int MainPlayerHandler(Handle playermenu, MenuAction action, int client, i
 											char lrname[MAX_DISPLAYNAME_SIZE];
 											if (g_LRLookup[client] < LastRequest)
 											{
-												FormatEx(lrname, sizeof(lrname), "%T", g_sLastRequestPhrase[g_LRLookup[client]], ClientIdxOfCT);		
+												FormatEx(lrname, sizeof(lrname), "%t", g_sLastRequestPhrase[g_LRLookup[client]], ClientIdxOfCT);		
 											}
 											else
 											{
 												GetArrayString(gH_DArray_LR_CustomNames, view_as<int>(g_LRLookup[client] - LastRequest), lrname, MAX_DISPLAYNAME_SIZE);
 											}
-											SetMenuTitle(askmenu, "%T", "Rebel Ask CT For LR", ClientIdxOfCT, client, lrname);
+											SetMenuTitle(askmenu, "%t", "Rebel Ask CT For LR", ClientIdxOfCT, client, lrname);
 	
 											char yes[8];
 											char no[8];
-											FormatEx(yes, sizeof(yes), "%T", "Yes", ClientIdxOfCT);
-											FormatEx(no, sizeof(no), "%T", "No", ClientIdxOfCT);
+											FormatEx(yes, sizeof(yes), "%t", "Yes", ClientIdxOfCT);
+											FormatEx(no, sizeof(no), "%t", "No", ClientIdxOfCT);
 											AddMenuItem(askmenu, "yes", yes);
 											AddMenuItem(askmenu, "no", no);
 	
@@ -4315,13 +4315,13 @@ void InitializeGame(int iPartnersIndex)
 			SetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, -1, view_as<int>(Block_Global1));
 			SetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, -1, view_as<int>(Block_Global2));
 			Handle rpsmenu1 = CreateMenu(RPSmenuHandler);
-			SetMenuTitle(rpsmenu1, "%T", "Rock Paper Scissors", LR_Player_Prisoner);
+			SetMenuTitle(rpsmenu1, "%t", "Rock Paper Scissors", LR_Player_Prisoner);
 			SetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, rpsmenu1, view_as<int>(Block_PrisonerData));
 
 			char r1[32], p1[64], s1[64];
-			FormatEx(r1, sizeof(r1), "%T", "Rock", LR_Player_Prisoner);
-			FormatEx(p1, sizeof(p1), "%T", "Paper", LR_Player_Prisoner);
-			FormatEx(s1, sizeof(s1), "%T", "Scissors", LR_Player_Prisoner);
+			FormatEx(r1, sizeof(r1), "%t", "Rock", LR_Player_Prisoner);
+			FormatEx(p1, sizeof(p1), "%t", "Paper", LR_Player_Prisoner);
+			FormatEx(s1, sizeof(s1), "%t", "Scissors", LR_Player_Prisoner);
 			AddMenuItem(rpsmenu1, "0", r1);
 			AddMenuItem(rpsmenu1, "1", p1);
 			AddMenuItem(rpsmenu1, "2", s1);
@@ -4330,13 +4330,13 @@ void InitializeGame(int iPartnersIndex)
 			DisplayMenu(rpsmenu1, LR_Player_Prisoner, 15);
 
 			Handle rpsmenu2 = CreateMenu(RPSmenuHandler);
-			SetMenuTitle(rpsmenu2, "%T", "Rock Paper Scissors", LR_Player_Guard);
+			SetMenuTitle(rpsmenu2, "%t", "Rock Paper Scissors", LR_Player_Guard);
 			SetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, rpsmenu2, view_as<int>(Block_GuardData));
 
 			char r2[32], p2[64], s2[64];
-			FormatEx(r2, sizeof(r2), "%T", "Rock", LR_Player_Guard);
-			FormatEx(p2, sizeof(p2), "%T", "Paper", LR_Player_Guard);
-			FormatEx(s2, sizeof(s2), "%T", "Scissors", LR_Player_Guard);
+			FormatEx(r2, sizeof(r2), "%t", "Rock", LR_Player_Guard);
+			FormatEx(p2, sizeof(p2), "%t", "Paper", LR_Player_Guard);
+			FormatEx(s2, sizeof(s2), "%t", "Scissors", LR_Player_Guard);
 			AddMenuItem(rpsmenu2, "0", r2);
 			AddMenuItem(rpsmenu2, "1", p2);
 			AddMenuItem(rpsmenu2, "2", s2);
@@ -4660,15 +4660,15 @@ void InitializeGame(int iPartnersIndex)
 				{
 					case Jump_TheMost:
 					{
-						FormatEx(JumpTranslation, sizeof(JumpTranslation), "%T", "Jump_TheMost");
+						FormatEx(JumpTranslation, sizeof(JumpTranslation), "%t", "Jump_TheMost");
 					}
 					case Jump_Farthest:
 					{
-						FormatEx(JumpTranslation, sizeof(JumpTranslation), "%T", "Jump_Farthest");
+						FormatEx(JumpTranslation, sizeof(JumpTranslation), "%t", "Jump_Farthest");
 					}
 					case Jump_BrinkOfDeath:
 					{
-						FormatEx(JumpTranslation, sizeof(JumpTranslation), "%T", "Jump_BrinkOfDeath");
+						FormatEx(JumpTranslation, sizeof(JumpTranslation), "%t", "Jump_BrinkOfDeath");
 					}
 				}
 
@@ -5361,9 +5361,9 @@ public int RPSmenuHandler(Handle menu, MenuAction action, int client, int param2
 					if ((RPS_Guard_Choice != -1) && (RPS_Prisoner_Choice != -1))
 					{
 						// decide who wins -- rock 0 paper 1 scissors 2
-						FormatEx(RPSr, sizeof(RPSr), "%T", "Rock", LR_Player_Prisoner);
-						FormatEx(RPSp, sizeof(RPSp), "%T", "Paper", LR_Player_Prisoner);
-						FormatEx(RPSs, sizeof(RPSs), "%T", "Scissors", LR_Player_Prisoner);
+						FormatEx(RPSr, sizeof(RPSr), "%t", "Rock", LR_Player_Prisoner);
+						FormatEx(RPSp, sizeof(RPSp), "%t", "Paper", LR_Player_Prisoner);
+						FormatEx(RPSs, sizeof(RPSs), "%t", "Scissors", LR_Player_Prisoner);
 		
 						switch (RPS_Prisoner_Choice)
 						{
@@ -5427,12 +5427,12 @@ public int RPSmenuHandler(Handle menu, MenuAction action, int client, int param2
 							SetArrayCell(gH_DArray_LR_Partners, idx, -1, view_as<int>(Block_Global1));
 							SetArrayCell(gH_DArray_LR_Partners, idx, -1, view_as<int>(Block_Global2));
 							rpsmenu1 = CreateMenu(RPSmenuHandler);
-							SetMenuTitle(rpsmenu1, "%T", "Rock Paper Scissors", LR_Player_Prisoner);
+							SetMenuTitle(rpsmenu1, "%t", "Rock Paper Scissors", LR_Player_Prisoner);
 							SetArrayCell(gH_DArray_LR_Partners, idx, rpsmenu1, view_as<int>(Block_PrisonerData));
 				
-							FormatEx(r1, sizeof(r1), "%T", "Rock", LR_Player_Prisoner);
-							FormatEx(p1, sizeof(p1), "%T", "Paper", LR_Player_Prisoner);
-							FormatEx(s1, sizeof(s1), "%T", "Scissors", LR_Player_Prisoner);
+							FormatEx(r1, sizeof(r1), "%t", "Rock", LR_Player_Prisoner);
+							FormatEx(p1, sizeof(p1), "%t", "Paper", LR_Player_Prisoner);
+							FormatEx(s1, sizeof(s1), "%t", "Scissors", LR_Player_Prisoner);
 							AddMenuItem(rpsmenu1, "0", r1);
 							AddMenuItem(rpsmenu1, "1", p1);
 							AddMenuItem(rpsmenu1, "2", s1);
@@ -5441,12 +5441,12 @@ public int RPSmenuHandler(Handle menu, MenuAction action, int client, int param2
 							DisplayMenu(rpsmenu1, LR_Player_Prisoner, 15);
 
 							rpsmenu2 = CreateMenu(RPSmenuHandler);
-							SetMenuTitle(rpsmenu2, "%T", "Rock Paper Scissors", LR_Player_Guard);
+							SetMenuTitle(rpsmenu2, "%t", "Rock Paper Scissors", LR_Player_Guard);
 							SetArrayCell(gH_DArray_LR_Partners, idx, rpsmenu2, view_as<int>(Block_GuardData));
 				
-							FormatEx(r1, sizeof(r1), "%T", "Rock", LR_Player_Guard);
-							FormatEx(p1, sizeof(p1), "%T", "Paper", LR_Player_Guard);
-							FormatEx(s1, sizeof(s1), "%T", "Scissors", LR_Player_Guard);
+							FormatEx(r1, sizeof(r1), "%t", "Rock", LR_Player_Guard);
+							FormatEx(p1, sizeof(p1), "%t", "Paper", LR_Player_Guard);
+							FormatEx(s1, sizeof(s1), "%t", "Scissors", LR_Player_Guard);
 							AddMenuItem(rpsmenu2, "0", r1);
 							AddMenuItem(rpsmenu2, "1", p1);
 							AddMenuItem(rpsmenu2, "2", s1);
