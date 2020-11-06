@@ -1388,7 +1388,6 @@ void CleanupLastRequest(int loser, int arrayIndex)
 					g_cvSvSuit = FindConVar("mp_weapons_allow_heavyassaultsuit");
 					
 				SetConVarInt(g_cvSvSuit, SuitSetBack, true, false);
-				EMP_FreeHandle(g_cvSvSuit);
 			}
 			
 			LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR Won", winner, g_sLastRequestPhrase[LR_JuggernoutBattle]);
@@ -3960,13 +3959,15 @@ void InitializeGame(int iPartnersIndex)
 			
 				SuitSetBack = GetConVarInt(g_cvSvSuit);		
 				SetConVarInt(g_cvSvSuit, 1, true, false);
-				EMP_FreeHandle(g_cvSvSuit);
 			
 				GivePlayerItem(LR_Player_Prisoner, "item_heavyassaultsuit");
 				GivePlayerItem(LR_Player_Guard, "item_heavyassaultsuit");
 				
 				EMP_GiveWeapon(LR_Player_Prisoner, "weapon_negev");
 				EMP_GiveWeapon(LR_Player_Guard, "weapon_negev");
+				
+				SetEntityHealth(LR_Player_Prisoner, 100);
+				SetEntityHealth(LR_Player_Guard, 100);
 			}
 			else if (GetEngineVersion() == Engine_CSS)
 			{
