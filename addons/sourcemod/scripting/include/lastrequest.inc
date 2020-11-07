@@ -24,27 +24,26 @@
 #define _LastRequest_Included_
 
 // Custom types
-enum LastRequest
-{
-	LR_KnifeFight = 0,
-	LR_Shot4Shot,
-	LR_GunToss,
-	LR_ChickenFight,
-	LR_HotPotato,
-	LR_Dodgeball,
-	LR_NoScope,
-	LR_RockPaperScissors,
-	LR_Rebel,
-	LR_Mag4Mag,
-	LR_Race,
-	LR_RussianRoulette,
-	LR_JumpContest,
-	LR_ShieldFight,
-	LR_FistFight,
-	LR_JuggernoutBattle,
-	LR_OnlyHS,
-	LR_HEFight
-};
+#define		LR_Number	18
+
+#define		LR_KnifeFight			0
+#define		LR_Shot4Shot			1
+#define		LR_GunToss				2
+#define		LR_ChickenFight			3
+#define		LR_HotPotato			4
+#define		LR_Dodgeball			5
+#define		LR_NoScope				6
+#define		LR_RockPaperScissors	7
+#define		LR_Rebel				8
+#define		LR_Mag4Mag				9
+#define		LR_Race					10
+#define		LR_RussianRoulette		11
+#define		LR_JumpContest			12
+#define		LR_ShieldFight			13
+#define		LR_FistFight			14
+#define		LR_JuggernoutBattle		15
+#define		LR_OnlyHS				16
+#define		LR_HEFight				17
 
 enum PartnersArray
 {
@@ -60,13 +59,13 @@ enum PartnersArray
 	Block_DataPackHandle
 };
 
-enum DataType
+/*enum DataType
 {
 	Type_Int = 0,
-	Type_Float,
-	Type_Handle,
-	Type_LastRequest,
-	Type_PartnerArray
+	Type_Float = 1,
+	Type_Handle = 2,
+	Type_LastRequest = 3,
+	Type_PartnerArray = 4
 };
 
 enum LR_Structure
@@ -81,7 +80,7 @@ enum LR_Structure
 	DataType:Global3,
 	DataType:Global4,
 	DataType:TheDataPack
-};
+};*/
 
 public SharedPlugin __pl_lastrequest =
 {

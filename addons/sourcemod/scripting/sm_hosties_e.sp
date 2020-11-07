@@ -41,7 +41,7 @@
 
 #pragma			semicolon 					1
 
-#define 		PLUGIN_VERSION				"4.1b"
+#define 		PLUGIN_VERSION				"4.2b"
 #define 		MAX_DISPLAYNAME_SIZE		64
 #define 		MAX_DATAENTRY_SIZE			5
 #define 		SERVERTAG					"ENT_Hosties,LR,LastRequest"
@@ -87,7 +87,7 @@ bool			g_bSBAvailable		=		false,
 				g_bMYJB				=		false,
 				g_bBW				=		false;
 		
-GameType		g_Game				=		Game_Unknown;
+int				g_Game				=		Game_Unknown;
 
 Handle			gH_TopMenu			=		INVALID_HANDLE,
 				gH_GameVar_CT_Name	=		INVALID_HANDLE,
@@ -110,9 +110,10 @@ ConVar			gH_Cvar_Freekill_Sound,
 				gH_Cvar_Freekill_Reset;
 
 char			gShadow_Freekill_Sound[PLATFORM_MAX_PATH];
-int				gA_FreekillsOfCT[MAXPLAYERS+1];
 
-FreekillPunishment gShadow_Freekill_Punishment;
+int				gA_FreekillsOfCT[MAXPLAYERS+1],
+				gShadow_Freekill_Punishment;
+
 #endif
 
 #if (MODULE_ANTIHEAL == 1)

@@ -114,7 +114,7 @@ void Freekillers_OnConfigsExecuted()
 		MediaType soundfile = type_Sound;
 		CacheTheFile(gShadow_Freekill_Sound, soundfile);
 	}
-	gShadow_Freekill_Punishment = view_as<FreekillPunishment>(GetConVarInt(gH_Cvar_Freekill_Punishment));
+	gShadow_Freekill_Punishment = GetConVarInt(gH_Cvar_Freekill_Punishment);
 }
 
 public void Freekillers_CvarChanged(Handle cvar, const char[] oldValue, const char[] newValue)
@@ -122,7 +122,7 @@ public void Freekillers_CvarChanged(Handle cvar, const char[] oldValue, const ch
 	if (cvar == gH_Cvar_Freekill_Sound)
 		Format(gShadow_Freekill_Sound, PLATFORM_MAX_PATH, newValue);
 	else if (cvar == gH_Cvar_Freekill_Punishment)
-		gShadow_Freekill_Punishment = view_as<FreekillPunishment>(StringToInt(newValue));
+		gShadow_Freekill_Punishment = StringToInt(newValue);
 }
 
 public Action Freekillers_RoundEnd(Event event, const char[] name, bool dontBroadcast)
@@ -165,7 +165,7 @@ public Action Freekillers_PlayerDeath(Event event, const char[] name, bool dontB
 				// check if victim was in an LR and not the attacker pair
 				for (int idx = 0; idx < GetArraySize(gH_DArray_LR_Partners); idx++)
 				{
-					LastRequest type = GetArrayCell(gH_DArray_LR_Partners, idx, view_as<int>(Block_LRType));
+					int type = GetArrayCell(gH_DArray_LR_Partners, idx, view_as<int>(Block_LRType));
 					int LR_Player_Prisoner = GetArrayCell(gH_DArray_LR_Partners, idx, view_as<int>(Block_Prisoner));
 					int LR_Player_Guard = GetArrayCell(gH_DArray_LR_Partners, idx, view_as<int>(Block_Guard));
 					

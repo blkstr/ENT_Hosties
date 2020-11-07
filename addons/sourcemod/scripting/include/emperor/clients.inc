@@ -136,7 +136,7 @@ stock void EMP_ShowOverlayToAll(const char[] overlaypath)
 	{
 		if (EMP_IsValidClient(x))
 		{
-			ShowOverlayToClient(x, overlaypath);
+			EMP_ShowOverlayToClient(x, overlaypath);
 		}
 	}
 }

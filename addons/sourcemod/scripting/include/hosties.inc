@@ -27,19 +27,14 @@
 #define 	NORMAL_VISION			90
 #define		INVALID_WEAPON			-1
 
-enum GameType
-{
-	Game_Unknown = -1,
-	Game_CSS,
-	Game_CSGO
-};
+#define 	Game_Unknown			-1
+#define 	Game_CSS				0
+#define 	Game_CSGO				1
 
-enum FreekillPunishment
-{
-	FP_Slay = 0,
-	FP_Kick,
-	FP_Ban
-};
+#define 	FP_Slay					0
+#define 	FP_Kick					1
+#define 	FP_Ban					2
+
 
 enum MediaType
 {

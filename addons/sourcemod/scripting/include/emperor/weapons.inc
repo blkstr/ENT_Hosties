@@ -52,7 +52,7 @@ stock void EMP_SaveWeapons(int target)
 				char temp_weapon_name[64];
 				EMP_SetWeaponClassname(temp_weapon, temp_weapon_name, sizeof(temp_weapon_name));
 				
-				Client_DetachWeapon(target, temp_weapon);
+				Client_RemoveWeapon(target, temp_weapon_name, true);
 				C_sWeapon[target][counter] = temp_weapon_name;
 				
 				counter++; temp_count--;
