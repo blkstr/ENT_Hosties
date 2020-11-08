@@ -475,17 +475,6 @@ void LastRequest_OnPluginStart()
 	gH_Cvar_LR_Fists_Instead_Knife 		= AutoExecConfig_CreateConVar("sm_hosties_fists_instead_knife", "0", "Forces to use fists instead of knife by Hosties. (Not affects LR games)", 0, true, 0.0, true, 1.0);
 	gH_Cvar_LR_Ten_Timer 				= AutoExecConfig_CreateConVar("sm_hosties_ten_second_timers", "1", "Enable or disable the Must Throw in GunToss and Must Jump in Jump Contests timers", 0, true, 0.0, true, 1.0);
 	
-	char g_sCommands[8][32], commands[128];
-	gH_Cvar_LR_Aliases.GetString(commands, sizeof(commands));
-	
-	int g_iCommandCount = ExplodeString(commands, ",", g_sCommands, sizeof(g_sCommands), sizeof(g_sCommands[]));
-	
-	for (int i = 0; i < g_iCommandCount; i++)
-	{
-		String_Trim(g_sCommands[i], g_sCommands[i], 32);
-		RegConsoleCmd(g_sCommands[i], Command_LastRequest);
-	}
-	
 	HookConVarChange(gH_Cvar_LR_KnifeFight_On,			ConVarChanged_LastRequest);
 	HookConVarChange(gH_Cvar_LR_Shot4Shot_On, 			ConVarChanged_LastRequest);
 	HookConVarChange(gH_Cvar_LR_ChickenFight_On, 		ConVarChanged_LastRequest);

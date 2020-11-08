@@ -230,6 +230,17 @@ public void OnPluginStart()
 	AutoExecConfig_ExecuteFile();
 	AutoExecConfig_CleanFile();
 	
+	char g_sCommands[8][32], commands[128];
+	gH_Cvar_LR_Aliases.GetString(commands, sizeof(commands));
+	
+	int g_iCommandCount = ExplodeString(commands, ",", g_sCommands, sizeof(g_sCommands), sizeof(g_sCommands[]));
+	
+	for (int i = 0; i < g_iCommandCount; i++)
+	{
+		String_Trim(g_sCommands[i], g_sCommands[i], 32);
+		RegConsoleCmd(g_sCommands[i], Command_LastRequest);
+	}
+	
 	#if (MODULE_FIXJB == 1)
 	FixJB_OnPluginStart();
 	#endif
@@ -240,10 +251,10 @@ public void OnPluginStart()
 	GetConVarString(gH_Cvar_ChatTag, Temp, sizeof(Temp));
 	Format(gShadow_Hosties_ChatBanner, sizeof(gShadow_Hosties_ChatBanner), "%s {lime}", Temp);
 	
-	if (StrEqual(gShadow_Hosties_ChatBanner, "{red}"))
+	if (StrContains(gShadow_Hosties_ChatBanner, "{red}") != -1)
 		ReplaceString(gShadow_Hosties_ChatBanner, sizeof(gShadow_Hosties_ChatBanner), "{red}", "\x02");	
 		
-	if (StrEqual(gShadow_Hosties_ChatBanner, "{blue}"))
+	if (StrContains(gShadow_Hosties_ChatBanner, "{blue}") != -1)
 		ReplaceString(gShadow_Hosties_ChatBanner, sizeof(gShadow_Hosties_ChatBanner), "{blue}", "\x0C");	
 	
 	AutoExecConfig_CreateConVar("sm_hosties_version", PLUGIN_VERSION, "SM_Hosties plugin version (unchangeable)", 0|FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY|FCVAR_DONTRECORD);
