@@ -3336,7 +3336,10 @@ public int RaceEndPointHandler(Handle menu, MenuAction action, int client, int p
 						if (distanceBetweenPoints > 300.0)
 						{
 							TE_SetupBeamRingPoint(f_EndLocation, 100.0, 130.0, BeamSprite, HaloSprite, 0, 15, 20.0, 7.0, 0.0, greenColor, 1, 0);
-							TE_SendToAll();						
+							TE_SendToAll();
+							
+							PrintToChatAll("Debug: Beam setup completed");
+							
 							// allow them to choose a player finally
 							CreateMainPlayerHandler(client);
 						}
@@ -4505,9 +4508,11 @@ void InitializeGame(int iPartnersIndex)
 			f_StartLocation[0] = ReadPackFloat(gH_BuildLR[LR_Player_Prisoner]);
 			f_StartLocation[1] = ReadPackFloat(gH_BuildLR[LR_Player_Prisoner]);
 			f_StartLocation[2] = ReadPackFloat(gH_BuildLR[LR_Player_Prisoner]);
+			
 			f_EndLocation[0] = ReadPackFloat(gH_BuildLR[LR_Player_Prisoner]);
 			f_EndLocation[1] = ReadPackFloat(gH_BuildLR[LR_Player_Prisoner]);
 			f_EndLocation[2] = ReadPackFloat(gH_BuildLR[LR_Player_Prisoner]);
+			
 			Handle ThisDataPack = CreateDataPack();
 			SetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, ThisDataPack, 9);
 			WritePackFloat(ThisDataPack, f_EndLocation[0]);
@@ -5320,8 +5325,6 @@ public Action Timer_Race(Handle timer)
 			}
 		}
 	}
-	else
-		return Plugin_Stop;
 	
 	if (!bIsRace)
 	{
