@@ -41,7 +41,7 @@
 
 #pragma			semicolon 					1
 
-#define 		PLUGIN_VERSION				"4.2b"
+#define 		PLUGIN_VERSION				"4.2.2b"
 #define 		MAX_DISPLAYNAME_SIZE		64
 #define 		MAX_DATAENTRY_SIZE			5
 #define 		SERVERTAG					"ENT_Hosties,LR,LastRequest"
@@ -230,17 +230,6 @@ public void OnPluginStart()
 	AutoExecConfig_ExecuteFile();
 	AutoExecConfig_CleanFile();
 	
-	char g_sCommands[8][32], commands[128];
-	gH_Cvar_LR_Aliases.GetString(commands, sizeof(commands));
-	
-	int g_iCommandCount = ExplodeString(commands, ",", g_sCommands, sizeof(g_sCommands), sizeof(g_sCommands[]));
-	
-	for (int i = 0; i < g_iCommandCount; i++)
-	{
-		String_Trim(g_sCommands[i], g_sCommands[i], 32);
-		RegConsoleCmd(g_sCommands[i], Command_LastRequest);
-	}
-	
 	#if (MODULE_FIXJB == 1)
 	FixJB_OnPluginStart();
 	#endif
@@ -411,6 +400,17 @@ public void OnConfigsExecuted()
 	#if (MODULE_FIXJB == 1)
 	FixJB_OnConfigsExecuted();
 	#endif
+	
+	char g_sCommands[8][32], commands[128];
+	gH_Cvar_LR_Aliases.GetString(commands, sizeof(commands));
+	
+	int g_iCommandCount = ExplodeString(commands, ",", g_sCommands, sizeof(g_sCommands), sizeof(g_sCommands[]));
+	
+	for (int i = 0; i < g_iCommandCount; i++)
+	{
+		String_Trim(g_sCommands[i], g_sCommands[i], 32);
+		RegConsoleCmd(g_sCommands[i], Command_LastRequest);
+	}
 	
 	char Temp[256];
 	GetConVarString(gH_Cvar_CT_Name, Temp, sizeof(Temp));
