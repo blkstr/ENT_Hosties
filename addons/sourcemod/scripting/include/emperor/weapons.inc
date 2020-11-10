@@ -89,7 +89,11 @@ stock void EMP_RestoreWeapons(int target)
 					EMP_GiveWeapon(target, weapon_class);
 				}
 			}
+			
+			C_sWeapon[target][g] = "";
 		}
+		
+		C_WeaponCount[target] = 0;
 	}
 }
 
