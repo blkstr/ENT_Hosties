@@ -751,7 +751,7 @@ void MarkRebel(int client, int victim)
 	{
 		if (gH_Cvar_SendGlobalMsgs.BoolValue)
 		{
-			LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "New Rebel", client);
+			EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "New Rebel", client);
 		}
 		else
 		{
@@ -818,7 +818,7 @@ public Action LastRequest_RoundStart(Event event, const char[] name, bool dontBr
 
 		if (gH_Cvar_Announce_Delay_Enable.BoolValue)
 		{
-			LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR Delay Announcement", RoundToNearest(gH_Cvar_LR_Delay_Enable_Time.FloatValue));
+			EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR Delay Announcement", RoundToNearest(gH_Cvar_LR_Delay_Enable_Time.FloatValue));
 		}
 	}
 	else
@@ -924,7 +924,7 @@ public Action LastRequest_PlayerDeath(Event event, const char[] name, bool dontB
 				{
 					if (!gH_Cvar_LR_NonContKiller_Action)
 					{
-						LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Non LR Kill LR Abort", attacker, victim);
+						EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Non LR Kill LR Abort", attacker, victim);
 					}
 					else
 					{
@@ -947,7 +947,7 @@ public Action LastRequest_PlayerDeath(Event event, const char[] name, bool dontB
 	{
 		if (gH_Cvar_SendGlobalMsgs.BoolValue)
 		{
-			LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Rebel Kill", attacker, victim);
+			EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Rebel Kill", attacker, victim);
 		}
 		else
 		{
@@ -979,7 +979,7 @@ public Action LastRequest_PlayerDeath(Event event, const char[] name, bool dontB
 		
 			if (gH_Cvar_Announce_LR.BoolValue)
 			{
-				LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR Available");
+				EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR Available");
 				char buffer[PLATFORM_MAX_PATH];
 				gH_Cvar_LR_Sound.GetString(buffer, sizeof(buffer));
 				
@@ -1029,7 +1029,7 @@ public Action LastRequest_PlayerHurt(Event event, const char[] name, bool dontBr
 					{
 						if (gH_Cvar_SendGlobalMsgs.BoolValue)
 						{
-							LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "New Rebel", attacker);
+							EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "New Rebel", attacker);
 						}
 						else
 						{
@@ -1159,7 +1159,7 @@ public Action LastRequest_PlayerDisconnect(Event event, const char[] name, bool 
 			{
 				CleanupLastRequest(client, idx);
 				RemoveFromArray(gH_DArray_LR_Partners, idx);
-				LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %s", gShadow_Hosties_ChatBanner, "LR Player Disconnect", client);
+				EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %s", gShadow_Hosties_ChatBanner, "LR Player Disconnect", client);
 				if (gH_Cvar_LR_Debug_Enabled.BoolValue) LogToFileEx(gShadow_Hosties_LogFile, "%L has disconnected in LR. LR aborted.", client);
 			}
 		}
@@ -1362,7 +1362,7 @@ void CleanupLastRequest(int loser, int arrayIndex)
 			}
 			
 			char LR_Name[64];
-			LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS)
+			EMP_LoopPlayers(TargetForLang)
 			{
 				FormatEx(LR_Name, sizeof(LR_Name), "%t", g_sLastRequestPhrase[LR_JuggernoutBattle]);
 				CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR Won", winner, LR_Name);
@@ -1371,7 +1371,7 @@ void CleanupLastRequest(int loser, int arrayIndex)
 		case LR_HEFight, LR_FistFight, LR_OnlyHS:
 		{
 			char LR_Name[64];
-			LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS)
+			EMP_LoopPlayers(TargetForLang)
 			{
 				FormatEx(LR_Name, sizeof(LR_Name), "%t", g_sLastRequestPhrase[type]);
 				CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR Won", winner, LR_Name);
@@ -1401,7 +1401,7 @@ void CleanupLastRequest(int loser, int arrayIndex)
 			}
 			
 			char LR_Name[64];
-			LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS)
+			EMP_LoopPlayers(TargetForLang)
 			{
 				FormatEx(LR_Name, sizeof(LR_Name), "%t", g_sLastRequestPhrase[type]);
 				CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR Won", winner, LR_Name);
@@ -1687,7 +1687,7 @@ public Action LastRequest_WeaponFire(Event event, const char[] name, bool dontBr
 								{
 									if (gH_Cvar_SendGlobalMsgs.BoolValue)
 									{
-										LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "M4M Mag Used", client);
+										EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "M4M Mag Used", client);
 									}
 									else
 									{
@@ -1737,7 +1737,7 @@ public Action LastRequest_WeaponFire(Event event, const char[] name, bool dontBr
 					{
 						if (gH_Cvar_SendGlobalMsgs.BoolValue)
 						{
-							LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "S4S Shot Taken", client);
+							EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "S4S Shot Taken", client);
 						}
 						else
 						{
@@ -1811,7 +1811,7 @@ public Action LastRequest_WeaponFire(Event event, const char[] name, bool dontBr
 							{
 								if (gH_Cvar_SendGlobalMsgs.BoolValue)
 								{
-									LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "S4S Shot Taken", client);
+									EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "S4S Shot Taken", client);
 								}
 								else
 								{
@@ -1945,14 +1945,14 @@ public Action OnTakeDamage(int victim, int &attacker, int &inflictor, float &dam
 								case 1:
 								{
 									KillAndReward(victim, attacker);
-									LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Russian Roulette - Hit", victim);
+									EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Russian Roulette - Hit", victim);
 
 								}
 								default:
 								{
 									if (gH_Cvar_SendGlobalMsgs.BoolValue)
 									{						
-										LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Russian Roulette - Miss");
+										EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Russian Roulette - Miss");
 									}
 									else
 									{
@@ -2252,7 +2252,7 @@ public Action OnWeaponEquip(int client, int weapon)
 						{
 							if (gH_Cvar_SendGlobalMsgs.BoolValue)
 							{
-								LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Hot Potato PickUp", client);
+								EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Hot Potato PickUp", client);
 							}
 							else
 							{
@@ -2421,12 +2421,12 @@ public Action Timer_EnemyMustThrow(Handle timer)
 				if (GTp1dropped && !GTp2dropped)
 				{
 					KillAndReward(LR_Player_Guard, LR_Player_Prisoner);
-					LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "GT No Throw", LR_Player_Prisoner, LR_Player_Guard);
+					EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "GT No Throw", LR_Player_Prisoner, LR_Player_Guard);
 				}
 				else if (!GTp1dropped && GTp2dropped)
 				{
 					KillAndReward(LR_Player_Prisoner, LR_Player_Guard);
-					LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "GT No Throw", LR_Player_Guard, LR_Player_Prisoner);
+					EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "GT No Throw", LR_Player_Guard, LR_Player_Prisoner);
 				}
 			}
 		}
@@ -3914,7 +3914,7 @@ void InitializeGame(int iPartnersIndex)
 				SetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, LR_Player_Prisoner, view_as<int>(Block_Global1));
 				if (gH_Cvar_SendGlobalMsgs.BoolValue)
 				{
-					LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Randomly Chose First Player", LR_Player_Guard);
+					EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Randomly Chose First Player", LR_Player_Guard);
 				}
 				else
 				{
@@ -3928,7 +3928,7 @@ void InitializeGame(int iPartnersIndex)
 				SetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, LR_Player_Guard, view_as<int>(Block_Global1));
 				if (gH_Cvar_SendGlobalMsgs.BoolValue)
 				{
-					LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Randomly Chose First Player", LR_Player_Prisoner);
+					EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Randomly Chose First Player", LR_Player_Prisoner);
 				}
 				else
 				{
@@ -4374,7 +4374,7 @@ void InitializeGame(int iPartnersIndex)
 				SetEntData(TargetForSetHP, g_Offset_Health, gH_Cvar_LR_Rebel_CT_HP.IntValue);
 			
 			// announce LR
-			LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR Has Chosen to Rebel!", LR_Player_Prisoner);
+			EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR Has Chosen to Rebel!", LR_Player_Prisoner);
 		}
 		case LR_Mag4Mag:
 		{
@@ -4467,7 +4467,7 @@ void InitializeGame(int iPartnersIndex)
 				SetEntData(Pistol_Guard, g_Offset_Clip1, gH_Cvar_LR_M4M_MagCapacity.IntValue);
 				if (gH_Cvar_SendGlobalMsgs.BoolValue)
 				{
-					LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Randomly Chose First Player", LR_Player_Guard);
+					EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Randomly Chose First Player", LR_Player_Guard);
 				}
 				else
 				{
@@ -4481,7 +4481,7 @@ void InitializeGame(int iPartnersIndex)
 				SetEntData(Pistol_Prisoner, g_Offset_Clip1, gH_Cvar_LR_M4M_MagCapacity.IntValue);			
 				if (gH_Cvar_SendGlobalMsgs.BoolValue)
 				{
-					LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Randomly Chose First Player", LR_Player_Prisoner);
+					EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Randomly Chose First Player", LR_Player_Prisoner);
 				}
 				else
 				{
@@ -4563,7 +4563,7 @@ void InitializeGame(int iPartnersIndex)
 				SetEntData(Pistol_Guard, g_Offset_Clip1, 1);
 				if (gH_Cvar_SendGlobalMsgs.BoolValue)
 				{
-					LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Randomly Chose First Player", LR_Player_Guard);
+					EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Randomly Chose First Player", LR_Player_Guard);
 				}
 				else
 				{
@@ -4576,7 +4576,7 @@ void InitializeGame(int iPartnersIndex)
 				SetEntData(Pistol_Prisoner, g_Offset_Clip1, 1);
 				if (gH_Cvar_SendGlobalMsgs.BoolValue)
 				{
-					LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Randomly Chose First Player", LR_Player_Prisoner);
+					EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Randomly Chose First Player", LR_Player_Prisoner);
 				}
 				else
 				{
@@ -4657,7 +4657,7 @@ void InitializeGame(int iPartnersIndex)
 			}
 			
 			char JumpTranslation[64];
-			LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS)
+			EMP_LoopPlayers(TargetForLang)
 			{
 				switch (JumpChoice) //To set everyone's own language for the message
 				{
@@ -4699,7 +4699,7 @@ void InitializeGame(int iPartnersIndex)
 	if (selection != LR_Rebel && selection != LR_JumpContest)
 	{
 		char LR_Name[32];
-		LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS)
+		EMP_LoopPlayers(TargetForLang)
 		{
 			FormatEx(LR_Name, sizeof(LR_Name), "%t", g_sLastRequestPhrase[selection]);
 			CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Start Selected Game", LR_Player_Prisoner, LR_Name, LR_Player_Guard);
@@ -4797,13 +4797,13 @@ public Action Timer_FarthestJumpDetector(Handle timer)
 						
 						if (Prisoner_Distance > Guard_Distance)
 						{
-							LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Farthest Jump Won", LR_Player_Prisoner, LR_Player_Guard, Prisoner_Distance, Guard_Distance);
+							EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Farthest Jump Won", LR_Player_Prisoner, LR_Player_Guard, Prisoner_Distance, Guard_Distance);
 							KillAndReward(LR_Player_Guard, LR_Player_Prisoner);
 						}
 						
 						else if (Guard_Distance >= Prisoner_Distance)
 						{
-							LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Farthest Jump Won", LR_Player_Guard, LR_Player_Prisoner, Guard_Distance, Prisoner_Distance);
+							EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Farthest Jump Won", LR_Player_Guard, LR_Player_Prisoner, Guard_Distance, Prisoner_Distance);
 							KillAndReward(LR_Player_Prisoner, LR_Player_Guard);
 						}	
 					}
@@ -4840,12 +4840,12 @@ public Action Timer_EnemyMustJump(Handle timer)
 						if (LR_Player_Jumped[LR_Player_Prisoner] && !LR_Player_Jumped[LR_Player_Guard])
 						{
 							KillAndReward(LR_Player_Guard, LR_Player_Prisoner);
-							LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "JF No Jump", LR_Player_Prisoner, LR_Player_Guard);
+							EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "JF No Jump", LR_Player_Prisoner, LR_Player_Guard);
 						}
 						else if (!LR_Player_Jumped[LR_Player_Prisoner] && LR_Player_Jumped[LR_Player_Guard])
 						{
 							KillAndReward(LR_Player_Prisoner, LR_Player_Guard);
-							LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "JF No Jump", LR_Player_Guard, LR_Player_Prisoner);
+							EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "JF No Jump", LR_Player_Guard, LR_Player_Prisoner);
 						}
 					}
 				}
@@ -4878,12 +4878,12 @@ public Action Timer_JumpContestOver(Handle timer)
 						
 						if (Prisoner_JumpCount > Guard_JumpCount)
 						{
-							LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Won Jump Contest", LR_Player_Prisoner);
+							EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Won Jump Contest", LR_Player_Prisoner);
 							KillAndReward(LR_Player_Guard, LR_Player_Prisoner);
 						}
 						else
 						{
-							LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Won Jump Contest", LR_Player_Guard);
+							EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Won Jump Contest", LR_Player_Guard);
 							KillAndReward(LR_Player_Prisoner, LR_Player_Guard);
 						}
 					}
@@ -4914,7 +4914,7 @@ public Action Timer_JumpContestOver(Handle timer)
 							}
 						}						
 						
-						LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Won Jump Contest", winner);
+						EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Won Jump Contest", winner);
 					}
 				}
 			}
@@ -5310,12 +5310,12 @@ public Action Timer_Race(Handle timer)
 					if (f_DoneDistance[LR_Player_Prisoner] < f_DoneDistance[LR_Player_Guard])
 					{
 						KillAndReward(LR_Player_Guard, LR_Player_Prisoner);
-						LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Race Won", LR_Player_Prisoner);
+						EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Race Won", LR_Player_Prisoner);
 					}
 					else
 					{
 						KillAndReward(LR_Player_Prisoner, LR_Player_Guard);
-						LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Race Won", LR_Player_Guard);
+						EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Race Won", LR_Player_Guard);
 					}
 				}
 				
@@ -5411,7 +5411,7 @@ public int RPSmenuHandler(Handle menu, MenuAction action, int client, int param2
 							{
 								if (gH_Cvar_SendGlobalMsgs.BoolValue)
 								{
-									LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR RPS Tie", LR_Player_Prisoner, RPSc2, LR_Player_Guard, RPSc1);
+									EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR RPS Tie", LR_Player_Prisoner, RPSc2, LR_Player_Guard, RPSc1);
 								}
 								else
 								{
@@ -5423,7 +5423,7 @@ public int RPSmenuHandler(Handle menu, MenuAction action, int client, int param2
 							{
 								if (gH_Cvar_SendGlobalMsgs.BoolValue)
 								{
-									LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR RPS Tie", LR_Player_Guard, RPSc1, LR_Player_Prisoner, RPSc2);
+									EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR RPS Tie", LR_Player_Guard, RPSc1, LR_Player_Prisoner, RPSc2);
 								}
 								else
 								{
@@ -5467,13 +5467,13 @@ public int RPSmenuHandler(Handle menu, MenuAction action, int client, int param2
 						else if ((RPS_Guard_Choice == 0 && RPS_Prisoner_Choice == 2) || (RPS_Guard_Choice == 1 && RPS_Prisoner_Choice == 0) || (RPS_Guard_Choice == 2 && RPS_Prisoner_Choice == 1))
 						{
 							KillAndReward(LR_Player_Prisoner, LR_Player_Guard);
-							LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR RPS Done", LR_Player_Prisoner, RPSc1, LR_Player_Guard, RPSc2, LR_Player_Guard);
+							EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR RPS Done", LR_Player_Prisoner, RPSc1, LR_Player_Guard, RPSc2, LR_Player_Guard);
 						}
 						// otherwise THIS player has lost
 						else
 						{
 							KillAndReward(LR_Player_Guard, LR_Player_Prisoner);
-							LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR RPS Done", LR_Player_Prisoner, RPSc1, LR_Player_Guard, RPSc2, LR_Player_Prisoner);
+							EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR RPS Done", LR_Player_Prisoner, RPSc1, LR_Player_Guard, RPSc2, LR_Player_Prisoner);
 						}				
 					}				
 				}		
@@ -5503,7 +5503,8 @@ public int RPSmenuHandler(Handle menu, MenuAction action, int client, int param2
 						{
 							EMP_SafeSlay(client);
 						}
-						LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR RPS No Answer", client);
+						
+						EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR RPS No Answer", client);
 					}
 				}	
 			}
@@ -5575,7 +5576,7 @@ public Action Timer_HotPotatoDone(Handle timer, any HotPotato_ID)
 				HPwinner = ((HPloser == LR_Player_Prisoner) ? LR_Player_Guard : LR_Player_Prisoner);
 				
 				KillAndReward(HPloser, HPwinner);
-				LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "HP Win", HPwinner, HPloser);
+				EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "HP Win", HPwinner, HPloser);
 				
 				if (gH_Cvar_LR_HotPotato_Mode.IntValue != 2)
 				{
@@ -5830,12 +5831,12 @@ public Action Timer_ChickenFight(Handle timer)
 				{
 					if (gH_Cvar_LR_ChickenFight_Slay.BoolValue)
 					{
-						LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Chicken Fight Win And Slay", LR_Player_Prisoner, LR_Player_Guard);
+						EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Chicken Fight Win And Slay", LR_Player_Prisoner, LR_Player_Guard);
 						KillAndReward(LR_Player_Guard, LR_Player_Prisoner);
 					}
 					else
 					{
-						LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Chicken Fight Win", LR_Player_Prisoner);
+						EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Chicken Fight Win", LR_Player_Prisoner);
 						CPrintToChat(LR_Player_Prisoner, "Chicken Fight Kill Loser", LR_Player_Guard);
 						
 						EMP_EquipKnife(LR_Player_Prisoner);
@@ -5850,12 +5851,12 @@ public Action Timer_ChickenFight(Handle timer)
 				{
 					if (gH_Cvar_LR_ChickenFight_Slay.BoolValue)
 					{
-						LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Chicken Fight Win And Slay", LR_Player_Guard, LR_Player_Prisoner);
+						EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Chicken Fight Win And Slay", LR_Player_Guard, LR_Player_Prisoner);
 						KillAndReward(LR_Player_Prisoner, LR_Player_Guard);
 					}
 					else
 					{
-						LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Chicken Fight Win", LR_Player_Guard);
+						EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "Chicken Fight Win", LR_Player_Guard);
 						CPrintToChat(LR_Player_Guard, "Chicken Fight Kill Loser", LR_Player_Prisoner);
 						
 						EMP_EquipKnife(LR_Player_Guard);
@@ -5934,15 +5935,15 @@ void DecideRebelsFate(int rebeller, int LRIndex, int victim = 0)
 			RemoveFromArray(gH_DArray_LR_Partners, LRIndex);
 			if (victim == 0)
 			{
-				LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR Interference Abort - No Victim", rebeller, sWeaponName);
+				EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR Interference Abort - No Victim", rebeller, sWeaponName);
 			}
 			else if (victim == -1)
 			{
-				LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR Cheating Abort", rebeller);
+				EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR Cheating Abort", rebeller);
 			}
 			else
 			{
-				LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR Interference Abort", rebeller, victim, sWeaponName);	
+				EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR Interference Abort", rebeller, victim, sWeaponName);	
 			}	
 		}
 		case 2:
@@ -5960,15 +5961,15 @@ void DecideRebelsFate(int rebeller, int LRIndex, int victim = 0)
 			}
 			if (victim == 0)
 			{
-				LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR Interference Slay - No Victim", rebeller, sWeaponName);
+				EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR Interference Slay - No Victim", rebeller, sWeaponName);
 			}
 			else if (victim == -1)
 			{
-				LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR Cheating Slay", rebeller);
+				EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR Cheating Slay", rebeller);
 			}
 			else
 			{
-				LOOP_CLIENTS(TargetForLang, CLIENTFILTER_INGAMEAUTH|CLIENTFILTER_NOBOTS) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR Interference Slay", rebeller, victim, sWeaponName);	
+				EMP_LoopPlayers(TargetForLang) CPrintToChat(TargetForLang, "%s %t", gShadow_Hosties_ChatBanner, "LR Interference Slay", rebeller, victim, sWeaponName);	
 			}		
 		}
 	}

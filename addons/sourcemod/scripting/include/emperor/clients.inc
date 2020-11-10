@@ -24,10 +24,10 @@
 #define _emperor_client_included
 
 //Loop all the Connected Players (No bots included)
-#define EMP_LoopPlayers(%1) for (int %1 = 1; %1 <=MaxClients; ++%1) if (EMP_IsValidClient(%1, false, true));
+#define EMP_LoopPlayers(%1) for (int %1 = 1; %1 <= MaxClients; ++%1) if (EMP_IsValidClient(%1, false, true))
 
 //Loop all the Alive Connected Players (No bots or Dead players included)
-#define EMP_LoopAlivePlayers(%1) for (int %1 = 1; %1 <=MaxClients; ++%1) if (EMP_IsValidClient(%1, false, false));
+#define EMP_LoopAlivePlayers(%1) for (int %1 = 1; %1 <= MaxClients; ++%1) if (EMP_IsValidClient(%1, false, false))
 
 /**
 * Checks if the specified client index is valid or not.
