@@ -40,7 +40,7 @@
 */
 stock bool EMP_IsValidClient(int client, bool bAllowBots = false, bool bAllowDead = true, int team = -1)
 {
-    if (!(1 <= client <= MaxClients) || !IsClientInGame(client) || (IsFakeClient(client) && !bAllowBots) || IsClientSourceTV(client) || IsClientReplay(client) || (!bAllowDead && !IsPlayerAlive(client)) || (team != -1 && GetClientTeam(client) != team))
+    if (!(1 <= client <= MaxClients) || !IsClientInGame(client) || (!bAllowBots && IsFakeClient(client)) || IsClientSourceTV(client) || IsClientReplay(client) || (!bAllowDead && !IsPlayerAlive(client)) || (team != -1 && GetClientTeam(client) != team))
     {
         return false;
     }
@@ -68,6 +68,63 @@ stock int EMP_RandomClient(bool alive = false, int ignoreFlags = 0)
                     clients[total++] = client;
     
     return clients[RandomInt(0, total)];
+}
+
+/**
+* Checks if a client is in the sight range
+*
+* @param client				Client index
+* @param target				Target index
+* @param angle				Angle to check
+* @param floatdistance		Distance to check
+* @param heightcheck		Check the target heigh too?
+* @param negativeangle		Negate the Vector or not?
+* @return					Returns True if in the sight range, otherwise false
+*/
+stock bool EMP_IsTargetInSightRange(int client, int target, float angle = 90.0, float floatdistance = 0.0, bool heightcheck = true, bool negativeangle = false)
+{
+	if((angle > 360.0 || angle < 0.0) || !EMP_IsValidClient(client, true, false) || !EMP_IsValidClient(target, true, false))
+		return false;
+		
+	float clientpos[3], targetpos[3], anglevector[3], targetvector[3], resultdistance;
+	
+	GetClientEyeAngles(client, anglevector);
+	anglevector[0] = anglevector[2] = 0.0;
+	GetAngleVectors(anglevector, anglevector, NULL_VECTOR, NULL_VECTOR);
+	NormalizeVector(anglevector, anglevector);
+	
+	if(negativeangle)
+		NegateVector(anglevector);
+
+	GetClientAbsOrigin(client, clientpos);
+	GetClientAbsOrigin(target, targetpos);
+	
+	if(heightcheck && distance > 0)
+		resultdistance = GetVectorDistance(clientpos, targetpos);
+		
+	clientpos[2] = targetpos[2] = 0.0;
+	MakeVectorFromPoints(clientpos, targetpos, targetvector);
+	NormalizeVector(targetvector, targetvector);
+	
+	float resultangle = RadToDeg(ArcCosine(GetVectorDotProduct(targetvector, anglevector)));
+	
+	if(resultangle <= angle/2)	
+	{
+		if(distance > 0)
+		{
+			if(!heightcheck)
+				resultdistance = GetVectorDistance(clientpos, targetpos);
+				
+			if(distance >= resultdistance)
+				return true;
+			else
+				return false;
+		}
+		else
+			return true;
+	}
+	else
+		return false;
 }
 
 /**
@@ -270,6 +327,156 @@ stock void EMP_ResetArmor(int client)
 			SetEntProp(client, Prop_Send, "m_bWearingSuit", 0);
 		}
 	}
+}
+
+/**
+* Searches for a player by the given Steam32 ID
+*
+* @param id					Steam32 ID
+* @return					Returns the client index of the user
+*/
+stock int EMP_GetClientOfSteamID(const char[] id)
+{
+	char steamid[20];
+	for (int i = 1; i <= MaxClients; ++i)
+	{
+		if(!EMP_IsValidClient(i))
+			continue;
+		
+		GetClientAuthId(i, AuthId_Steam2, steamid, sizeof(steamid));
+		if(StrEqual(steamid, id))
+			return i;
+	}
+
+	return -1;
+}
+
+/**
+* Dissolves the player deadd body
+*
+* @param client				Player index
+*/
+stock void EMP_Dissolve(int client)
+{
+	int ragdoll = GetEntPropEnt(client, Prop_Send, "m_hRagdoll");
+	if (ragdoll > 0)
+	{
+		int ent = CreateEntityByName("env_entity_dissolver");
+		if (ent > 0)
+		{
+			char dissolvename[32];
+			Format(dissolvename, sizeof(dissolvename), "dis_%d", client);
+			DispatchKeyValue(ragdoll, "targetname", dissolvename);
+			DispatchKeyValue(ent, "dissolvetype", "0");
+			DispatchKeyValue(ent, "target", dissolvename);
+			AcceptEntityInput(ent, "Dissolve");
+			AcceptEntityInput(ent, "kill");
+		}
+	}
+}
+
+/**
+* Hide/Show player on the radar
+*
+* @param client				Player index
+* @param status				Status for the hide
+*/
+stock void EMP_RadarVisibilityToggle(int client, bool status)
+{
+	int offset = FindSendPropInfo("CBaseEntity", "m_bSpotted");
+	if (offset > 0)
+	{
+		Address g_aCanBeSpotted = view_as<Address>(offset - 4);
+		
+		if (active)
+		{
+			SetEntProp(client, Prop_Send, "m_bSpotted", false);
+			SetEntProp(client, Prop_Send, "m_bSpottedByMask", 0, 4, 0);
+			SetEntProp(client, Prop_Send, "m_bSpottedByMask", 0, 4, 1);
+		   
+			StoreToAddress(GetEntityAddress(client)+g_aCanBeSpotted, 0, NumberType_Int32);
+		}
+		else
+		{
+			StoreToAddress(GetEntityAddress(client)+g_aCanBeSpotted, 9, NumberType_Int32);
+		}
+	}
+}
+
+/**
+* Checks if the client is currently looking at wall
+*
+* @param client				Player index
+* @param distance			Distance to check
+* @return					Returns True if the clients is looking at wall otherwise false
+*/
+stock bool EMP_IsLookingAtWall(int client, float distance=40.0)
+{
+
+	float posEye[3], posEyeAngles[3];
+	bool isClientLookingAtWall = false;
+
+	GetClientEyePosition(client, posEye);
+	GetClientEyeAngles(client, posEyeAngles);
+
+	posEyeAngles[0] = 0.0;
+
+	Handle trace = TR_TraceRayFilterEx(posEye, posEyeAngles, CONTENTS_SOLID, RayType_Infinite, LookingWall_TraceEntityFilter);
+
+	if (TR_DidHit(trace))
+	{
+		if (TR_GetEntityIndex(trace) > 0)
+		{
+			CloseHandle(trace);
+			return false;
+		}
+
+		float posEnd[3];
+
+		TR_GetEndPosition(posEnd, trace);
+
+		if (GetVectorDistance(posEye, posEnd, true) <= (distance * distance))
+		{
+			isClientLookingAtWall = true;
+		}
+	}
+
+	CloseHandle(trace);
+
+	return isClientLookingAtWall;
+}
+
+public bool LookingWall_TraceEntityFilter(int entity, int contentsMask)
+{
+	return entity == 0;
+}
+
+/**
+* Checks if the client is currently crouching
+*
+* @param client				Player index
+* @return					Returns True if the clients is crouching otherwise false
+*/
+stock bool EMP_IsClientCrouching(int client)
+{
+	if(GetEntityFlags(client) & FL_DUCKING)
+		return true;
+
+	return false;
+}
+
+/**
+* Checks if the client is currently on the ground
+*
+* @param client				Player index
+* @return					Returns True if the clients is on the ground otherwise false
+*/
+stock bool EMP_IsClientOnGround(int client)
+{
+	if(GetEntityFlags(client) & FL_ONGROUND)
+		return true;
+
+	return false;
 }
 
 /**

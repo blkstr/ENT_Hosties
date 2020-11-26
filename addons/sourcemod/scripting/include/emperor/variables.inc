@@ -115,25 +115,65 @@ stock void EMP_RandomString(char[] buffer, int maxLen)
 }
 
 /**
+* Checks if the string equals
+*
+* @param input				String to set to lower case
+* @param substring			Buffer to save the string into
+* @param caseSensitive		Works as case sensitive
+*/
+stock bool EMP_StrEquals(const char[] string, char[] substring, bool caseSensitive = false)
+{
+    if (strcmp(string, substring, caseSensitive) == 0)
+		return true;
+	else
+		return false;
+}
+
+/**
 * Sets the string to lower case
 *
 * @param input				String to set to lower case
 * @param output				Buffer to save the string into
 * @param size				Size of the string
 */
-stock void EMP_ToLower(const char[] input, char[] output, int size)
+stock void EMP_ToLower(const char[] str, char[] buffer, int bufsize)
 {
-    size--;
-    output[0] = '\0';
+    int n=0, x=0;
+    while (str[n] != '\0' && x < (bufsize-1))
+	{
 
-    int x = 0;
-    while(input[x] != '\0' && x < size)
-    {
-        output[x] = CharToLower(input[x]);
-        x++;
+        char thisone = str[n++];
+    
+        if (thisone == ' ')
+		{
+            continue;
+        }
+        else if (IsCharUpper(thisone))
+		{
+            thisone = CharToLower(thisone);
+        }
+
+        buffer[x++] = thisone;
     }
 
-    output[x] = '\0';
+    buffer[x++] = '\0';
+}
+
+/**
+* Checks if the given string contains only numbers or not
+*
+* @param buffer				String of the command to check
+* @return					True if only numbers, otherwise false
+*/
+stock bool EMP_IsInteger(char[] buffer)
+{
+    for (int i = 0; i < strlen(buffer); i++)
+    {
+        if (!IsCharNumeric(buffer[i]) )
+            return false;
+    }
+
+    return true;    
 }
 
 /**

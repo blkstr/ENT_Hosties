@@ -1179,6 +1179,7 @@ void CleanupLastRequest(int loser, int arrayIndex)
 	RemoveBeacon(LR_Player_Guard);
 	
 	int winner = (loser == LR_Player_Prisoner) ? LR_Player_Guard : LR_Player_Prisoner;
+	char LR_Name[64];
 	
 	switch (type)
 	{
@@ -1336,23 +1337,37 @@ void CleanupLastRequest(int loser, int arrayIndex)
 		}
 		case LR_JuggernoutBattle:
 		{
+			LogToFileEx(gShadow_Hosties_LogFile, "Juggernout cleanup started for prisoner");
 			if (EMP_IsValidClient(LR_Player_Prisoner, false, false))
 			{
 				EMP_ResetArmor(LR_Player_Prisoner);
 				
 				if (GetEngineVersion() == Engine_CSGO)
-					SetEntityModel(LR_Player_Prisoner, BeforeModel[LR_Player_Prisoner]);
-
+				{
+					if (strlen(BeforeModel[LR_Player_Prisoner]) > 0)
+					{
+						SetEntityModel(LR_Player_Prisoner, BeforeModel[LR_Player_Prisoner]);
+						FormatEx(BeforeModel[LR_Player_Prisoner], sizeof(BeforeModel), "");
+					}
+				}
 			}
 			
+			LogToFileEx(gShadow_Hosties_LogFile, "Juggernout cleanup started for guard");
 			if (EMP_IsValidClient(LR_Player_Guard, false, false))
 			{
 				EMP_ResetArmor(LR_Player_Guard);
 			
 				if (GetEngineVersion() == Engine_CSGO)
-					SetEntityModel(LR_Player_Guard, BeforeModel[LR_Player_Guard]);
+				{
+					if (strlen(BeforeModel[LR_Player_Guard]) > 0)
+					{
+						SetEntityModel(LR_Player_Guard, BeforeModel[LR_Player_Guard]);
+						FormatEx(BeforeModel[LR_Player_Guard], sizeof(BeforeModel), "");
+					}
+				}
 			}
 			
+			LogToFileEx(gShadow_Hosties_LogFile, "Juggernout cleanup started for csgo");
 			if (GetEngineVersion() == Engine_CSGO)
 			{
 				if (g_cvSvSuit == INVALID_HANDLE)
@@ -1361,7 +1376,7 @@ void CleanupLastRequest(int loser, int arrayIndex)
 				SetConVarInt(g_cvSvSuit, SuitSetBack, true, false);
 			}
 			
-			char LR_Name[64];
+			LogToFileEx(gShadow_Hosties_LogFile, "Juggernout cleanup started for looper");
 			EMP_LoopPlayers(TargetForLang)
 			{
 				FormatEx(LR_Name, sizeof(LR_Name), "%t", g_sLastRequestPhrase[LR_JuggernoutBattle]);
@@ -1370,7 +1385,6 @@ void CleanupLastRequest(int loser, int arrayIndex)
 		}
 		case LR_HEFight, LR_FistFight, LR_OnlyHS:
 		{
-			char LR_Name[64];
 			EMP_LoopPlayers(TargetForLang)
 			{
 				FormatEx(LR_Name, sizeof(LR_Name), "%t", g_sLastRequestPhrase[type]);
@@ -1400,7 +1414,6 @@ void CleanupLastRequest(int loser, int arrayIndex)
 				}
 			}
 			
-			char LR_Name[64];
 			EMP_LoopPlayers(TargetForLang)
 			{
 				FormatEx(LR_Name, sizeof(LR_Name), "%t", g_sLastRequestPhrase[type]);
@@ -2053,10 +2066,29 @@ public Action OnTakeDamage(int victim, int &attacker, int &inflictor, float &dam
 								}
 							}
 						}
+						else if (victim != LR_Player_Prisoner && victim != LR_Player_Guard && (attacker == LR_Player_Prisoner || attacker == LR_Player_Guard))
+						{
+							damage = 0.0;
+							return Plugin_Changed;
+						}
 					}
-					case LR_JuggernoutBattle, LR_Rebel:
+					case LR_Rebel:
 					{
 						return Plugin_Continue;
+					}
+					case LR_JuggernoutBattle:
+					{
+						if ((attacker == LR_Player_Guard && victim == LR_Player_Prisoner) || (attacker == LR_Player_Prisoner && victim == LR_Player_Guard))
+						{
+							LogToFileEx(gShadow_Hosties_LogFile, "Juggernout opponent got hit");
+							return Plugin_Continue;
+						}
+						else if (victim != LR_Player_Prisoner && victim != LR_Player_Guard && (attacker == LR_Player_Prisoner || attacker == LR_Player_Guard))
+						{
+							damage = 0.0;
+							LogToFileEx(gShadow_Hosties_LogFile, "Juggernout random player got hit");
+							return Plugin_Changed;
+						}
 					}
 					default:
 					{
@@ -3985,6 +4017,8 @@ void InitializeGame(int iPartnersIndex)
 			// give knives
 			EMP_EquipKnife(LR_Player_Prisoner);
 			EMP_EquipKnife(LR_Player_Guard);
+			
+			LogToFileEx(gShadow_Hosties_LogFile, "Juggernout initialize completed");
 		}
 		case LR_ShieldFight:
 		{
@@ -5792,8 +5826,6 @@ public Action Timer_GunToss(Handle timer)
 			}
 		}
 	}
-	else
-		return Plugin_Stop;
 	
 	if (gH_Cvar_LR_GunToss_ShowMeter.IntValue && gH_Cvar_SendGlobalMsgs.BoolValue && (iNumGunTosses > 0))
 	{
@@ -5841,9 +5873,8 @@ public Action Timer_ChickenFight(Handle timer)
 						
 						EMP_EquipKnife(LR_Player_Prisoner);
 						
-						SetEntityRenderColor(LR_Player_Guard, gH_Cvar_LR_ChickenFight_C_Red.IntValue, gH_Cvar_LR_ChickenFight_C_Green.IntValue,
-							gH_Cvar_LR_ChickenFight_C_Blue.IntValue, 255);
-							
+						SetEntityRenderColor(LR_Player_Guard, gH_Cvar_LR_ChickenFight_C_Red.IntValue, gH_Cvar_LR_ChickenFight_C_Green.IntValue, gH_Cvar_LR_ChickenFight_C_Blue.IntValue, 255);
+						
 						bIsChickenFight = false;
 					}
 				}
@@ -5861,8 +5892,7 @@ public Action Timer_ChickenFight(Handle timer)
 						
 						EMP_EquipKnife(LR_Player_Guard);
 						
-						SetEntityRenderColor(LR_Player_Prisoner, gH_Cvar_LR_ChickenFight_C_Red.IntValue, gH_Cvar_LR_ChickenFight_C_Green.IntValue,
-							gH_Cvar_LR_ChickenFight_C_Blue.IntValue, 255);
+						SetEntityRenderColor(LR_Player_Prisoner, gH_Cvar_LR_ChickenFight_C_Red.IntValue, gH_Cvar_LR_ChickenFight_C_Green.IntValue, gH_Cvar_LR_ChickenFight_C_Blue.IntValue, 255);
 							
 						bIsChickenFight = false;
 					}
@@ -5870,8 +5900,6 @@ public Action Timer_ChickenFight(Handle timer)
 			}
 		}
 	}
-	else
-		return Plugin_Stop;
 		
 	if (!bIsChickenFight)
 	{
@@ -6246,7 +6274,7 @@ public Action TimerTick_Equipper(Handle timer, int iPartnersIndex)
 		
 	int type = GetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, view_as<int>(Block_LRType));
 	int LR_Player_Prisoner = GetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, view_as<int>(Block_Prisoner));
-	int LR_Player_Guard = GetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, view_as<int>(Block_Guard));
+	int LR_Player_Guard = GetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, view_as<int>(Block_Guard)); //szejetjek masi :3 (mostmár én is programágus vagyok hahi)
 	
 	if (type != LR_ShieldFight && type != LR_HEFight) return Plugin_Stop;
 	

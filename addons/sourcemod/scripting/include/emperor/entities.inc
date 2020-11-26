@@ -17,23 +17,29 @@
  * You should have received a copy of the GNU General Public License along with
  * this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#if !defined _smlib_included
-	#include <smlib>
-#endif
 
-#if defined _emperor_included
+#if defined _emperor_entities_included
 	#endinput
 #endif
-#define _emperor_included
+#define _emperor_entities_included
 
-#define EMPEROR_VERSION "0.1"
+/**
+* Returns two Entity's distance
+*
+* @param entity1			The entity to get the distance from
+* @param entity2			The entity to get the distance to
+* @return					Returns float of the distance
+*/
+stock float EMP_GetEntitiesDistance(int entity1, int entity2)
+{
+	if(!IsValidEntity(entity1) || !IsValidEntity(entity2))
+		return 0.0;
+	
+	float fOrigin1[3];
+	GetEntPropVector(entity1, Prop_Send, "m_vecOrigin", fOrigin1);
 
-#include <emperor/clients>
-#include <emperor/files>
-#include <emperor/weapons>
-#include <emperor/messages>
-#include <emperor/variables>
-#include <emperor/debug>
-#include <emperor/entities>
-#include <emperor/extras>
+	float fOrigin2[3];
+	GetEntPropVector(entity2, Prop_Send, "m_vecOrigin", fOrigin2);
+	
+	return GetVectorDistance(fOrigin1, fOrigin2);
+}

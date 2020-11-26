@@ -188,6 +188,32 @@ stock void EMP_EquipKnife(int client)
 	}
 }
 
+stock bool EMP_IsKnife(char[] knifename)
+{
+	if(strcmp(knifename, "weapon_bayonet") == 0 || StrContains(knifename, "weapon_knife") != -1)
+    	return true;
+
+    return false;
+}
+
+/**
+* Removes all kind of malee from the client
+*
+* @param client				Client index
+*/
+stock void EMP_RemoveKnife(int client)
+{
+    int knife_index;
+    for (int i = 0; i < 6; i++)
+    {
+		knife_index = GetPlayerWeaponSlot(client, i);
+		if(IsValidEntity(knife_index) && i == 2)
+		{
+			RemovePlayerItem(client, knife_index);
+		}
+	}
+}
+
 /**
 * Sets totally zero ammo to a weapon
 *

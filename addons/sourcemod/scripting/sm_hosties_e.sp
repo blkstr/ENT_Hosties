@@ -41,7 +41,8 @@
 
 #pragma			semicolon 					1
 
-#define 		PLUGIN_VERSION				"4.2.2b"
+#define 		PLUGIN_VERSION				"4.2.3b"
+#define 		PLUGIN_NAME					"ENT_Hosties(V4.2.3b)"
 #define 		MAX_DISPLAYNAME_SIZE		64
 #define 		MAX_DATAENTRY_SIZE			5
 #define 		SERVERTAG					"ENT_Hosties,LR,LastRequest"
@@ -50,7 +51,7 @@
 
 // Add ability to disable collisions for players
 #define	MODULE_NOBLOCK						1
-// Add ability to disable collisions for players
+// Add anti-healing check for LRs
 #define	MODULE_ANTIHEAL						1
 // Add the last request system
 #define	MODULE_LASTREQUEST					1
@@ -113,7 +114,6 @@ char			gShadow_Freekill_Sound[PLATFORM_MAX_PATH];
 
 int				gA_FreekillsOfCT[MAXPLAYERS+1],
 				gShadow_Freekill_Punishment;
-
 #endif
 
 #if (MODULE_ANTIHEAL == 1)
@@ -158,10 +158,10 @@ int				gA_FreekillsOfCT[MAXPLAYERS+1],
 
 public Plugin myinfo =
 {
-	name     	  	=		"ENT_Hosties(V4)",
+	name     	  	=		PLUGIN_NAME,
 	author    	 	=		"databomb & Entity",
 	description 	= 		"SM_Hosties Remake",
-	version    		=		"Entity",
+	version    		=		PLUGIN_VERSION,
 };
 
 public void OnPluginStart()
@@ -238,7 +238,7 @@ public void OnPluginStart()
 	
 	char Temp[256];
 	GetConVarString(gH_Cvar_ChatTag, Temp, sizeof(Temp));
-	Format(gShadow_Hosties_ChatBanner, sizeof(gShadow_Hosties_ChatBanner), "%s {lime}", Temp);
+	Format(gShadow_Hosties_ChatBanner, sizeof(gShadow_Hosties_ChatBanner), "%s {lightblue}", Temp);
 	
 	if (StrContains(gShadow_Hosties_ChatBanner, "{red}") != -1)
 		ReplaceString(gShadow_Hosties_ChatBanner, sizeof(gShadow_Hosties_ChatBanner), "{red}", "\x02");	
@@ -409,7 +409,9 @@ public void OnConfigsExecuted()
 	for (int i = 0; i < g_iCommandCount; i++)
 	{
 		String_Trim(g_sCommands[i], g_sCommands[i], 32);
-		RegConsoleCmd(g_sCommands[i], Command_LastRequest);
+		
+		if(!CommandExists(g_sCommands[i]))
+			RegConsoleCmd(g_sCommands[i], Command_LastRequest);
 	}
 	
 	char Temp[256];
@@ -466,7 +468,7 @@ public void OnAdminMenuReady(Handle h_TopMenu)
 
 public void OnCvarChange_ChatTag(ConVar cvar, char[] oldvalue, char[] newvalue)
 {
-	Format(gShadow_Hosties_ChatBanner, sizeof(gShadow_Hosties_ChatBanner), "%s {lime}", newvalue);
+	Format(gShadow_Hosties_ChatBanner, sizeof(gShadow_Hosties_ChatBanner), "%s {lightblue}", newvalue);
 	
 	if (StrEqual(gShadow_Hosties_ChatBanner, "{red}"))
 		ReplaceString(gShadow_Hosties_ChatBanner, sizeof(gShadow_Hosties_ChatBanner), "{red}", "\x02");	

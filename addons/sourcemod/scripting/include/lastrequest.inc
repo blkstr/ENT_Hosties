@@ -111,6 +111,7 @@ typedef FuncProcessLR = function void(Handle array, int iLRNumber);
 
 
 forward void OnStartLR(int PrisonerIndex, int GuardIndex, int LR_Type);
+forward void OnStopLR(int PrisonerIndex, int GuardIndex, int LR_Type);
 
 forward void OnAvailableLR(int Announced);
 

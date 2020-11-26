@@ -17,23 +17,13 @@
  * You should have received a copy of the GNU General Public License along with
  * this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#if !defined _smlib_included
-	#include <smlib>
-#endif
 
-#if defined _emperor_included
+#if defined _emperor_extras_included
 	#endinput
 #endif
-#define _emperor_included
+#define _emperor_extras_included
 
-#define EMPEROR_VERSION "0.1"
-
-#include <emperor/clients>
-#include <emperor/files>
-#include <emperor/weapons>
-#include <emperor/messages>
-#include <emperor/variables>
-#include <emperor/debug>
-#include <emperor/entities>
-#include <emperor/extras>
+stock float EMP_GetPercentage(any all, any count) 
+{
+    return RoundFloat(FloatMul((float(number) / float(count)), 100.0)); 
+}
