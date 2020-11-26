@@ -3370,8 +3370,6 @@ public int RaceEndPointHandler(Handle menu, MenuAction action, int client, int p
 							TE_SetupBeamRingPoint(f_EndLocation, 100.0, 130.0, BeamSprite, HaloSprite, 0, 15, 20.0, 7.0, 0.0, greenColor, 1, 0);
 							TE_SendToAll();
 							
-							PrintToChatAll("Debug: Beam setup completed");
-							
 							// allow them to choose a player finally
 							CreateMainPlayerHandler(client);
 						}
