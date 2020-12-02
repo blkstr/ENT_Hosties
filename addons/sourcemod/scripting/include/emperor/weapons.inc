@@ -40,22 +40,21 @@ stock void EMP_SaveWeapons(int target)
 	int counter = 0;
 	
 	C_FlashCounter[target] = GetEntProp(target, Prop_Data, "m_iAmmo", _, FlashbangOffsetForHC);
-	C_WeaponCount[target] = Client_GetWeaponCount(target);
-	int temp_count = C_WeaponCount[target];
 	if (EMP_IsValidClient(target))
 	{
-		for (int g = C_WeaponCount[target]; g != 0; g--)
+		while (GetEntPropEnt(target, Prop_Data, "m_hActiveWeapon") != -1)
 		{
 			int temp_weapon = GetEntPropEnt(target, Prop_Data, "m_hActiveWeapon");
 			if (Weapon_IsValid(temp_weapon))
 			{
 				char temp_weapon_name[64];
 				EMP_SetWeaponClassname(temp_weapon, temp_weapon_name, sizeof(temp_weapon_name));
-				
-				Client_RemoveWeapon(target, temp_weapon_name, true);
+				PrintToChatAll("Debug: saved  %s for %N", temp_weapon_name, target);
+				RemoveEntity(temp_weapon);
+
 				C_sWeapon[target][counter] = temp_weapon_name;
 				
-				counter++; temp_count--;
+				counter++; C_WeaponCount[target]++;
 			}
 		}
 	}
@@ -79,7 +78,12 @@ stock void EMP_RestoreWeapons(int target)
 			{
 				if (String_StartsWith(weapon_class, "weapon_"))
 				{
-					EMP_GiveWeapon(target, weapon_class);
+					if (!Client_HasWeapon(target, weapon_class))
+					{
+						PrintToChatAll("Debug: add %s - (%s) for %N", weapon_class, C_sWeapon[target][g], target);
+						EMP_GiveWeapon(target, weapon_class);
+						FormatEx(C_sWeapon[target][g], sizeof(C_sWeapon[]), NULL_STRING);
+					}
 				}
 			}
 			else
@@ -87,10 +91,9 @@ stock void EMP_RestoreWeapons(int target)
 				for (int x = 1; x <= C_FlashCounter[target]; x++)
 				{
 					EMP_GiveWeapon(target, weapon_class);
+					FormatEx(C_sWeapon[target][g], sizeof(C_sWeapon[]), NULL_STRING);
 				}
 			}
-			
-			C_sWeapon[target][g] = "";
 		}
 		
 		C_WeaponCount[target] = 0;

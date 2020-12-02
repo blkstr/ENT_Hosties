@@ -75,6 +75,10 @@ bool	g_TriedToStab[MAXPLAYERS+1]				= false,
 		g_bInLastRequest[MAXPLAYERS+1],
 		g_bIsARebel[MAXPLAYERS+1];
 		
+char LR_C_sWeapon[MAXPLAYERS + 1][11][64];
+int LR_C_WeaponCount[MAXPLAYERS + 1] = 0;
+int LR_C_FlashCounter[MAXPLAYERS + 1] = 0;
+
 char	BeforeModel[MAXPLAYERS+1][PLATFORM_MAX_PATH],
 		g_sLastRequestPhrase[LR_Number][MAX_DISPLAYNAME_SIZE];
 
@@ -3376,11 +3380,13 @@ public int RaceEndPointHandler(Handle menu, MenuAction action, int client, int p
 						else
 						{
 							CPrintToChat(client, "%s %t", gShadow_Hosties_ChatBanner, "Race Points too Close");
+							CreateRaceEndPointMenu(client);
 						}
 					}
 					else
 					{
 						CPrintToChat(client, "%s %t", gShadow_Hosties_ChatBanner, "Must Be On Ground");
+						CreateRaceEndPointMenu(client);
 					}
 				}
 				else
@@ -3787,15 +3793,15 @@ void InitializeGame(int iPartnersIndex)
 		}
 	}
 	
-	if (selection != LR_Rebel && selection != LR_RockPaperScissors)
+	if (selection != LR_Rebel)
 	{
 		if (gH_Cvar_LR_RestoreWeapon_T.BoolValue)
-			EMP_SaveWeapons(LR_Player_Prisoner);
+			LR_SaveWeapons(LR_Player_Prisoner);
 		else
 			Client_RemoveAllWeapons(LR_Player_Prisoner);
 			
 		if (gH_Cvar_LR_RestoreWeapon_CT.BoolValue)
-			EMP_SaveWeapons(LR_Player_Guard);
+			LR_SaveWeapons(LR_Player_Guard);
 		else
 			Client_RemoveAllWeapons(LR_Player_Guard);
 	}
@@ -6238,7 +6244,7 @@ stock void PerformRestore(int client)
 		Client_RemoveAllWeapons(client);
 		
 		if (gH_Cvar_LR_RestoreWeapon_CT.BoolValue && g_Game == Game_CSGO)
-			EMP_RestoreWeapons(client);
+			LR_RestoreWeapons(client);
 
 		if (gH_Cvar_LR_Fists_Instead_Knife.BoolValue)
 		{
@@ -6297,6 +6303,88 @@ public Action TimerTick_Equipper(Handle timer, int iPartnersIndex)
 	}
 
 	return Plugin_Continue;
+}
+
+void LR_SaveWeapons(int target)
+{
+	LR_C_WeaponCount[target] = 0;
+	LR_C_FlashCounter[target] = GetEntProp(target, Prop_Data, "m_iAmmo", _, FlashbangOffset);
+	if (EMP_IsValidClient(target, false, false))
+	{
+		int wep;
+		for(int slot = 0; slot <= 4; slot++)
+		{
+			if(GetPlayerWeaponSlot(target, slot) > -1)
+			{
+				wep = GetPlayerWeaponSlot(target, slot);
+				LR_SetWeaponClassname(wep, LR_C_sWeapon[target][slot], 64);
+				RemovePlayerItem(target, wep);
+				RemoveEdict(wep);
+				LR_C_WeaponCount[target]++;
+			}
+			else LR_C_sWeapon[target][slot] = "";
+		}
+	}
+	Client_RemoveAllWeapons(target);
+}
+
+void LR_RestoreWeapons(int target)
+{
+	if (EMP_IsValidClient(target))
+	{
+		char weapon_class[32];
+		for (int g = 0; g <= LR_C_WeaponCount[target]; g++)
+		{
+			Format(weapon_class, sizeof(weapon_class), LR_C_sWeapon[target][g]);
+			if (!StrEqual(weapon_class, "weapon_flashbang"))
+			{
+				if (String_StartsWith(weapon_class, "weapon_"))
+				{
+					if (!Client_HasWeapon(target, weapon_class))
+					{
+						if (StrEqual(weapon_class, "weapon_usp"))
+							EMP_GiveWeapon(target, "weapon_usp_silencer");
+						else
+							EMP_GiveWeapon(target, weapon_class);
+						FormatEx(LR_C_sWeapon[target][g], sizeof(LR_C_sWeapon[]), NULL_STRING);
+					}
+				}
+			}
+			else
+			{
+				for (int x = 1; x <= LR_C_FlashCounter[target]; x++)
+				{
+					EMP_GiveWeapon(target, weapon_class);
+					FormatEx(LR_C_sWeapon[target][g], sizeof(LR_C_sWeapon[]), NULL_STRING);
+				}
+			}
+		}
+		
+		C_WeaponCount[target] = 0;
+	}
+}
+
+void LR_SetWeaponClassname(int weapon, char[] buffer, int size) 
+{ 
+	if (Weapon_IsValid(weapon))
+	{
+		if (GetEngineVersion() == Engine_CSGO) 
+		{
+			switch (GetEntProp(weapon, Prop_Send, "m_iItemDefinitionIndex")) 
+			{ 
+				case 23: Format(buffer, size, "weapon_mp5sd"); 
+				case 60: Format(buffer, size, "weapon_m4a1_silencer"); 
+				case 61: Format(buffer, size, "weapon_usp_silencer"); 
+				case 63: Format(buffer, size, "weapon_cz75a"); 
+				case 64: Format(buffer, size, "weapon_revolver"); 
+				default: GetEntityClassname(weapon, buffer, size); 
+			}
+		}
+		else
+		{
+			GetEdictClassname(weapon, buffer, size);
+		}
+	}
 }
 
 void SetCorrectPlayerColor(int client)
