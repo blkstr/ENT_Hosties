@@ -41,7 +41,7 @@
 
 #pragma			semicolon 					1
 
-#define 		PLUGIN_VERSION				"4.2.3b"
+#define 		PLUGIN_VERSION				"4.2.44b"
 #define 		PLUGIN_NAME					"ENT_Hosties(V4.2.3b)"
 #define 		MAX_DISPLAYNAME_SIZE		64
 #define 		MAX_DATAENTRY_SIZE			5

@@ -61,7 +61,8 @@ stock void CalImmun()
 {
 	char flag[32];
 	gH_Cvar_MuteImmune.GetString(flag, sizeof(flag));
-	gAdmFlags_MuteImmunity = (EMP_Flag_StringToInt(flag) != -1) ? EMP_Flag_StringToInt(flag) : 0;
+	int bt = EMP_Flag_StringToInt(flag);
+	gAdmFlags_MuteImmunity = (bt != -1) ? bt : 0;
 }
 
 stock void MuteTs()
@@ -115,13 +116,13 @@ public Action MutePrisoners_PlayerSpawn(Event event, const char[] name, bool don
 		{
 			if (gAdmFlags_MuteImmunity == 0)
 			{
-				CreateTimer(0.1, Timer_Mute, client, TIMER_FLAG_NO_MAPCHANGE);
+				CreateTimer(0.1, Timer_Mute, GetClientUserId(client), TIMER_FLAG_NO_MAPCHANGE);
 			}
 			else
 			{
-				if (!Client_HasAdminFlags(client, gAdmFlags_MuteImmunity))
+				if (!Client_HasAdminFlags(client, gAdmFlags_MuteImmunity) || !Client_HasAdminFlags(client, ADMFLAG_ROOT))
 				{
-					CreateTimer(0.1, Timer_Mute, client, TIMER_FLAG_NO_MAPCHANGE);
+					CreateTimer(0.1, Timer_Mute, GetClientUserId(client), TIMER_FLAG_NO_MAPCHANGE);
 				}
 			}
 		}
@@ -137,29 +138,30 @@ public Action MutePrisoners_PlayerDeath(Event event, const char[] name, bool don
 
 	int victim = GetClientOfUserId(GetEventInt(event, "userid"));
 	
-	if ((gAdmFlags_MuteImmunity == 0 || !Client_HasAdminFlags(victim, gAdmFlags_MuteImmunity)) && ((g_Game == Game_CSGO && GameRules_GetProp("m_bWarmupPeriod") == 0) || g_Game == Game_CSS))
+	if ((gAdmFlags_MuteImmunity == 0 || !Client_HasAdminFlags(victim, gAdmFlags_MuteImmunity) || !Client_HasAdminFlags(victim, ADMFLAG_ROOT)) && ((g_Game == Game_CSGO && GameRules_GetProp("m_bWarmupPeriod") == 0) || g_Game == Game_CSS))
 	{
 		int team = GetClientTeam(victim);
 		switch (team)
 		{
 			case CS_TEAM_T:
 			{
-				CreateTimer(0.1, Timer_Mute, victim, TIMER_FLAG_NO_MAPCHANGE);
+				CreateTimer(0.1, Timer_Mute, GetClientUserId(victim), TIMER_FLAG_NO_MAPCHANGE);
 			}
 			case CS_TEAM_CT:
 			{
 				if (gH_Cvar_MuteCT.BoolValue)
 				{			
-					CreateTimer(0.1, Timer_Mute, victim, TIMER_FLAG_NO_MAPCHANGE);
+					CreateTimer(0.1, Timer_Mute, GetClientUserId(victim), TIMER_FLAG_NO_MAPCHANGE);
 				}
 			}
 		}
 	}
 }
 
-public Action Timer_Mute(Handle timer, any client)
+public Action Timer_Mute(Handle timer, any id)
 {
-	if (IsClientInGame(client))
+	int client = GetClientOfUserId(client);
+	if (EMP_IsValidClient(client))
 	{
 		MutePlayer(client);
 		CPrintToChat(client, "%s %t", gShadow_Hosties_ChatBanner, "Now Muted");
@@ -191,7 +193,7 @@ public Action MutePrisoners_RoundStart(Event event, const char[] name, bool dont
 			// Mute non-flagged Ts
 			for (int idx = 1; idx <= MaxClients; idx++)
 			{
-				if (EMP_IsValidClient(idx) && (GetClientTeam(idx) == CS_TEAM_T) && !Client_HasAdminFlags(idx, gAdmFlags_MuteImmunity))
+				if (EMP_IsValidClient(idx, false, true, CS_TEAM_T) && !Client_HasAdminFlags(idx, gAdmFlags_MuteImmunity || !Client_HasAdminFlags(idx, ADMFLAG_ROOT)))
 				{
 					MutePlayer(idx);
 				}

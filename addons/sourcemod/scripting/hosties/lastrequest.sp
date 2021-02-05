@@ -36,6 +36,8 @@
 #pragma semicolon 1
 
 // Global variables
+int LR_Number = BASE_LR_Number;
+
 int 	g_LastButtons[MAXPLAYERS+1],
 		SuitSetBack,
 		g_RoundTime,
@@ -75,12 +77,12 @@ bool	g_TriedToStab[MAXPLAYERS+1]				= false,
 		g_bInLastRequest[MAXPLAYERS+1],
 		g_bIsARebel[MAXPLAYERS+1];
 		
-char LR_C_sWeapon[MAXPLAYERS + 1][11][64];
-int LR_C_WeaponCount[MAXPLAYERS + 1] = 0;
-int LR_C_FlashCounter[MAXPLAYERS + 1] = 0;
+char 	LR_C_sWeapon[MAXPLAYERS + 1][11][64];
+int 	LR_C_WeaponCount[MAXPLAYERS + 1] = 0;
+int 	LR_C_FlashCounter[MAXPLAYERS + 1] = 0;
 
 char	BeforeModel[MAXPLAYERS+1][PLATFORM_MAX_PATH],
-		g_sLastRequestPhrase[LR_Number][MAX_DISPLAYNAME_SIZE];
+		g_sLastRequestPhrase[BASE_LR_Number][MAX_DISPLAYNAME_SIZE];
 
 ConVar	g_hRoundTime,
 		Cvar_TeamBlock,
@@ -614,7 +616,7 @@ public int Native_LR_Initialize(Handle h_Plugin, int iNumParameters)
 		int LR_Player_Prisoner = 0, oPrisoner = GetNativeCell(1);
 		if(oPrisoner != 0)
 		{
-			if(GetClientTeam(oPrisoner) == 2)
+			if(GetClientTeam(oPrisoner) == CS_TEAM_T)
 			{
 				LR_Player_Prisoner = oPrisoner;
 			}
@@ -626,9 +628,6 @@ public int Native_LR_Initialize(Handle h_Plugin, int iNumParameters)
 				int iArrayIndex = PushArrayCell(gH_DArray_LR_Partners, g_selection[LR_Player_Prisoner]);
 				SetArrayCell(gH_DArray_LR_Partners, iArrayIndex, LR_Player_Prisoner, view_as<int>(Block_Prisoner));
 				SetArrayCell(gH_DArray_LR_Partners, iArrayIndex, g_LR_Player_Guard[LR_Player_Prisoner], view_as<int>(Block_Guard));
-
-				g_bInLastRequest[LR_Player_Prisoner] = true;
-				g_bInLastRequest[g_LR_Player_Guard[LR_Player_Prisoner]] = true;
 
 				// Fire global
 				Call_StartForward(gH_Frwd_LR_StartGlobal);
@@ -665,13 +664,9 @@ public int Native_LR_Cleanup(Handle h_Plugin, int iNumParameters)
 {
 	if(iNumParameters == 1)
 	{
-		int LR_Player_Prisoner = 0, oPrisoner = GetNativeCell(1);
-		if(EMP_IsValidClient(oPrisoner, false, true, CS_TEAM_T) && g_bInLastRequest[oPrisoner])
-		{
-			LR_Player_Prisoner = oPrisoner;
-		}
-		
-		if(LR_Player_Prisoner != 0)
+		int LR_Player_Prisoner = GetNativeCell(1);
+		PrintToChatAll("Debug: %d", LR_Player_Prisoner);
+		if(IsClientInGame(LR_Player_Prisoner))
 		{
 			if(!IsLastRequestAutoStart(g_selection[LR_Player_Prisoner]))
 			{
@@ -681,8 +676,6 @@ public int Native_LR_Cleanup(Handle h_Plugin, int iNumParameters)
 				RemoveBeacon(LR_Player_Prisoner);
 				RemoveBeacon(g_LR_Player_Guard[LR_Player_Prisoner]);
 				
-				g_LR_Player_Guard[LR_Player_Prisoner] = 0;
-				
 				// Fire global
 				Call_StartForward(gH_Frwd_LR_StopGlobal);
 				Call_PushCell(LR_Player_Prisoner);
@@ -691,6 +684,8 @@ public int Native_LR_Cleanup(Handle h_Plugin, int iNumParameters)
 				Call_PushCell(g_selection[LR_Player_Prisoner]);
 				int ignore;
 				Call_Finish(view_as<int>(ignore));
+				
+				g_LR_Player_Guard[LR_Player_Prisoner] = 0;
 			}
 		}
 		else
@@ -1451,58 +1446,68 @@ void CleanupLastRequest(int loser, int arrayIndex)
 	int ignore;
 	Call_Finish(view_as<int>(ignore));
 	
-	if (EMP_IsValidClient(LR_Player_Prisoner, false, false))
+	if (EMP_IsValidClient(LR_Player_Prisoner))
 	{
-		if (g_Game == Game_CSGO)
-		{
-			int TeamBlock = GetConVarInt(Cvar_TeamBlock);
+		EMP_FreeHandle(gH_BuildLR[LR_Player_Prisoner]);
 		
-			if (TeamBlock == 1 || TeamBlock == 2)
+		if (IsPlayerAlive(LR_Player_Prisoner))
+		{
+			if (g_Game == Game_CSGO)
+			{
+				int TeamBlock = GetConVarInt(Cvar_TeamBlock);
+			
+				if (TeamBlock == 1 || TeamBlock == 2)
+					BlockEntity(LR_Player_Prisoner, g_Offset_CollisionGroup);
+				else
+					UnblockEntity(LR_Player_Prisoner, g_Offset_CollisionGroup);
+			}
+			else if (g_Game == Game_CSS)
+			{
 				BlockEntity(LR_Player_Prisoner, g_Offset_CollisionGroup);
-			else
-				UnblockEntity(LR_Player_Prisoner, g_Offset_CollisionGroup);
-		}
-		else if (g_Game == Game_CSS)
-		{
-			BlockEntity(LR_Player_Prisoner, g_Offset_CollisionGroup);
-		}
-		
-		SetEntPropFloat(LR_Player_Prisoner, Prop_Data, "m_flLaggedMovementValue", 1.0);
-		
-		SetEntityMoveType(LR_Player_Prisoner, MOVETYPE_WALK);
-		
-		PerformRestore(LR_Player_Prisoner);
+			}
+			
+			SetEntPropFloat(LR_Player_Prisoner, Prop_Data, "m_flLaggedMovementValue", 1.0);
+			
+			SetEntityMoveType(LR_Player_Prisoner, MOVETYPE_WALK);
+			
+			PerformRestore(LR_Player_Prisoner);
 
-		SetEntityHealth(LR_Player_Prisoner, 100);
-		
-		if (gH_Cvar_LR_Debug_Enabled.BoolValue) LogToFileEx(gShadow_Hosties_LogFile, "%L (Prisoner) attribute reset after LR.", LR_Player_Prisoner);
+			SetEntityHealth(LR_Player_Prisoner, 100);
+			
+			if (gH_Cvar_LR_Debug_Enabled.BoolValue) LogToFileEx(gShadow_Hosties_LogFile, "%L (Prisoner) attribute reset after LR.", LR_Player_Prisoner);
+		}
 	}
 	
-	if (EMP_IsValidClient(LR_Player_Guard, false, false))
+	if (EMP_IsValidClient(LR_Player_Guard))
 	{
-		SetEntPropFloat(LR_Player_Guard, Prop_Data, "m_flLaggedMovementValue", 1.0);
+		EMP_FreeHandle(gH_BuildLR[LR_Player_Guard]);
 		
-		if (g_Game == Game_CSGO)
+		if (IsPlayerAlive(LR_Player_Guard))
 		{
-			int TeamBlock = GetConVarInt(Cvar_TeamBlock);
-		
-			if (TeamBlock == 1 || TeamBlock == 2)
+			if (g_Game == Game_CSGO)
+			{
+				int TeamBlock = GetConVarInt(Cvar_TeamBlock);
+			
+				if (TeamBlock == 1 || TeamBlock == 2)
+					BlockEntity(LR_Player_Guard, g_Offset_CollisionGroup);
+				else
+					UnblockEntity(LR_Player_Guard, g_Offset_CollisionGroup);
+			}
+			else if (g_Game == Game_CSS)
+			{
 				BlockEntity(LR_Player_Guard, g_Offset_CollisionGroup);
-			else
-				UnblockEntity(LR_Player_Guard, g_Offset_CollisionGroup);
+			}
+			
+			SetEntPropFloat(LR_Player_Guard, Prop_Data, "m_flLaggedMovementValue", 1.0);
+			
+			SetEntityMoveType(LR_Player_Guard, MOVETYPE_WALK);
+			
+			PerformRestore(LR_Player_Guard);
+			
+			SetEntityHealth(LR_Player_Guard, 100);
+			
+			if (gH_Cvar_LR_Debug_Enabled.BoolValue) LogToFileEx(gShadow_Hosties_LogFile, "%L (Guard) attribute reset after LR.", LR_Player_Guard);
 		}
-		else if (g_Game == Game_CSS)
-		{
-			BlockEntity(LR_Player_Guard, g_Offset_CollisionGroup);
-		}
-		
-		SetEntityMoveType(LR_Player_Guard, MOVETYPE_WALK);
-		
-		PerformRestore(LR_Player_Guard);
-		
-		SetEntityHealth(LR_Player_Guard, 100);
-		
-		if (gH_Cvar_LR_Debug_Enabled.BoolValue) LogToFileEx(gShadow_Hosties_LogFile, "%L (Guard) attribute reset after LR.", LR_Player_Guard);
 	}
 }
 
@@ -1681,7 +1686,7 @@ public Action LastRequest_WeaponFire(Event event, const char[] name, bool dontBr
 					iClientWeapon = GetEntDataEnt2(client, g_Offset_ActiveWeapon);	
 					
 					// set the time to enable burst value to a high value
-					SetEntDataFloat(iClientWeapon, g_Offset_SecAttack, 5000.0);
+					SetEntDataFloat(iClientWeapon, g_Offset_SecAttack, GetGameTime() + 9999.0);
 					
 					if (iClientWeapon != M4M_Prisoner_Weapon && iClientWeapon != M4M_Guard_Weapon && StrContains(FiredWeapon, "knife") == -1)
 					{
@@ -1876,7 +1881,7 @@ public Action LastRequest_WeaponFire(Event event, const char[] name, bool dontBr
 				{
 					// place delay on zoom
 					iClientWeapon = GetEntDataEnt2(client, g_Offset_ActiveWeapon);
-					SetEntDataFloat(iClientWeapon, g_Offset_SecAttack, 5000.0);
+					SetEntDataFloat(iClientWeapon, g_Offset_SecAttack, GetGameTime() + 9999.0);
 					
 					// grab weapon choice
 					int NS_Selection = GetArrayCell(gH_DArray_LR_Partners, idx, view_as<int>(Block_Global2));					
@@ -3573,6 +3578,8 @@ public int MainPlayerHandler(Handle playermenu, MenuAction action, int client, i
 													int iArrayIndex = PushArrayCell(gH_DArray_LR_Partners, game);
 													SetArrayCell(gH_DArray_LR_Partners, iArrayIndex, client, view_as<int>(Block_Prisoner));
 													SetArrayCell(gH_DArray_LR_Partners, iArrayIndex, ClientIdxOfCT, view_as<int>(Block_Guard));
+													g_bInLastRequest[client] = true;
+													g_bInLastRequest[ClientIdxOfCT] = true;
 													InitializeGame(iArrayIndex);
 												}
 											}
@@ -4339,8 +4346,8 @@ void InitializeGame(int iPartnersIndex)
 				SetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, NSW_Guard, view_as<int>(Block_GuardData));
 				
 				// place delay on zoom
-				SetEntDataFloat(NSW_Prisoner, g_Offset_SecAttack, 5000.0);
-				SetEntDataFloat(NSW_Guard, g_Offset_SecAttack, 5000.0);
+				SetEntDataFloat(NSW_Prisoner, g_Offset_SecAttack, GetGameTime() + 9999.0);
+				SetEntDataFloat(NSW_Guard, g_Offset_SecAttack, GetGameTime() + 9999.0);
 				
 				char buffer[PLATFORM_MAX_PATH];
 				gH_Cvar_LR_NoScope_Sound.GetString(buffer, sizeof(buffer));
@@ -4496,8 +4503,8 @@ void InitializeGame(int iPartnersIndex)
 			SetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, Pistol_Prisoner, view_as<int>(Block_PrisonerData));
 			SetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, Pistol_Guard, view_as<int>(Block_GuardData));
 			
-			SetEntDataFloat(Pistol_Prisoner, g_Offset_SecAttack, 5000.0);
-			SetEntDataFloat(Pistol_Guard, g_Offset_SecAttack, 5000.0);
+			SetEntDataFloat(Pistol_Prisoner, g_Offset_SecAttack, GetGameTime() + 9999.0);
+			SetEntDataFloat(Pistol_Guard, g_Offset_SecAttack, GetGameTime() + 9999.0);
 			
 			int m4mPlayerFirst = GetRandomInt(0, 1);
 			if (m4mPlayerFirst == 0)
@@ -4734,7 +4741,7 @@ void InitializeGame(int iPartnersIndex)
 		}
 	}
 	
-	if (selection != LR_Rebel && selection != LR_JumpContest)
+	if (selection != LR_Rebel && selection != LR_JumpContest && selection <= BASE_LR_Number)
 	{
 		char LR_Name[32];
 		EMP_LoopPlayers(TargetForLang)
@@ -5273,8 +5280,8 @@ public Action Timer_Countdown(Handle timer, int iPartnersIndex)
 					SetArrayCell(gH_DArray_LR_Partners, iPartnersIndex, NSW_Guard, view_as<int>(Block_GuardData));
 					
 					// place delay on zoom
-					SetEntDataFloat(NSW_Prisoner, g_Offset_SecAttack, 5000.0);
-					SetEntDataFloat(NSW_Guard, g_Offset_SecAttack, 5000.0);
+					SetEntDataFloat(NSW_Prisoner, g_Offset_SecAttack, GetGameTime() + 9999.0);
+					SetEntDataFloat(NSW_Guard, g_Offset_SecAttack, GetGameTime() + 9999.0);
 					
 					gH_Cvar_LR_NoScope_Sound.GetString(buffer, sizeof(buffer));
 					if ((strlen(buffer) > 0) && strcmp(buffer, "-1") != 0)
@@ -6251,8 +6258,11 @@ stock void PerformRestore(int client)
 			int weapon;
 			while((weapon = GetPlayerWeaponSlot(client, CS_SLOT_KNIFE)) != -1)
 			{
-				RemovePlayerItem(client, weapon);
-				if (IsValidEntity(weapon)) RemoveEntity(weapon);
+				if (IsValidEntity(weapon))
+				{
+					RemovePlayerItem(client, weapon);
+					RemoveEntity(weapon);
+				}
 			}
 			
 			EMP_EquipWeapon(client, "weapon_fists");
