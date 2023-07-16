@@ -104,6 +104,8 @@ public void __pl_lastrequest_SetNTVOptional()
 	MarkNativeAsOptional("ChangeRebelStatus");
 	MarkNativeAsOptional("InitializeLR");
 	MarkNativeAsOptional("CleanupLR");
+	MarkNativeAsOptional("EnableLR");
+	MarkNativeAsOptional("DisableLR");
 }
 
 typedef FuncLastRequest = function void(int type, int prisoner, int guard);
@@ -200,6 +202,20 @@ native void InitializeLR(int prisoner);
  * @error						Invalid parameters or wrong client index
  */
 native void CleanupLR(int prisoner);
+
+/**
+ * Makes last request available
+ *
+ * @noreturn
+ */
+native void EnableLR();
+
+/**
+ * Makes last request unavailable
+ *
+ * @noreturn
+ */
+native void DisableLR();
 
 stock void SetThirdPerson(int client)
 {

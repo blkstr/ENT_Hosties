@@ -36,7 +36,6 @@
 #pragma semicolon 1
 
 // Global variables
-int LR_Number = BASE_LR_Number;
 
 int 	g_LastButtons[MAXPLAYERS+1],
 		SuitSetBack,
@@ -82,7 +81,7 @@ int 	LR_C_WeaponCount[MAXPLAYERS + 1] = 0;
 int 	LR_C_FlashCounter[MAXPLAYERS + 1] = 0;
 
 char	BeforeModel[MAXPLAYERS+1][PLATFORM_MAX_PATH],
-		g_sLastRequestPhrase[BASE_LR_Number][MAX_DISPLAYNAME_SIZE];
+		g_sLastRequestPhrase[LR_Number][MAX_DISPLAYNAME_SIZE];
 
 ConVar	g_hRoundTime,
 		Cvar_TeamBlock,
@@ -539,10 +538,13 @@ void LastRequest_APL()
 	CreateNative("RemoveLastRequestFromList", 	Native_LR_RemoveFromList);
 	CreateNative("IsClientRebel", 				Native_IsClientRebel);
 	CreateNative("IsClientInLastRequest", 		Native_IsClientInLR);
+	CreateNative("IsLastRequestAvailable", 		Native_LR_Available);
 	CreateNative("ProcessAllLastRequests", 		Native_ProcessLRs);
 	CreateNative("ChangeRebelStatus", 			Native_ChangeRebelStatus);
 	CreateNative("InitializeLR", 				Native_LR_Initialize);
 	CreateNative("CleanupLR", 					Native_LR_Cleanup);
+	CreateNative("EnableLR", 					Native_LR_Enable);
+	CreateNative("DisableLR", 					Native_LR_Disable);
 	
 	RegPluginLibrary("lastrequest");
 }
@@ -697,6 +699,16 @@ public int Native_LR_Cleanup(Handle h_Plugin, int iNumParameters)
 	{
 		ThrowNativeError(SP_ERROR_NATIVE, "CleanupLR Failure (Wrong number of parameters).");
 	}
+}
+
+public int Native_LR_Enable(Handle h_Plugin, int iNumParameters)
+{
+	g_bIsLRAvailable = true;
+}
+
+public int Native_LR_Disable(Handle h_Plugin, int iNumParameters)
+{
+	g_bIsLRAvailable = false;
 }
 
 public int Native_LR_Available(Handle h_Plugin, int iNumParameters)
@@ -4741,7 +4753,7 @@ void InitializeGame(int iPartnersIndex)
 		}
 	}
 	
-	if (selection != LR_Rebel && selection != LR_JumpContest && selection <= BASE_LR_Number)
+	if (selection != LR_Rebel && selection != LR_JumpContest && selection <= LR_Number)
 	{
 		char LR_Name[32];
 		EMP_LoopPlayers(TargetForLang)

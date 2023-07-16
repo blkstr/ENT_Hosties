@@ -32,7 +32,7 @@
 
 #undef 			REQUIRE_PLUGIN
 #undef 			REQUIRE_EXTENSIONS
-#tryinclude		<SteamWorks>
+//#tryinclude		<SteamWorks>
 #tryinclude		<sourcebanspp>
 #tryinclude		<myjailbreak>
 #tryinclude		<wardenmenu>
@@ -56,7 +56,7 @@
 // Add the last request system
 #define	MODULE_LASTREQUEST					1
 // Add a game description override
-#define	MODULE_GAMEDESCRIPTION				1
+#define	MODULE_GAMEDESCRIPTION				0
 // Add start weapons for both teams
 #define	MODULE_STARTWEAPONS					1
 // Add round-end team overlays
@@ -317,7 +317,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 
 	MarkNativeAsOptional("MyJailbreak_IsEventDayRunning");
 	MarkNativeAsOptional("IsEventDayActive");
-	MarkNativeAsOptional("SteamWorks_SetGameDescription");
+	//MarkNativeAsOptional("SteamWorks_SetGameDescription");
 
 	LastRequest_APL();
 	
